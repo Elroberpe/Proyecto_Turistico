@@ -1,0 +1,582 @@
+/* ==================== VARIABLES - PALETA TENUE Y DESCANSDADA ==================== */
+:root {
+    /* Colores principales - tonos tierra apagados */
+    --primary: #6b7b8d;      /* Gris azulado suave - no cansa */
+    --primary-light: #8a9aaa;
+    --primary-dark: #4a5a6a;
+    --secondary: #b8a28c;     /* Beige/café suave */
+    --secondary-light: #cdbbaa;
+    --secondary-dark: #9e8976;
+    --accent: #7d8b6e;        /* Verde musgo apagado */
+    --accent-light: #9aab8a;
+    
+    /* Fondos - cálidos y suaves */
+    --bg-light: #f2efe9;      /* Beige claro muy suave */
+    --bg-white: #fefcf8;
+    --bg-gray: #e8e4dd;
+    --bg-dark: #3a4048;
+    
+    /* Textos */
+    --text-dark: #4a4540;
+    --text-gray: #8a8681;
+    --text-light: #e8e4df;
+    
+    /* Sombras */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.08);
+    
+    /* Bordes */
+    --border-radius: 24px;
+    --border-radius-sm: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    padding-top: 80px;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+/* ==================== NAVBAR ==================== */
+.navbar {
+    background: rgba(255, 253, 248, 0.98);
+    backdrop-filter: blur(10px);
+    padding: 16px 0;
+    box-shadow: var(--shadow-sm);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.navbar-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-dark) !important;
+}
+
+.navbar-brand span {
+    color: var(--secondary-dark);
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin: 0 4px;
+    color: var(--text-dark) !important;
+    transition: all 0.3s;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: var(--primary) !important;
+}
+
+/* ==================== CARRUSEL ==================== */
+.carousel-item {
+    height: 80vh;
+    min-height: 550px;
+    position: relative;
+}
+
+.carousel-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.25));
+    z-index: 1;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carousel-caption {
+    z-index: 2;
+    bottom: 28%;
+}
+
+.carousel-caption h1 {
+    font-size: 3.2rem;
+    font-weight: 600;
+    color: white;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+    margin-bottom: 16px;
+}
+
+.carousel-caption p {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 24px;
+}
+
+.accent-text {
+    color: var(--secondary-light);
+}
+
+/* ==================== BOTONES ==================== */
+.btn {
+    border-radius: 40px;
+    padding: 10px 28px;
+    font-weight: 500;
+    transition: all 0.3s;
+    border: none;
+    font-size: 0.9rem;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1.5px solid var(--primary);
+    color: var(--primary);
+}
+
+.btn-outline:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* ==================== BUSCADOR ==================== */
+.search-section {
+    margin-top: -50px;
+    position: relative;
+    z-index: 10;
+}
+
+.search-card {
+    background: var(--bg-white);
+    border-radius: var(--border-radius);
+    padding: 32px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.search-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--primary-dark);
+    margin-bottom: 28px;
+}
+
+.form-label {
+    font-weight: 500;
+    font-size: 0.75rem;
+    margin-bottom: 8px;
+    color: var(--text-gray);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-select, .form-control {
+    border-radius: var(--border-radius-sm);
+    border: 1px solid #e2ddd5;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+}
+
+.form-select:focus, .form-control:focus {
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(107, 123, 141, 0.12);
+    outline: none;
+}
+
+.price-display {
+    background: var(--bg-gray);
+    padding: 10px 20px;
+    border-radius: 40px;
+}
+
+.price-soles {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+}
+
+.price-usd {
+    font-size: 0.85rem;
+    color: var(--text-gray);
+    margin-left: 8px;
+}
+
+/* ==================== BENEFICIOS ==================== */
+.benefits-section {
+    padding: 70px 0;
+    background: var(--bg-white);
+}
+
+.benefit-card {
+    background: var(--bg-light);
+    padding: 32px 20px;
+    border-radius: var(--border-radius);
+    transition: all 0.3s;
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.benefit-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.benefit-card i {
+    font-size: 2.2rem;
+    color: var(--primary);
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.benefit-card h4 {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text-dark);
+}
+
+.benefit-card p {
+    font-size: 0.85rem;
+    color: var(--text-gray);
+}
+
+/* ==================== SECCIÓN HEADER ==================== */
+.section-header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.section-header h2 {
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-bottom: 12px;
+    position: relative;
+    display: inline-block;
+}
+
+.section-header h2:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 2px;
+    background: var(--secondary);
+    border-radius: 2px;
+}
+
+.section-header p {
+    font-size: 0.95rem;
+    color: var(--text-gray);
+    max-width: 550px;
+    margin: 20px auto 0;
+}
+
+/* ==================== DESTINATION CARDS ==================== */
+.destination-card {
+    background: var(--bg-white);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    transition: all 0.3s;
+    box-shadow: var(--shadow-sm);
+    height: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.destination-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-md);
+}
+
+.destination-card img {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+}
+
+.destination-card .card-body {
+    padding: 20px;
+}
+
+.destination-card h4 {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--primary-dark);
+}
+
+.destination-card p {
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.destination-card .price {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 12px 0;
+}
+
+/* ==================== TEAM SECTION ==================== */
+.team-section {
+    padding: 70px 0;
+    background: var(--bg-gray);
+}
+
+.team-card {
+    background: var(--bg-white);
+    border-radius: var(--border-radius);
+    padding: 28px 20px;
+    text-align: center;
+    transition: all 0.3s;
+    box-shadow: var(--shadow-sm);
+}
+
+.team-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.team-card img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 16px;
+    border: 2px solid var(--secondary-light);
+}
+
+.team-card h4 {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.team-card p {
+    font-size: 0.8rem;
+    color: var(--primary);
+    margin-bottom: 14px;
+}
+
+.team-card .social-links a {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background: var(--bg-gray);
+    border-radius: 50%;
+    line-height: 32px;
+    margin: 0 3px;
+    color: var(--text-gray);
+    transition: all 0.3s;
+    font-size: 0.85rem;
+}
+
+.team-card .social-links a:hover {
+    background: var(--primary-light);
+    color: white;
+}
+
+/* ==================== FOOTER ==================== */
+.footer {
+    background: var(--bg-dark);
+    color: #b8b4ae;
+    padding: 50px 0 20px;
+    margin-top: 50px;
+}
+
+.footer h5 {
+    font-family: 'Inter', sans-serif;
+    color: white;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.footer p {
+    color: #b8b4ae;
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+.footer ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer ul li {
+    margin-bottom: 10px;
+}
+
+.footer ul li a {
+    color: #b8b4ae;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-size: 0.85rem;
+}
+
+.footer ul li a:hover {
+    color: var(--secondary-light);
+    padding-left: 5px;
+}
+
+.footer .social-links a {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    text-align: center;
+    line-height: 36px;
+    margin-right: 8px;
+    color: #b8b4ae;
+    transition: all 0.3s;
+}
+
+.footer .social-links a:hover {
+    background: var(--secondary-dark);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.footer hr {
+    border-color: rgba(255, 255, 255, 0.08);
+    margin: 28px 0 20px;
+}
+
+/* ==================== PREVIEW BOX ==================== */
+.preview-box {
+    position: fixed;
+    background: var(--bg-white);
+    border-radius: var(--border-radius-sm);
+    padding: 10px;
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    display: none;
+    width: 200px;
+    text-align: center;
+    pointer-events: none;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.preview-box img {
+    width: 100%;
+    border-radius: 8px;
+    height: 110px;
+    object-fit: cover;
+}
+
+.preview-box p {
+    margin-top: 8px;
+    font-weight: 500;
+    color: var(--primary-dark);
+    font-size: 0.8rem;
+}
+
+/* ==================== PAGE HEADER REGIONES ==================== */
+.page-header {
+    padding: 70px 0 45px;
+    margin-top: 76px;
+    text-align: center;
+}
+
+.page-header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 12px;
+}
+
+.page-header p {
+    font-size: 1rem;
+    max-width: 550px;
+    margin: 0 auto;
+}
+
+/* ==================== PAGO Y FACTURA ==================== */
+.payment-card {
+    background: var(--bg-white);
+    border-radius: var(--border-radius);
+    padding: 28px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.invoice-detail {
+    background: var(--bg-gray);
+    border-radius: var(--border-radius-sm);
+    padding: 18px;
+    margin-top: 15px;
+}
+
+.invoice-detail .row {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2ddd5;
+}
+
+.invoice-detail .row:last-child {
+    border-bottom: none;
+}
+
+.total-grande {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 992px) {
+    .carousel-caption h1 { font-size: 2.2rem; }
+    .section-header h2 { font-size: 1.8rem; }
+}
+
+@media (max-width: 768px) {
+    body { padding-top: 70px; }
+    .carousel-item { height: 55vh; }
+    .carousel-caption { bottom: 18%; }
+    .carousel-caption h1 { font-size: 1.5rem; }
+    .carousel-caption p { font-size: 0.8rem; }
+    .search-section { margin-top: -30px; }
+    .search-card { padding: 20px; margin: 0 12px; }
+    .price-soles { font-size: 1.2rem; }
+    .section-header h2 { font-size: 1.5rem; }
+    .benefit-card, .team-card { margin-bottom: 16px; }
+}
+
+@media (max-width: 576px) {
+    .price-display { width: 100%; text-align: center; margin-bottom: 12px; }
+    .search-card button { width: 100%; }
+}
