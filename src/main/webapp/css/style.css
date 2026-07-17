@@ -525,6 +525,16 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0 auto;
 }
 
+/* Colores de cabecera según la región (leídos del atributo data-region del <body>) */
+body[data-region="costa"]  .page-header { background: linear-gradient(135deg, #e8f4f8 0%, #d1e8f0 100%); }
+body[data-region="costa"]  .page-header h1 { color: #6b7b8d; }
+
+body[data-region="sierra"] .page-header { background: linear-gradient(135deg, #e8e0d5 0%, #d9cebf 100%); }
+body[data-region="sierra"] .page-header h1 { color: #8b7355; }
+
+body[data-region="selva"]  .page-header { background: linear-gradient(135deg, #d4e8d9 0%, #c2d9c4 100%); }
+body[data-region="selva"]  .page-header h1 { color: #5a8f6c; }
+
 /* ==================== PAGO Y FACTURA ==================== */
 .payment-card {
     background: var(--bg-white);

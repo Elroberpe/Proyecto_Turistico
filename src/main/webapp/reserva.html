@@ -15,7 +15,7 @@
             <a class="navbar-brand fw-bold" href="index.jsp"><span class="text-primary">Chasqui</span> PERÚ</a>
         </div>
     </nav>
-    
+
     <div class="container mt-5 pt-5">
         <div class="row g-4">
             <div class="col-md-6">
@@ -33,7 +33,7 @@
                                 <option value="plin">📱 Plin</option>
                             </select>
                         </div>
-                        
+
                         <div id="tarjetaFields">
                             <div class="mb-3">
                                 <label class="form-label">Número de tarjeta</label>
@@ -54,7 +54,7 @@
                                 <input type="text" id="titular" class="form-control" placeholder="Como aparece en la tarjeta">
                             </div>
                         </div>
-                        
+
                         <div id="qrFields" style="display: none;">
                             <div class="qr-code text-center p-4" style="background: #f0ede7; border-radius: 20px;">
                                 <i class="bi bi-qr-code" style="font-size: 100px; color: var(--primary);"></i>
@@ -62,7 +62,7 @@
                                 <p class="text-muted">Código de referencia: <strong>CH-2026-001</strong></p>
                             </div>
                         </div>
-                        
+
                         <button type="submit" class="btn btn-primary w-100 mt-3 btn-lg">
                             <i class="bi bi-lock"></i> Pagar ahora
                         </button>
@@ -71,117 +71,15 @@
             </div>
         </div>
     </div>
-    
+
     <footer class="footer mt-5">
         <div class="container text-center">
             <p>&copy; 2026 Chasqui PERÚ - Tu aventura comienza aquí</p>
         </div>
     </footer>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/data.js"></script>
-    <script>
-        function cargarResumenReserva() {
-            const reservaStr = localStorage.getItem('reservaActual');
-            if (!reservaStr) {
-                window.location.href = 'index.html';
-                return;
-            }
-            
-            const reserva = JSON.parse(reservaStr);
-            const container = document.getElementById('resumenReserva');
-            
-            if (container) {
-                container.innerHTML = `
-                    <h3 class="mb-4 text-primary"><i class="bi bi-receipt"></i> Factura Electrónica</h3>
-                    <div class="invoice-detail">
-                        <div class="row"><div class="col-6 text-muted">Destino:</div><div class="col-6 fw-bold">${reserva.destino.nombre}</div></div>
-                        <div class="row"><div class="col-6 text-muted">Tipo:</div><div class="col-6 fw-bold">${reserva.tipoViaje === 'roundtrip' ? 'Ida y Vuelta' : 'Solo Ida'}</div></div>
-                        <div class="row"><div class="col-6 text-muted">Salida:</div><div class="col-6 fw-bold">${reserva.fechaSalida}</div></div>
-                        ${reserva.fechaRetorno ? `<div class="row"><div class="col-6 text-muted">Retorno:</div><div class="col-6 fw-bold">${reserva.fechaRetorno}</div></div>` : ''}
-                        <div class="row"><div class="col-6 text-muted">Noches:</div><div class="col-6 fw-bold">${reserva.noches}</div></div>
-                        <div class="row"><div class="col-6 text-muted">Pasajeros:</div><div class="col-6 fw-bold">${reserva.pasajeros}</div></div>
-                        <hr>
-                        <div class="row"><div class="col-6 text-muted">Subtotal:</div><div class="col-6">S/ ${reserva.subtotal.toFixed(2)}</div></div>
-                        <div class="row"><div class="col-6 text-muted">IGV (18%):</div><div class="col-6">S/ ${reserva.igv.toFixed(2)}</div></div>
-                        <div class="row"><div class="col-6 fw-bold">TOTAL:</div><div class="col-6 fw-bold total-grande">S/ ${reserva.precioTotal.toFixed(2)}</div></div>
-                    </div>
-                    <div class="alert alert-info mt-3 small"><i class="bi bi-info-circle"></i> Pago 100% seguro. Datos encriptados.</div>
-                `;
-            }
-        }
-        
-        function initEventosPago() {
-            const metodoPago = document.getElementById('metodoPago');
-            const tarjetaFields = document.getElementById('tarjetaFields');
-            const qrFields = document.getElementById('qrFields');
-            const paymentForm = document.getElementById('paymentForm');
-            
-            if (metodoPago) {
-                metodoPago.addEventListener('change', (e) => {
-                    if (e.target.value === 'tarjeta') {
-                        tarjetaFields.style.display = 'block';
-                        qrFields.style.display = 'none';
-                    } else {
-                        tarjetaFields.style.display = 'none';
-                        qrFields.style.display = 'block';
-                    }
-                });
-            }
-            
-            if (paymentForm) {
-                paymentForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    procesarPago();
-                });
-            }
-        }
-        
-        function procesarPago() {
-            const metodoPago = document.getElementById('metodoPago').value;
-            
-            if (metodoPago === 'tarjeta') {
-                const numeroTarjeta = document.getElementById('numeroTarjeta').value;
-                const cvv = document.getElementById('cvv').value;
-                const fechaExp = document.getElementById('fechaExp').value;
-                
-                const regexTarjeta = /^\d{16}$/;
-                const regexCVV = /^\d{3}$/;
-                const regexFecha = /^(0[1-9]|1[0-2])\/\d{2}$/;
-                
-                if (!regexTarjeta.test(numeroTarjeta.replace(/\s/g, ''))) {
-                    alert('❌ Número de tarjeta inválido (16 dígitos)');
-                    return;
-                }
-                if (!regexCVV.test(cvv)) {
-                    alert('❌ CVV inválido (3 dígitos)');
-                    return;
-                }
-                if (!regexFecha.test(fechaExp)) {
-                    alert('❌ Fecha expiración inválida (MM/AA)');
-                    return;
-                }
-            }
-            
-            const btnPagar = document.querySelector('#paymentForm button[type="submit"]');
-            btnPagar.innerHTML = '<i class="bi bi-hourglass-split"></i> Procesando...';
-            btnPagar.disabled = true;
-            
-            setTimeout(() => {
-                const reserva = JSON.parse(localStorage.getItem('reservaActual'));
-                let confirmadas = JSON.parse(localStorage.getItem('reservasConfirmadas')) || [];
-                confirmadas.push({ ...reserva, estado: 'confirmada', fechaPago: new Date().toLocaleString() });
-                localStorage.setItem('reservasConfirmadas', JSON.stringify(confirmadas));
-                localStorage.removeItem('reservaActual');
-                alert('✅ ¡Pago exitoso! Tu reserva ha sido confirmada.');
-                window.location.href = 'index.jsp';
-            }, 2000);
-        }
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            cargarResumenReserva();
-            initEventosPago();
-        });
-    </script>
+    <script src="js/reserva.js"></script>
 </body>
 </html>

@@ -8,21 +8,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        .page-header {
-            background: linear-gradient(135deg, #d4e8d9 0%, #c2d9c4 100%);
-            padding: 80px 0 50px;
-            margin-top: 76px;
-            text-align: center;
-        }
-        .page-header h1 { color: #5a8f6c; }
-    </style>
 </head>
-<body>
+<body data-region="selva">
 
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html"><span class="text-primary">Chasqui</span> PERÚ</a>
+            <a class="navbar-brand fw-bold" href="index.jsp"><span class="text-primary">Chasqui</span> PERÚ</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -108,131 +99,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/data.js"></script>
-    <script>
-        let currentRegion = 'selva';
-        let tipoCambioActual = 3.75;
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            await obtenerTipoCambio();
-            cargarDestinosSelect();
-            cargarDestinosRegion();
-            initEventos();
-            setFechasMinimas();
-        });
-
-        async function obtenerTipoCambio() {
-            try {
-                const response = await fetch('https://api.exchangerate-api.com/v4/latest/PEN');
-                if (response.ok) {
-                    const data = await response.json();
-                    tipoCambioActual = data.rates.USD;
-                }
-            } catch(e) { tipoCambioActual = 0.27; }
-        }
-
-        function cargarDestinosSelect() {
-            const select = document.getElementById('destinoSelect');
-            const destinos = getDestinosByRegion(currentRegion);
-            destinos.forEach(d => {
-                const option = document.createElement('option');
-                option.value = d.id;
-                option.textContent = `${d.nombre} - S/ ${d.precioBase}/noche`;
-                select.appendChild(option);
-            });
-        }
-
-        function cargarDestinosRegion() {
-            const container = document.getElementById('destinosContainer');
-            const destinos = getDestinosByRegion(currentRegion);
-            container.innerHTML = '';
-            destinos.forEach(d => {
-                container.innerHTML += `
-                    <div class="col-md-6 col-lg-4">
-                        <div class="destination-card">
-                            <img src="${d.imagen}" alt="${d.nombre}">
-                            <div class="card-body">
-                                <h4>${d.nombre}</h4>
-                                <p>${d.descripcion}</p>
-                                <p class="price">S/ ${d.precioBase} <small>/noche</small></p>
-                                <button class="btn btn-outline w-100" onclick="seleccionarDestino(${d.id})">Reservar ahora</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function seleccionarDestino(id) {
-            document.getElementById('destinoSelect').value = id;
-            document.getElementById('searchCard').scrollIntoView({ behavior: 'smooth' });
-            calcularPrecio();
-        }
-
-        function initEventos() {
-            document.getElementById('tipoViaje').addEventListener('change', () => {
-                const retornoGroup = document.getElementById('retornoGroup');
-                retornoGroup.style.display = document.getElementById('tipoViaje').value === 'oneway' ? 'none' : 'block';
-                calcularPrecio();
-            });
-            document.getElementById('destinoSelect').addEventListener('change', calcularPrecio);
-            document.getElementById('fechaSalida').addEventListener('change', calcularPrecio);
-            document.getElementById('fechaRetorno').addEventListener('change', calcularPrecio);
-            document.getElementById('pasajerosSelect').addEventListener('change', calcularPrecio);
-            document.getElementById('bookingForm').addEventListener('submit', (e) => {
-                e.preventDefault();
-                procesarReserva();
-            });
-        }
-
-        function calcularPrecio() {
-            const destinoId = document.getElementById('destinoSelect').value;
-            if (!destinoId) return;
-            const destino = getDestinoById(destinoId);
-            const fechaSalida = document.getElementById('fechaSalida').value;
-            if (!fechaSalida) return;
-            
-            let noches = 1;
-            if (document.getElementById('tipoViaje').value === 'roundtrip') {
-                const retorno = document.getElementById('fechaRetorno').value;
-                if (retorno) {
-                    noches = Math.ceil((new Date(retorno) - new Date(fechaSalida)) / (86400000));
-                }
-            }
-            const pasajeros = parseInt(document.getElementById('pasajerosSelect').value);
-            const subtotal = destino.precioBase * noches * pasajeros;
-            const { total } = calcularPrecioConImpuestos(subtotal);
-            document.getElementById('precioSoles').textContent = `S/ ${total.toFixed(2)}`;
-            window.precioActual = { subtotal, igv: total - subtotal, total, noches, pasajeros, destino };
-        }
-
-        function procesarReserva() {
-            if (!window.precioActual) {
-                alert('Completa los datos de tu viaje');
-                return;
-            }
-            const reserva = {
-                id: Date.now(),
-                destino: window.precioActual.destino,
-                tipoViaje: document.getElementById('tipoViaje').value,
-                fechaSalida: document.getElementById('fechaSalida').value,
-                fechaRetorno: document.getElementById('fechaRetorno').value,
-                pasajeros: window.precioActual.pasajeros,
-                noches: window.precioActual.noches,
-                subtotal: window.precioActual.subtotal,
-                igv: window.precioActual.igv,
-                precioTotal: window.precioActual.total
-            };
-            localStorage.setItem('reservaActual', JSON.stringify(reserva));
-            window.location.href = 'reserva.html';
-        }
-
-        function setFechasMinimas() {
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            const minDate = tomorrow.toISOString().split('T')[0];
-            document.getElementById('fechaSalida').min = minDate;
-            document.getElementById('fechaRetorno').min = minDate;
-        }
-    </script>
+    <script src="js/region.js"></script>
 </body>
 </html>
