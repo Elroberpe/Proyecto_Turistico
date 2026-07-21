@@ -510,8 +510,8 @@ h1, h2, h3, h4, h5, h6 {
 /* ==================== PAGE HEADER REGIONES ==================== */
 .page-header {
     padding: 85px 0 55px;
-    margin-top: 76px;
     text-align: center;
+    width: 100%;
 }
 
 .page-header h1 {
