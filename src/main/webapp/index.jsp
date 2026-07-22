@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,8 +12,9 @@
 	rel="stylesheet">
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link
-	href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+	href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap"
 	rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -21,6 +22,7 @@
 
 	<!-- ==================== NAVBAR ==================== -->
 	<jsp:include page="componentes/navbar.jsp"></jsp:include>
+
 
 	<!-- ==================== CARRUSEL ==================== -->
 	<div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
@@ -34,38 +36,38 @@
 		</div>
 		<div class="carousel-inner">
 			<div class="carousel-item active">
-				<img src="assets/img/pimentel.webp" class="d-block w-100"
-					alt="Costa Peruana">
+				<img src="https://picsum.photos/seed/costaperu/1600/900"
+					class="d-block w-100" alt="Costa Peruana">
 				<div class="carousel-caption">
 					<h1>
 						Descubre la <span class="accent-text">Costa</span>
 					</h1>
 					<p>Playas paradisíacas, surf y la mejor gastronomía del
 						Pacífico</p>
-					<a href="costa.jsp" class="btn btn-primary">Explorar Costa →</a>
+					<a href="costa.jsp" class="btn btn-terracota">Explorar Costa →</a>
 				</div>
 			</div>
 			<div class="carousel-item">
-				<img src="assets/img/cusco_noche.jpeg" class="d-block w-100"
-					alt="Sierra Peruana">
+				<img src="https://picsum.photos/seed/cusconoche/1600/900"
+					class="d-block w-100" alt="Sierra Peruana">
 				<div class="carousel-caption">
 					<h1>
 						Aventura en la <span class="accent-text">Sierra</span>
 					</h1>
 					<p>Montañas, el mítico Machu Picchu y cultura viva</p>
-					<a href="sierra.html" class="btn btn-primary">Explorar Sierra
+					<a href="sierra.jsp" class="btn btn-terracota">Explorar Sierra
 						→</a>
 				</div>
 			</div>
 			<div class="carousel-item">
-				<img src="assets/img/iquitos_carrusel.jpg" class="d-block w-100"
-					alt="Selva Peruana">
+				<img src="https://picsum.photos/seed/iquitosselva/1600/900"
+					class="d-block w-100" alt="Selva Peruana">
 				<div class="carousel-caption">
 					<h1>
 						Magia en la <span class="accent-text">Selva</span>
 					</h1>
 					<p>Amazonía, ríos serpenteantes y biodiversidad única</p>
-					<a href="selva.html" class="btn btn-primary">Explorar Selva →</a>
+					<a href="selva.jsp" class="btn btn-terracota">Explorar Selva →</a>
 				</div>
 			</div>
 		</div>
@@ -80,36 +82,49 @@
 	</div>
 
 	<!-- ==================== BUSCADOR ==================== -->
-	<jsp:include page="componentes/buscador.jsp"></jsp:include>
+
 	<!-- ==================== BENEFICIOS ==================== -->
-	<section class="benefits-section">
+	<section class="benefits-section py-5 bg-white">
 		<div class="container">
 			<div class="row text-center g-4">
 				<div class="col-md-4">
-					<div class="benefit-card">
-						<i class="bi bi-person-bounding-box"></i>
-						<h4>Las mejores ofertas</h4>
-						<p>Descuentos exclusivos y paquetes diseñados para ti</p>
+					<div
+						class="card benefit-card h-100 border-0 shadow-sm rounded-4 p-4">
+						<div class="card-body">
+							<i
+								class="bi bi-person-bounding-box display-5 text-terracota mb-3"></i>
+							<h4 class="h5 fw-semibold mb-2">Las mejores ofertas</h4>
+							<p class="text-muted small mb-0">Descuentos exclusivos y
+								paquetes diseñados para ti</p>
+						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
-					<div class="benefit-card">
-						<i class="bi bi-credit-card-2-front"></i>
-						<h4>Compra fácil y segura</h4>
-						<p>Pagos protegidos con múltiples métodos</p>
+					<div
+						class="card benefit-card h-100 border-0 shadow-sm rounded-4 p-4">
+						<div class="card-body">
+							<i
+								class="bi bi-credit-card-2-front display-5 text-terracota mb-3"></i>
+							<h4 class="h5 fw-semibold mb-2">Compra fácil y segura</h4>
+							<p class="text-muted small mb-0">Pagos protegidos con
+								múltiples métodos</p>
+						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
-					<div class="benefit-card">
-						<i class="bi bi-people"></i>
-						<h4>Expertos en viajes</h4>
-						<p>Más de 10 años conectando viajeros con el Perú</p>
+					<div
+						class="card benefit-card h-100 border-0 shadow-sm rounded-4 p-4">
+						<div class="card-body">
+							<i class="bi bi-people display-5 text-terracota mb-3"></i>
+							<h4 class="h5 fw-semibold mb-2">Expertos en viajes</h4>
+							<p class="text-muted small mb-0">Más de 10 años conectando
+								viajeros con el Perú</p>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
-
 	<!-- ==================== PAQUETES DESTACADOS ==================== -->
 	<section class="packages-section">
 		<div class="container">
@@ -133,11 +148,12 @@
 	</section>
 
 	<!-- ==================== FOOTER ==================== -->
+	<jsp:include page="componentes/modal_reserva.jsp"></jsp:include>
 	<jsp:include page="componentes/footer.jsp"></jsp:include>
 
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="assets/js/data.js"></script>
 	<script src="assets/js/main.js"></script>
 </body>
 </html>
+

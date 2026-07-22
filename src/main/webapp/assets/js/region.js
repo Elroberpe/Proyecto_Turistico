@@ -115,11 +115,24 @@ function cargarDestinosRegion() {
 // Actualiza el select y hace scroll suave al formulario.
 function seleccionarDestino(id) {
     const select = document.getElementById('destinoSelect');
-    if (select) {
+    const paquete = getPaqueteById(id);
+    if (select && paquete) {
         select.value = id;
+        
+        // Actualizar título en el modal
+        const modalDestinoNombre = document.getElementById('modalDestinoNombre');
+        if(modalDestinoNombre) modalDestinoNombre.textContent = paquete.nombre;
+        
+        // Disparar cálculo de precio
         select.dispatchEvent(new Event('change'));
+        
+        // Mostrar modal usando Bootstrap 5
+        const modalEl = document.getElementById('modalReserva');
+        if (modalEl) {
+            const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+            modal.show();
+        }
     }
-    document.getElementById('bookingForm')?.scrollIntoView({ behavior: 'smooth' });
 }
 
 // ==================== INICIALIZAR EVENTOS DEL FORMULARIO ====================

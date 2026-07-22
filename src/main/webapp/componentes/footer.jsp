@@ -1,37 +1,31 @@
 <!-- ==================== FOOTER ==================== -->
-	<footer class="footer">
+	<footer class="site-footer">
 		<div class="container">
-			<div class="row">
+			<div class="row g-4">
 				<div class="col-md-4">
-					<h5>
-						<span class="text-primary">Chasqui</span>PERÙš
-					</h5>
-					<p>Tu aventura comienza aqui. Màs de 10 años conectando
-						viajeros con el Perù profundo.</p>
+					<h5>Chasqui Perú</h5>
+					<p>Más de 10 años conectando viajeros con la Costa, Sierra y
+						Selva del Perú.</p>
 				</div>
 				<div class="col-md-4">
-					<h5>Enlaces ràpidos</h5>
+					<h5>Regiones</h5>
 					<ul>
-						<li><a href="index.html">Inicio</a></li>
-						<li><a href="costa.html">Costa</a></li>
-						<li><a href="sierra.html">Sierra</a></li>
-						<li><a href="selva.html">Selva</a></li>
-						<li><a href="contacto.html">Contacto</a></li>
+						<li><a href="costa.jsp">Costa</a></li>
+						<li><a href="sierra.jsp">Sierra</a></li>
+						<li><a href="selva.jsp">Selva</a></li>
 					</ul>
 				</div>
 				<div class="col-md-4">
-					<h5>Sìguenos</h5>
+					<h5>Síguenos</h5>
 					<div class="social-links">
 						<a href="#"><i class="bi bi-facebook"></i></a> <a href="#"><i
 							class="bi bi-instagram"></i></a> <a href="#"><i
-							class="bi bi-twitter"></i></a> <a href="#"><i
-							class="bi bi-whatsapp"></i></a>
+							class="bi bi-twitter"></i></a>
 					</div>
 				</div>
 			</div>
 			<hr>
-			<div class="text-center">
-				<p>&copy; 2026 Chasqui PERÙ - Todos los derechos reservados</p>
-			</div>
+			<p class="text-center mb-0">&copy; 2026 Chasqui Perú. Todos los
+				derechos reservados.</p>
 		</div>
 	</footer>

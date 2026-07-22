@@ -23,8 +23,6 @@
         </div>
     </div>
 
-    <jsp:include page="componentes/buscador.jsp"></jsp:include>
-    
     <section class="packages-section">
         <div class="container">
             <div class="section-header">
@@ -36,6 +34,8 @@
             </div>
         </div>
     </section>
+
+    <jsp:include page="componentes/modal_reserva.jsp"></jsp:include>
 
     <jsp:include page="componentes/footer.jsp"></jsp:include>
 
