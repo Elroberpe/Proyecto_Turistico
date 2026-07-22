@@ -12,20 +12,58 @@
 <body>
     <jsp:include page="componentes/navbar.jsp"></jsp:include>
 
-    <!-- HERO SECTION -->
-    <section class="hero-section">
-        <video class="hero-video-bg" autoplay muted loop playsinline>
-            <source src="https://assets.mixkit.co/videos/preview/mixkit-beautiful-landscape-of-machu-picchu-4279-large.mp4" type="video/mp4">
-            <!-- fallback image if video doesn't load -->
-            <img src="https://picsum.photos/seed/peru/1920/1080" alt="Peru" class="hero-video-bg">
-        </video>
-        <div class="hero-content">
-            <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow" style="font-family: 'Inter', sans-serif;">Descubre lo inexplorado</span>
-            <h1>Aventuras que cambian la <span style="color: var(--primary);">vida</span></h1>
-            <p>Conecta con la magia del Perú. Explora destinos únicos con el confort y seguridad que te mereces.</p>
-            <div class="d-flex justify-content-center gap-3">
-                <a href="#destinos" class="btn btn-primary-custom px-4 py-3 fs-5">Ver Destinos <i class="bi bi-arrow-down ms-2"></i></a>
+    <!-- HERO SECTION CARRUSEL -->
+    <section class="hero-carousel-section p-0">
+        <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
             </div>
+            
+            <div class="carousel-inner">
+                <!-- Slide 1 (Costa) -->
+                <div class="carousel-item active">
+                    <img src="https://picsum.photos/seed/costaperu/1920/1080" class="d-block w-100" alt="Costa">
+                    <div class="carousel-caption">
+                        <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow" style="font-family: 'Inter', sans-serif;">La magia del mar</span>
+                        <h1>Aventuras en la <span style="color: var(--primary);">Costa</span></h1>
+                        <p>Playas infinitas, dunas espectaculares y la mejor gastronomía marina del mundo.</p>
+                        <a href="costa.jsp" class="btn btn-primary-custom px-4 py-3 fs-5 mt-3">Explorar Costa <i class="bi bi-arrow-right ms-2"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Slide 2 (Sierra) -->
+                <div class="carousel-item">
+                    <img src="https://picsum.photos/seed/andesperu/1920/1080" class="d-block w-100" alt="Sierra">
+                    <div class="carousel-caption">
+                        <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow" style="font-family: 'Inter', sans-serif;">Tocando el cielo andino</span>
+                        <h1>Misticismo en la <span style="color: var(--primary);">Sierra</span></h1>
+                        <p>Maravíllate con el imponente Machu Picchu y paisajes montañosos que roban el aliento.</p>
+                        <a href="sierra.jsp" class="btn btn-primary-custom px-4 py-3 fs-5 mt-3">Explorar Sierra <i class="bi bi-arrow-right ms-2"></i></a>
+                    </div>
+                </div>
+
+                <!-- Slide 3 (Selva) -->
+                <div class="carousel-item">
+                    <img src="https://picsum.photos/seed/amazonasperu/1920/1080" class="d-block w-100" alt="Selva">
+                    <div class="carousel-caption">
+                        <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow" style="font-family: 'Inter', sans-serif;">El corazón del Amazonas</span>
+                        <h1>Magia en la <span style="color: var(--primary);">Selva</span></h1>
+                        <p>Navega el río más caudaloso del mundo y descubre flora y fauna en su estado más puro.</p>
+                        <a href="selva.jsp" class="btn btn-primary-custom px-4 py-3 fs-5 mt-3">Explorar Selva <i class="bi bi-arrow-right ms-2"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
         </div>
     </section>
 

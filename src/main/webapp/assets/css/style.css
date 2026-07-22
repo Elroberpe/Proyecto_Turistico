@@ -78,51 +78,46 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--white);
 }
 
-/* ================== HERO ================== */
-.hero-section {
-    position: relative;
+/* ================== HERO CAROUSEL ================== */
+.hero-carousel-section .carousel-item {
     height: 85vh;
     min-height: 600px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: var(--white);
-    overflow: hidden;
+    position: relative;
 }
-.hero-section::after {
+.hero-carousel-section .carousel-item::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgba(17, 24, 39, 0.3), rgba(17, 24, 39, 0.8));
+    background: linear-gradient(to bottom, rgba(17, 24, 39, 0.4), rgba(17, 24, 39, 0.9));
     z-index: 1;
 }
-.hero-video-bg {
-    position: absolute;
-    inset: 0;
+.hero-carousel-section .carousel-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     z-index: 0;
 }
-.hero-content {
-    position: relative;
+.hero-carousel-section .carousel-caption {
     z-index: 2;
+    bottom: 25%;
     max-width: 800px;
-    padding: 0 20px;
+    margin: 0 auto;
 }
-.hero-content h1 {
+.hero-carousel-section .carousel-caption h1 {
     color: var(--white);
     font-size: clamp(3rem, 5vw, 5rem);
     line-height: 1.1;
     margin-bottom: 1.5rem;
     text-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
-.hero-content p {
+.hero-carousel-section .carousel-caption p {
     font-size: 1.25rem;
     font-weight: 300;
     opacity: 0.9;
     margin-bottom: 2rem;
+}
+.hero-carousel-section .carousel-indicators [data-bs-target] {
+    background-color: var(--primary);
 }
 
 /* ================== SECTION TITLES ================== */
