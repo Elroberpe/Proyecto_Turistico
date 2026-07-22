@@ -1,31 +1,44 @@
-<!-- ==================== FOOTER ==================== -->
-	<footer class="site-footer">
-		<div class="container">
-			<div class="row g-4">
-				<div class="col-md-4">
-					<h5>Chasqui Perú</h5>
-					<p>Más de 10 años conectando viajeros con la Costa, Sierra y
-						Selva del Perú.</p>
-				</div>
-				<div class="col-md-4">
-					<h5>Regiones</h5>
-					<ul>
-						<li><a href="costa.jsp">Costa</a></li>
-						<li><a href="sierra.jsp">Sierra</a></li>
-						<li><a href="selva.jsp">Selva</a></li>
-					</ul>
-				</div>
-				<div class="col-md-4">
-					<h5>Síguenos</h5>
-					<div class="social-links">
-						<a href="#"><i class="bi bi-facebook"></i></a> <a href="#"><i
-							class="bi bi-instagram"></i></a> <a href="#"><i
-							class="bi bi-twitter"></i></a>
-					</div>
-				</div>
-			</div>
-			<hr>
-			<p class="text-center mb-0">&copy; 2026 Chasqui Perú. Todos los
-				derechos reservados.</p>
-		</div>
-	</footer>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!-- ================== MODERN FOOTER ================== -->
+<footer class="modern-footer">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4 pe-lg-5">
+                <h3 style="font-family: 'Outfit', sans-serif; font-weight: 800; color: white;">PerÃº<span style="color: var(--primary);">Chasqui</span></h3>
+                <p class="mt-3" style="color: rgba(255,255,255,0.7); font-size: 0.95rem;">Explora los destinos mÃ¡s impresionantes del PerÃº con expertos locales. Tu aventura comienza aquÃ­.</p>
+                <div class="d-flex gap-3 mt-4">
+                    <a href="#" class="text-white fs-5"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="text-white fs-5"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-white fs-5"><i class="bi bi-twitter-x"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4">
+                <h5>Destinos</h5>
+                <ul>
+                    <li><a href="costa.jsp">Costa</a></li>
+                    <li><a href="sierra.jsp">Sierra</a></li>
+                    <li><a href="selva.jsp">Selva</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-md-4">
+                <h5>CompaÃ±Ã­a</h5>
+                <ul>
+                    <li><a href="#">Sobre Nosotros</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><a href="#">TÃ©rminos y Condiciones</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4 col-md-4">
+                <h5>SuscrÃ­bete</h5>
+                <p style="font-size: 0.9rem;">Recibe las mejores ofertas y tips de viaje.</p>
+                <div class="input-group mt-3">
+                    <input type="email" class="form-control rounded-start-pill border-0 px-4 py-2" placeholder="Tu correo electrÃ³nico">
+                    <button class="btn btn-primary-custom rounded-end-pill rounded-start-0 m-0" style="padding-left: 20px; padding-right: 20px;" type="button">Unirme</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="mb-0">&copy; 2026 PerÃº Chasqui. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</footer>

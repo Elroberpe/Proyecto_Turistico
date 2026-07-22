@@ -1,32 +1,32 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!-- Modal de Reserva -->
+<!-- Modal de Reserva Modernizado -->
 <div class="modal fade" id="modalReserva" tabindex="-1" aria-labelledby="modalReservaLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content border-0 shadow-lg rounded-4">
-      <div class="modal-header border-bottom-0 pb-0">
-        <h5 class="modal-title fw-bold" id="modalReservaLabel">
-          <i class="bi bi-calendar-heart text-terracota me-2"></i> Reservar Paquete
+    <div class="modal-content border-0 shadow-lg" style="border-radius: var(--radius-lg);">
+      <div class="modal-header border-bottom-0 pb-0 pt-4 px-4 px-md-5">
+        <h5 class="modal-title" style="font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.5rem;" id="modalReservaLabel">
+          <i class="bi bi-geo-alt-fill me-2" style="color: var(--primary);"></i> Tu Aventura
         </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body p-4 p-md-5 pt-3">
-        <p class="text-muted mb-4">Completa los detalles para tu viaje a <strong id="modalDestinoNombre" class="text-dark">...</strong>.</p>
+      <div class="modal-body p-4 p-md-5 pt-2">
+        <p class="text-muted mb-4" style="font-size: 1.05rem;">Reserva tu paquete a <strong id="modalDestinoNombre" class="text-dark">...</strong>.</p>
         
-        <form id="bookingForm" class="row g-3">
+        <form id="bookingForm" class="row g-4">
           <!-- Destino Oculto para lógica JS -->
           <input type="hidden" id="destinoSelect" value="">
 
           <div class="col-md-6">
-            <label class="form-label text-uppercase small text-muted fw-medium"><i class="bi bi-arrow-left-right me-1"></i> Tipo de viaje</label>
-            <select id="tipoViaje" class="form-select rounded-3" required>
+            <label class="form-label text-uppercase small text-muted fw-bold"><i class="bi bi-arrow-left-right me-2"></i>Tipo de viaje</label>
+            <select id="tipoViaje" class="form-select bg-light border-0 shadow-none py-2" style="border-radius: var(--radius-sm);" required>
               <option value="roundtrip">Ida y Vuelta</option>
               <option value="oneway">Solo Ida</option>
             </select>
           </div>
 
           <div class="col-md-6">
-            <label class="form-label text-uppercase small text-muted fw-medium"><i class="bi bi-people me-1"></i> Pasajeros</label>
-            <select id="pasajerosSelect" class="form-select rounded-3">
+            <label class="form-label text-uppercase small text-muted fw-bold"><i class="bi bi-people me-2"></i>Pasajeros</label>
+            <select id="pasajerosSelect" class="form-select bg-light border-0 shadow-none py-2" style="border-radius: var(--radius-sm);">
               <option value="1">1 pasajero</option>
               <option value="2" selected>2 pasajeros</option>
               <option value="3">3 pasajeros</option>
@@ -37,33 +37,27 @@
           </div>
 
           <div class="col-md-6">
-            <label class="form-label text-uppercase small text-muted fw-medium"><i class="bi bi-calendar-check me-1"></i> Salida</label>
-            <input type="date" id="fechaSalida" class="form-control rounded-3" required>
+            <label class="form-label text-uppercase small text-muted fw-bold"><i class="bi bi-calendar-check me-2"></i>Salida</label>
+            <input type="date" id="fechaSalida" class="form-control bg-light border-0 shadow-none py-2" style="border-radius: var(--radius-sm);" required>
           </div>
 
           <div class="col-md-6" id="retornoGroup">
-            <label class="form-label text-uppercase small text-muted fw-medium"><i class="bi bi-calendar-x me-1"></i> Retorno</label>
-            <input type="date" id="fechaRetorno" class="form-control rounded-3">
+            <label class="form-label text-uppercase small text-muted fw-bold"><i class="bi bi-calendar-x me-2"></i>Retorno</label>
+            <input type="date" id="fechaRetorno" class="form-control bg-light border-0 shadow-none py-2" style="border-radius: var(--radius-sm);">
           </div>
 
-          <div class="col-12 mt-4 bg-light p-3 rounded-3 border">
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="text-muted small">Precio total estimado</span>
-              <div class="text-end">
-                <div id="precioSoles" class="fw-bold fs-4" style="color: var(--accent);">S/ 0.00</div>
-              </div>
-            </div>
+          <div class="col-12 mt-4 p-4 text-center" style="background: rgba(13, 148, 136, 0.05); border-radius: var(--radius-md);">
+            <span class="text-muted small d-block mb-1 text-uppercase fw-bold">Precio total estimado</span>
+            <div id="precioSoles" class="fw-bold" style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; color: var(--primary);">S/ 0.00</div>
           </div>
 
-          <div id="validationMsg" class="text-danger small mt-2 col-12"></div>
-          
-          <!-- Submit real oculto para validaciones nativas de HTML5 -->
+          <div id="validationMsg" class="text-danger small mt-2 col-12 text-center"></div>
           <input type="submit" id="btnSubmitOculto" style="display:none;">
         </form>
       </div>
-      <div class="modal-footer border-top-0 pt-0 pb-4 px-4 px-md-5">
-        <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary rounded-pill px-5" id="btnConfirmarReserva" onclick="document.getElementById('btnSubmitOculto').click();">Confirmar Reserva</button>
+      <div class="modal-footer border-top-0 pt-0 pb-4 pb-md-5 px-4 px-md-5 d-flex justify-content-between">
+        <button type="button" class="btn text-muted fw-semibold" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary-custom w-50" id="btnConfirmarReserva" onclick="document.getElementById('btnSubmitOculto').click();">Confirmar Reserva</button>
       </div>
     </div>
   </div>
