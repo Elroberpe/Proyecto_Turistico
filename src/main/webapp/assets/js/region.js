@@ -100,7 +100,7 @@ function cargarDestinosRegion() {
                     <div class="meta mb-2">Destino destacado de la región</div>
                     <div class="d-flex justify-content-between align-items-end mt-3">
                         <div class="precio">S/ ${Number(p.precioSoles).toFixed(2)}<small> / persona</small></div>
-                        <button class="btn btn-primary btn-sm" onclick="seleccionarDestino(${p.idPaquete})">Seleccionar</button>
+                        <button class="btn-card-action" onclick="seleccionarDestino(${p.idPaquete})">Seleccionar <i class="bi bi-arrow-right"></i></button>
                     </div>
                 </div>
             </div>
