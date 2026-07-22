@@ -1,4 +1,4 @@
-﻿const regionLabel = { costa:"Costa", sierra:"Sierra", selva:"Selva" };
+const regionLabel = { costa: "Costa", sierra: "Sierra", selva: "Selva" };
 let tipoCambioActual = 3.75;
 let previewTimeout = null;
 let destinosGlobales = []; // Cache para buscador
@@ -39,7 +39,7 @@ function cargarDestinosEnSelect() {
   destinosGlobales.forEach(destino => {
     const option = document.createElement('option');
     option.value = destino.idPaquete || destino.id;
-    option.textContent = $ + {destino.nombre} ($ + {destino.region ? destino.region.toUpperCase() : ''});
+    option.textContent = `${destino.nombre} (${destino.region ? destino.region.toUpperCase() : ''})`;
     destinoSelect.appendChild(option);
   });
 }
@@ -61,22 +61,22 @@ function cargarPaquetesDestacados() {
     
     const col = document.createElement('div');
     col.className = 'col-md-4';
-    col.innerHTML = \
+    col.innerHTML = `
       <div class="card-tour">
         <div class="img-wrap">
-          <img src="\ + \\ + " alt="\ + \\ + ">
-          <span class="badge-region">\ + \\ + </span>
+          <img src="${destino.imagenUrl || destino.imagen}" alt="${destino.nombre}">
+          <span class="badge-region">${regionText}</span>
         </div>
         <div class="body">
-          <h3>\ + \\ + </h3>
-          <div class="meta mb-2">"\ + \\ + "</div>
+          <h3>${destino.nombre}</h3>
+          <div class="meta mb-2">"${destino.descripcion}"</div>
           <div class="d-flex justify-content-between align-items-end mt-3">
-            <div class="precio">S/ \ + \\ + <small> / persona</small></div>
-            <button class="btn-card-action" onclick="seleccionarDestino(\ + \\ + )">Seleccionar <i class="bi bi-arrow-right"></i></button>
+            <div class="precio">S/ ${Number(destino.precioSoles || destino.precioBase).toFixed(2)}<small> / persona</small></div>
+            <button class="btn-card-action" onclick="seleccionarDestino(${id})">Seleccionar <i class="bi bi-arrow-right"></i></button>
           </div>
         </div>
       </div>
-    \;
+    `;
     container.appendChild(col);
   });
 }
@@ -94,18 +94,18 @@ function cargarEquipoAsesores() {
   teamData.forEach(miembro => {
     const col = document.createElement('div');
     col.className = 'col-md-3 col-sm-6';
-    col.innerHTML = \
+    col.innerHTML = `
       <div class="team-card">
-        <img src="\ + \\ + " alt="\ + \\ + ">
-        <h4>\ + \\ + </h4>
-        <p>\ + \\ + </p>
+        <img src="${miembro.img}" alt="${miembro.nombre}">
+        <h4>${miembro.nombre}</h4>
+        <p>${miembro.cargo}</p>
         <div class="social-links">
           <a href="#"><i class="bi bi-twitter"></i></a>
           <a href="#"><i class="bi bi-instagram"></i></a>
           <a href="#"><i class="bi bi-facebook"></i></a>
         </div>
       </div>
-    \;
+    `;
     container.appendChild(col);
   });
 }
@@ -145,7 +145,7 @@ function seleccionarDestino(id) {
   }
   document.getElementById('searchCard')?.scrollIntoView({ behavior:'smooth' });
   
-  // Show Modal Reserva si existe (ya que ahora no hay form de búsqueda estático)
+  // Show Modal Reserva si existe
   const modalEl = document.getElementById('modalReserva');
   if (modalEl) {
       const paquete = getDestinoById(id);
@@ -232,7 +232,7 @@ function calcularPrecio() {
   const { igv, total } = calcularPrecioConImpuestos(subtotal);
 
   const precioSolesSpan = document.getElementById('precioSoles');
-  if (precioSolesSpan) precioSolesSpan.textContent = \S/ \ + \\\;
+  if (precioSolesSpan) precioSolesSpan.textContent = \`S/ \${total.toFixed(2)}\`;
 
   window.precioActual = { subtotal, igv, total, noches, pasajeros, destino };
   return total;
