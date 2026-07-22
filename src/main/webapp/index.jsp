@@ -24,7 +24,7 @@
             <div class="carousel-inner">
                 <!-- Slide 1 (Costa) -->
                 <div class="carousel-item active">
-                    <img src="https://picsum.photos/seed/costaperu/1920/1080" class="d-block w-100" alt="Costa">
+                    <img src="assets/img/Paracas.jpg" class="d-block w-100" alt="Costa">
                     <div class="carousel-caption">
                         <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow" style="font-family: 'Inter', sans-serif;">La magia del mar</span>
                         <h1>Aventuras en la <span style="color: var(--primary);">Costa</span></h1>
@@ -35,7 +35,7 @@
                 
                 <!-- Slide 2 (Sierra) -->
                 <div class="carousel-item">
-                    <img src="https://picsum.photos/seed/andesperu/1920/1080" class="d-block w-100" alt="Sierra">
+                    <img src="assets/img/machupicchu.jpeg" class="d-block w-100" alt="Sierra">
                     <div class="carousel-caption">
                         <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow" style="font-family: 'Inter', sans-serif;">Tocando el cielo andino</span>
                         <h1>Misticismo en la <span style="color: var(--primary);">Sierra</span></h1>
@@ -46,7 +46,7 @@
 
                 <!-- Slide 3 (Selva) -->
                 <div class="carousel-item">
-                    <img src="https://picsum.photos/seed/amazonasperu/1920/1080" class="d-block w-100" alt="Selva">
+                    <img src="assets/img/iquitos_carrusel.jpg" class="d-block w-100" alt="Selva">
                     <div class="carousel-caption">
                         <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow" style="font-family: 'Inter', sans-serif;">El corazón del Amazonas</span>
                         <h1>Magia en la <span style="color: var(--primary);">Selva</span></h1>
@@ -116,7 +116,7 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="card-tour">
                         <div class="img-wrap">
-                            <img src="https://picsum.photos/seed/cusco/800/600" alt="Cusco">
+                            <img src="assets/img/Colca.jpg" alt="Cusco">
                             <span class="badge-region">Sierra</span>
                         </div>
                         <div class="body">
@@ -133,7 +133,7 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="card-tour">
                         <div class="img-wrap">
-                            <img src="https://picsum.photos/seed/iquitos/800/600" alt="Iquitos">
+                            <img src="assets/img/Tarapoto_laguna.jpg" alt="Iquitos">
                             <span class="badge-region">Selva</span>
                         </div>
                         <div class="body">
@@ -150,7 +150,7 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="card-tour">
                         <div class="img-wrap">
-                            <img src="https://picsum.photos/seed/paracas/800/600" alt="Paracas">
+                            <img src="assets/img/pimentel.webp" alt="Paracas">
                             <span class="badge-region">Costa</span>
                         </div>
                         <div class="body">

@@ -13,7 +13,7 @@
     <jsp:include page="componentes/navbar.jsp"></jsp:include>
 
     <!-- HEADER DE REGION -->
-    <header class="region-header" style="background-image: url('https://picsum.photos/seed/andesperu/1920/1080');">
+    <header class="region-header" style="background-image: url('assets/img/cusco_noche.jpeg');">
         <div class="text-center">
             <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow" style="font-family: 'Inter', sans-serif;">Tocando el cielo andino</span>
             <h1>Sierra Peruana</h1>
