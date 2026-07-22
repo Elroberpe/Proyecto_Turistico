@@ -55,12 +55,15 @@ function cargarDestinosSelect() {
     const select = document.getElementById('destinoSelect');
     if (!select) return;
 
-  	paquetesActuales.forEach(p => {
-		const option = document.createElement('option');
-		option.value = p.idPaquete;
-		option.textContent = `${p.nombre} - S/ ${p.precioDia}/día`;
-		select.appendChild(option);
-	})
+    // Limpiar opciones anteriores dejando la primera
+    select.length = 1;
+
+    paquetesActuales.forEach(p => {
+        const option = document.createElement('option');
+        option.value = p.idPaquete;
+        option.textContent = `${p.nombre} - S/ ${Number(p.precioSoles).toFixed(2)}`;
+        select.appendChild(option);
+    });
 }
 
 // ==================== RENDERIZAR TARJETAS DE DESTINOS ====================
@@ -70,39 +73,41 @@ function cargarDestinosRegion() {
     const container = document.getElementById('destinosContainer');
     if (!container) return;
 
-	container.innerHTML = '';
-	
-	if(paquetesActuales.length === 0){
-	  	container.innerHTML = `
-		<div class= "col-12 text-center text-muted">
-			No hay paquetes disponibles para esta region.
-		</div>
-		`;
-		return;	
-	}
-   
-	paquetesActuales.forEach(p => {
-	        const col = document.createElement('div');
-	        col.className = 'col-md-4';
-	        col.innerHTML = `
-	            <div class="destination-card"">
-					<img src="" alt = "">
-	                <div class="card-body">
-	                    <h4>${p.nombre}</h4>
-	                    <p class="text-muted mb-1"><i class="bi bi-geo-alt"></i> ${p.destino}</p>
-	                    <p>${p.descripcion}</p>
-	                    <p class="price">Desde S/ ${p.precioDia.toFixed(2)} por día</p>
-	                    <p class="text-muted small mb-1">
-	                        Duración: ${p.diasMinimos} - ${p.diasMaximos} días
-	                    </p>
-	                    <p class="text-muted small">
-	                        Cupos disponibles: ${p.cupoDisponible}
-	                    </p>
-	                </div>
-	            </div>
-	        `;
-	        container.appendChild(col);
-	    });
+    container.innerHTML = '';
+
+    if (paquetesActuales.length === 0) {
+        container.innerHTML = `
+            <div class="col-12 text-center text-muted">
+                No hay paquetes disponibles para esta región.
+            </div>
+        `;
+        return;
+    }
+
+    paquetesActuales.forEach(p => {
+
+        const col = document.createElement('div');
+        col.className = 'col-md-4';
+
+        col.innerHTML = `
+            <div class="card-tour">
+                <div class="img-wrap">
+                    <img src="${p.imagenUrl}" alt="${p.nombre}">
+                    <span class="badge-region"><i class="bi bi-geo-alt"></i> ${p.destino}</span>
+                </div>
+                <div class="body">
+                    <h3>${p.nombre}</h3>
+                    <div class="meta mb-2">Destino destacado de la región</div>
+                    <div class="d-flex justify-content-between align-items-end mt-3">
+                        <div class="precio">S/ ${Number(p.precioSoles).toFixed(2)}<small> / persona</small></div>
+                        <button class="btn btn-primary btn-sm" onclick="seleccionarDestino(${p.idPaquete})">Seleccionar</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(col);
+    });
 }
 
 // ==================== SELECCIONAR DESTINO DESDE TARJETA ====================

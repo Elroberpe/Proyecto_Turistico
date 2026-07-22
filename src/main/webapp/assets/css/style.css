@@ -305,50 +305,58 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ==================== DESTINATION CARDS ==================== */
-.destination-card {
-    background: var(--bg-white);
-    border-radius: var(--border-radius);
+.card-tour {
+    border: none;
+    border-radius: 14px;
     overflow: hidden;
-    transition: all 0.3s;
-    box-shadow: var(--shadow-sm);
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(30, 20, 10, 0.04);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
     height: 100%;
-    border: 1px solid rgba(0, 0, 0, 0.04);
 }
-
-.destination-card:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow-md);
+.card-tour:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 28px rgba(30, 20, 10, 0.12);
 }
-
-.destination-card img {
-    width: 100%;
-    height: 210px;
-    object-fit: cover;
+.card-tour .img-wrap {
+    position: relative;
+    height: 190px;
+    overflow: hidden;
 }
-
-.destination-card .card-body {
-    padding: 20px;
+.card-tour .img-wrap img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.5s ease;
 }
-
-.destination-card h4 {
+.card-tour:hover .img-wrap img { transform: scale(1.06); }
+.card-tour .badge-region {
+    position: absolute; top: 0.7rem; right: 0.7rem;
+    font-size: 0.68rem; font-weight: 500;
+    padding: 0.3rem 0.55rem;
+    border-radius: 999px;
+    background: rgba(239, 230, 214, 0.92);
+    color: #1e2a22;
+}
+.card-tour .body { padding: 1.15rem 1.25rem 1.35rem; }
+.card-tour h3 {
     font-family: 'Inter', sans-serif;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 600;
-    margin-bottom: 10px;
+    margin-bottom: 0.2rem;
     color: var(--primary-dark);
 }
-
-.destination-card p {
-    font-size: 0.85rem;
-    margin-bottom: 12px;
-    line-height: 1.5;
+.card-tour .meta {
+    font-size: 0.82rem;
+    color: #7a725f;
 }
-
-.destination-card .price {
-    font-size: 1.3rem;
-    font-weight: 600;
+.card-tour .precio {
+    font-size: 1.5rem;
     color: var(--accent);
-    margin: 12px 0;
+    font-weight: 600;
+}
+.card-tour .precio small {
+    font-size: 0.7rem;
+    color: #8a8172;
+    font-weight: 400;
 }
 
 /* ==================== TEAM SECTION ==================== */
