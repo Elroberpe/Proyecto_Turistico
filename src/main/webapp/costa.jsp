@@ -13,7 +13,7 @@
     <jsp:include page="componentes/navbar.jsp"></jsp:include>
 
     <!-- HEADER DE REGION -->
-    <header class="region-header" style="background-image: url('assets/img/punta_sal.jpg');">
+    <header class="region-header" style="background-image: url('assets/img/costa/punta_sal.jpg');">
         <div class="text-center">
             <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow" style="font-family: 'Inter', sans-serif;">Descubre la magia del mar</span>
             <h1>Costa Peruana</h1>
