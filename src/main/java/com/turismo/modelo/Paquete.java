@@ -8,6 +8,7 @@ public class Paquete {
     private int idCategoria;
     private String nombre;
     private String destino;
+    private String descripcion;
     private String imagenUrl;
     private BigDecimal precioSoles;
     private String estado;
@@ -109,4 +110,12 @@ public class Paquete {
                 ", estado='" + estado + '\'' +
                 '}';
     }
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
 }

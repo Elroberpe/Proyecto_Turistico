@@ -16,7 +16,7 @@ public class PaqueteDao {
         List<Paquete> lista = new ArrayList<>();
 
         String sql =
-                "SELECT p.id_paquete, p.id_categoria, p.nombre, p.destino, " +
+                "SELECT p.id_paquete, p.id_categoria, p.nombre, p.destino, p.descripcion," +
                 "p.imagenUrl, p.precio_soles, p.estado " +
                 "FROM paquetes p " +
                 "INNER JOIN categorias_paquetes c ON p.id_categoria = c.id_categoria " +
@@ -37,6 +37,7 @@ public class PaqueteDao {
                 paquete.setIdCategoria(rs.getInt("id_categoria"));
                 paquete.setNombre(rs.getString("nombre"));
                 paquete.setDestino(rs.getString("destino"));
+                paquete.setDescripcion(rs.getString("descripcion"));
                 paquete.setImagenUrl(rs.getString("imagenUrl"));
                 paquete.setPrecioSoles(rs.getBigDecimal("precio_soles"));
                 paquete.setEstado(rs.getString("estado"));
