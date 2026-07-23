@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin TurÃ­stico - Reservas</title>
+    <title>Panel Admin Turístico - Reservas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
             </div>
             <ul class="list-unstyled components">
                 <li><a href="index.jsp"><i class="bi bi-house-door me-2"></i> Dashboard</a></li>
-                <li><a href="categorias_paquetes.jsp"><i class="bi bi-tags me-2"></i> CategorÃ­as</a></li>
+                <li><a href="categorias_paquetes.jsp"><i class="bi bi-tags me-2"></i> Categorías</a></li>
                 <li><a href="paquetes.jsp"><i class="bi bi-box-seam me-2"></i> Paquetes</a></li>
                 <li><a href="clientes.jsp"><i class="bi bi-person-badge me-2"></i> Clientes</a></li>
                 <li><a href="usuarios.jsp"><i class="bi bi-people me-2"></i> Usuarios</a></li>
@@ -41,7 +41,7 @@
             </nav>
 
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>GestiÃ³n de Reservas</h2>
+                <h2>Gestión de Reservas</h2>
                 <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#reservaModal">
                     <i class="bi bi-plus-circle"></i> Nueva Reserva
                 </button>
@@ -67,7 +67,7 @@
                         <tbody>
                             <tr>
                                 <td>1</td>
-                                <td>Carlos RamÃ­rez (3)</td>
+                                <td>Carlos Ramírez (3)</td>
                                 <td>Tour Paracas (1)</td>
                                 <td>ida</td>
                                 <td>2026-08-15</td>
@@ -117,7 +117,7 @@
                     <label class="form-label">Cliente (ID Usuario)</label>
                     <select class="form-select" name="id_usuario" required>
                         <option value="">Seleccionar Cliente</option>
-                        <option value="3">Carlos RamÃ­rez</option>
+                        <option value="3">Carlos Ramírez</option>
                         <option value="4">Ana Smith</option>
                     </select>
                   </div>
@@ -149,7 +149,7 @@
               </div>
               <div class="row">
                   <div class="col-md-4 mb-3">
-                    <label class="form-label">NÂ° Pasajeros</label>
+                    <label class="form-label">N° Pasajeros</label>
                     <input type="number" class="form-control" name="num_pasajeros" min="1" value="1" required>
                   </div>
                   <div class="col-md-4 mb-3">

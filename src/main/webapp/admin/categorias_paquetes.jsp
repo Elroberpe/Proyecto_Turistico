@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin TurÃ­stico - CategorÃ­as de Paquetes</title>
+    <title>Panel Admin Turístico - Categorías de Paquetes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
             </div>
             <ul class="list-unstyled components">
                 <li><a href="index.jsp"><i class="bi bi-house-door me-2"></i> Dashboard</a></li>
-                <li class="active"><a href="categorias_paquetes.jsp"><i class="bi bi-tags me-2"></i> CategorÃ­as</a></li>
+                <li class="active"><a href="categorias_paquetes.jsp"><i class="bi bi-tags me-2"></i> Categorías</a></li>
                 <li><a href="paquetes.jsp"><i class="bi bi-box-seam me-2"></i> Paquetes</a></li>
                 <li><a href="clientes.jsp"><i class="bi bi-person-badge me-2"></i> Clientes</a></li>
                 <li><a href="usuarios.jsp"><i class="bi bi-people me-2"></i> Usuarios</a></li>
@@ -41,9 +41,9 @@
             </nav>
 
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>CategorÃ­as de Paquetes</h2>
+                <h2>Categorías de Paquetes</h2>
                 <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#categoriaModal">
-                    <i class="bi bi-plus-circle"></i> Nueva CategorÃ­a
+                    <i class="bi bi-plus-circle"></i> Nueva Categoría
                 </button>
             </div>
             
@@ -52,9 +52,9 @@
                     <table class="table table-hover table-custom align-middle">
                         <thead>
                             <tr>
-                                <th>ID CategorÃ­a</th>
+                                <th>ID Categoría</th>
                                 <th>Nombre</th>
-                                <th>DescripciÃ³n</th>
+                                <th>Descripción</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -62,7 +62,7 @@
                             <tr>
                                 <td>1</td>
                                 <td>Costa</td>
-                                <td>Paquetes turÃ­sticos a destinos de playa y mar.</td>
+                                <td>Paquetes turísticos a destinos de playa y mar.</td>
                                 <td>
                                     <button class="btn btn-sm btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#categoriaModal"><i class="bi bi-pencil"></i></button>
                                     <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
@@ -71,7 +71,7 @@
                             <tr>
                                 <td>2</td>
                                 <td>Sierra</td>
-                                <td>Tours enfocados en montaÃ±a, cultura andina y frÃ­o.</td>
+                                <td>Tours enfocados en montaña, cultura andina y frío.</td>
                                 <td>
                                     <button class="btn btn-sm btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#categoriaModal"><i class="bi bi-pencil"></i></button>
                                     <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
@@ -84,22 +84,22 @@
         </div>
     </div>
 
-    <!-- Modal Formulario CategorÃ­a -->
+    <!-- Modal Formulario Categoría -->
     <div class="modal fade" id="categoriaModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header bg-primary-custom text-white">
-            <h5 class="modal-title">Detalle de CategorÃ­a</h5>
+            <h5 class="modal-title">Detalle de Categoría</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <form>
               <div class="mb-3">
-                <label class="form-label">Nombre de CategorÃ­a</label>
+                <label class="form-label">Nombre de Categoría</label>
                 <input type="text" class="form-control" name="nombre" placeholder="Ej. Selva" required>
               </div>
               <div class="mb-3">
-                <label class="form-label">DescripciÃ³n</label>
+                <label class="form-label">Descripción</label>
                 <textarea class="form-control" name="descripcion" rows="3" required></textarea>
               </div>
               <div class="text-end mt-3">

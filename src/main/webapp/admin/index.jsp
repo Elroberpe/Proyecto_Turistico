@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin TurÃ­stico - Dashboard</title>
+    <title>Panel Admin Turístico - Dashboard</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -22,7 +22,7 @@
             </div>
             <ul class="list-unstyled components">
                 <li class="active"><a href="index.jsp"><i class="bi bi-house-door me-2"></i> Dashboard</a></li>
-                <li><a href="categorias_paquetes.jsp"><i class="bi bi-tags me-2"></i> CategorÃ­as</a></li>
+                <li><a href="categorias_paquetes.jsp"><i class="bi bi-tags me-2"></i> Categorías</a></li>
                 <li><a href="paquetes.jsp"><i class="bi bi-box-seam me-2"></i> Paquetes</a></li>
                 <li><a href="clientes.jsp"><i class="bi bi-person-badge me-2"></i> Clientes</a></li>
                 <li><a href="usuarios.jsp"><i class="bi bi-people me-2"></i> Usuarios</a></li>

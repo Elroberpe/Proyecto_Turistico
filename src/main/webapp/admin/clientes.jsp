@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin TurÃ­stico - Clientes</title>
+    <title>Panel Admin Turístico - Clientes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
             </div>
             <ul class="list-unstyled components">
                 <li><a href="index.jsp"><i class="bi bi-house-door me-2"></i> Dashboard</a></li>
-                <li><a href="categorias_paquetes.jsp"><i class="bi bi-tags me-2"></i> CategorÃ­as</a></li>
+                <li><a href="categorias_paquetes.jsp"><i class="bi bi-tags me-2"></i> Categorías</a></li>
                 <li><a href="paquetes.jsp"><i class="bi bi-box-seam me-2"></i> Paquetes</a></li>
                 <li class="active"><a href="clientes.jsp"><i class="bi bi-person-badge me-2"></i> Clientes</a></li>
                 <li><a href="usuarios.jsp"><i class="bi bi-people me-2"></i> Usuarios</a></li>
@@ -56,7 +56,7 @@
                                 <th>Nombres</th>
                                 <th>Apellidos</th>
                                 <th>Email</th>
-                                <th>TelÃ©fono</th>
+                                <th>Teléfono</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -64,7 +64,7 @@
                             <tr>
                                 <td>3</td>
                                 <td>Carlos</td>
-                                <td>RamÃ­rez</td>
+                                <td>Ramírez</td>
                                 <td>carlos.ramirez@mail.com</td>
                                 <td>987654321</td>
                                 <td>
@@ -103,16 +103,16 @@
               </div>
               <div class="row">
                   <div class="col-md-6 mb-3">
-                    <label class="form-label">Correo ElectrÃ³nico</label>
+                    <label class="form-label">Correo Electrónico</label>
                     <input type="email" class="form-control" name="email" required>
                   </div>
                   <div class="col-md-6 mb-3">
-                    <label class="form-label">TelÃ©fono</label>
+                    <label class="form-label">Teléfono</label>
                     <input type="text" class="form-control" name="telefono">
                   </div>
               </div>
               <div class="mb-3">
-                <label class="form-label">ContraseÃ±a</label>
+                <label class="form-label">Contraseña</label>
                 <input type="password" class="form-control" name="password" required>
               </div>
               <div class="text-end mt-3">

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin TurÃ­stico - Usuarios</title>
+    <title>Panel Admin Turístico - Usuarios</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
             </div>
             <ul class="list-unstyled components">
                 <li><a href="index.jsp"><i class="bi bi-house-door me-2"></i> Dashboard</a></li>
-                <li><a href="categorias_paquetes.jsp"><i class="bi bi-tags me-2"></i> CategorÃ­as</a></li>
+                <li><a href="categorias_paquetes.jsp"><i class="bi bi-tags me-2"></i> Categorías</a></li>
                 <li><a href="paquetes.jsp"><i class="bi bi-box-seam me-2"></i> Paquetes</a></li>
                 <li><a href="clientes.jsp"><i class="bi bi-person-badge me-2"></i> Clientes</a></li>
                 <li class="active"><a href="usuarios.jsp"><i class="bi bi-people me-2"></i> Usuarios</a></li>
@@ -41,7 +41,7 @@
             </nav>
 
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>GestiÃ³n de Usuarios</h2>
+                <h2>Gestión de Usuarios</h2>
                 <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#usuarioModal">
                     <i class="bi bi-person-plus"></i> Nuevo Usuario
                 </button>
@@ -56,7 +56,7 @@
                                 <th>Nombres</th>
                                 <th>Apellidos</th>
                                 <th>Email</th>
-                                <th>TelÃ©fono</th>
+                                <th>Teléfono</th>
                                 <th>Rol (ID)</th>
                                 <th>Acciones</th>
                             </tr>
@@ -64,8 +64,8 @@
                         <tbody>
                             <tr>
                                 <td>1</td>
-                                <td>MarÃ­a</td>
-                                <td>GarcÃ­a</td>
+                                <td>María</td>
+                                <td>García</td>
                                 <td>maria.admin@example.com</td>
                                 <td>987654321</td>
                                 <td><span class="badge bg-primary">Admin (1)</span></td>
@@ -77,7 +77,7 @@
                             <tr>
                                 <td>2</td>
                                 <td>Juan</td>
-                                <td>PÃ©rez</td>
+                                <td>Pérez</td>
                                 <td>juan.perez@example.com</td>
                                 <td>912345678</td>
                                 <td><span class="badge bg-info text-dark">Empleado (2)</span></td>
@@ -115,17 +115,17 @@
               </div>
               <div class="row">
                   <div class="col-md-6 mb-3">
-                    <label class="form-label">Correo ElectrÃ³nico</label>
+                    <label class="form-label">Correo Electrónico</label>
                     <input type="email" class="form-control" name="email" required>
                   </div>
                   <div class="col-md-6 mb-3">
-                    <label class="form-label">TelÃ©fono</label>
+                    <label class="form-label">Teléfono</label>
                     <input type="text" class="form-control" name="telefono">
                   </div>
               </div>
               <div class="row">
                   <div class="col-md-6 mb-3">
-                    <label class="form-label">ContraseÃ±a</label>
+                    <label class="form-label">Contraseña</label>
                     <input type="password" class="form-control" name="password" required>
                   </div>
                   <div class="col-md-6 mb-3">
