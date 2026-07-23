@@ -52,7 +52,7 @@ function cargarPaquetesDestacados() {
       <div class="card-tour">
         <div class="img-wrap">
           <img src="${destino.imagenUrl || destino.imagen}" alt="${destino.nombre}">
-          <span class="badge-region">${regionText}</span>
+          <span class="badge-region">${destino.destino}</span>
         </div>
         <div class="body">
           <h3>${destino.nombre}</h3>
@@ -71,15 +71,11 @@ function cargarPaquetesDestacados() {
 function cargarDestinoDesdeURL() {
   const urlParams = new URLSearchParams(window.location.search);
   const destinoId = urlParams.get('destino');
-  if (destinoId) {
-    const destinoSelect = document.getElementById('destinoSelect');
-    if (destinoSelect) {
-      destinoSelect.value = destinoId;
-      destinoSelect.dispatchEvent(new Event('change')); // dispara calcularPrecio de booking-modal
-    }
+  if (destinoId && typeof window.seleccionarDestino === 'function') {
+    // Pequeño retraso para asegurar que la vista y los datos cargaron
     setTimeout(() => {
-      document.getElementById('searchCard')?.scrollIntoView({ behavior:'smooth' });
-    }, 500);
+      window.seleccionarDestino(destinoId);
+    }, 300);
   }
 }
 

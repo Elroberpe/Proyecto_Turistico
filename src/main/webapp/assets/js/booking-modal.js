@@ -18,7 +18,6 @@ window.seleccionarDestino = function(id) {
         destinoSelect.value = id;
         destinoSelect.dispatchEvent(new Event('change'));
     }
-    document.getElementById('searchCard')?.scrollIntoView({ behavior:'smooth' });
     
     const modalEl = document.getElementById('modalReserva');
     if (modalEl) {
