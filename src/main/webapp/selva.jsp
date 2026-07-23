@@ -13,18 +13,18 @@
     <jsp:include page="componentes/navbar.jsp"></jsp:include>
 
     <!-- HEADER DE REGION -->
-    <header class="region-header" style="background-image: url('assets/img/selva/Iquitos_amazonas.jpg');">
+    <header class="region-header bg-selva">
         <div class="text-center">
-            <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow" style="font-family: 'Inter', sans-serif;">El corazón del Amazonas</span>
+            <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow badge-hero">El corazón del Amazonas</span>
             <h1>Selva Peruana</h1>
         </div>
     </header>
 
     <!-- CATALOGO -->
-    <section class="packages-section" style="border-radius: 30px 30px 0 0; margin-top: -30px; position: relative; z-index: 10;">
+    <section class="packages-section packages-section-custom">
         <div class="container">
             <div class="section-title">
-                <span class="text-uppercase fw-bold" style="color: var(--primary); letter-spacing: 2px; font-size: 0.85rem;">Magia Verde</span>
+                <span class="text-uppercase fw-bold text-subtitle">Naturaleza Pura</span>
                 <h2>Paquetes en la Selva</h2>
                 <p>Navega el río más caudaloso del mundo, descubre especies exóticas y alójate en lodges de ensueño inmersos en la naturaleza.</p>
             </div>

@@ -26,8 +26,8 @@
                 <div class="carousel-item active">
                     <img src="assets/img/costa/Paracas.jpg" class="d-block w-100" alt="Costa">
                     <div class="carousel-caption">
-                        <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow" style="font-family: 'Inter', sans-serif;">La magia del mar</span>
-                        <h1>Aventuras en la <span style="color: var(--primary);">Costa</span></h1>
+                        <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow badge-hero">La magia del mar</span>
+                        <h1>Aventuras en la <span class="title-primary-span">Costa</span></h1>
                         <p>Playas infinitas, dunas espectaculares y la mejor gastronomía marina del mundo.</p>
                         <a href="costa.jsp" class="btn btn-primary-custom px-4 py-3 fs-5 mt-3">Explorar Costa <i class="bi bi-arrow-right ms-2"></i></a>
                     </div>
@@ -37,8 +37,8 @@
                 <div class="carousel-item">
                     <img src="assets/img/sierra/machupicchu.jpeg" class="d-block w-100" alt="Sierra">
                     <div class="carousel-caption">
-                        <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow" style="font-family: 'Inter', sans-serif;">Tocando el cielo andino</span>
-                        <h1>Misticismo en la <span style="color: var(--primary);">Sierra</span></h1>
+                        <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow badge-hero">Tocando el cielo andino</span>
+                        <h1>Misticismo en la <span class="title-primary-span">Sierra</span></h1>
                         <p>Maravíllate con el imponente Machu Picchu y paisajes montañosos que roban el aliento.</p>
                         <a href="sierra.jsp" class="btn btn-primary-custom px-4 py-3 fs-5 mt-3">Explorar Sierra <i class="bi bi-arrow-right ms-2"></i></a>
                     </div>
@@ -48,8 +48,8 @@
                 <div class="carousel-item">
                     <img src="assets/img/selva/iquitos_carrusel.jpg" class="d-block w-100" alt="Selva">
                     <div class="carousel-caption">
-                        <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow" style="font-family: 'Inter', sans-serif;">El corazón del Amazonas</span>
-                        <h1>Magia en la <span style="color: var(--primary);">Selva</span></h1>
+                        <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow badge-hero">El corazón del Amazonas</span>
+                        <h1>Magia en la <span class="title-primary-span">Selva</span></h1>
                         <p>Navega el río más caudaloso del mundo y descubre flora y fauna en su estado más puro.</p>
                         <a href="selva.jsp" class="btn btn-primary-custom px-4 py-3 fs-5 mt-3">Explorar Selva <i class="bi bi-arrow-right ms-2"></i></a>
                     </div>
@@ -68,12 +68,12 @@
     </section>
 
     <!-- BENEFICIOS -->
-    <section class="py-5" style="background: var(--white); margin-top: -30px; position: relative; z-index: 10; border-radius: 30px 30px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.05);">
+    <section class="py-5 section-features">
         <div class="container py-5">
             <div class="row g-4 text-center">
                 <div class="col-md-4">
-                    <div class="p-4 rounded-4" style="transition: all 0.3s; cursor: default;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-                        <div class="d-inline-flex align-items-center justify-content-center text-white rounded-circle mb-4" style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), var(--primary-hover));">
+                    <div class="p-4 rounded-4 feature-card">
+                        <div class="d-inline-flex align-items-center justify-content-center text-white rounded-circle mb-4 feature-icon-wrap">
                             <i class="bi bi-shield-check fs-1"></i>
                         </div>
                         <h4 class="fw-bold mb-3">Viaje Seguro</h4>
@@ -81,8 +81,8 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="p-4 rounded-4" style="transition: all 0.3s; cursor: default;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-                        <div class="d-inline-flex align-items-center justify-content-center text-white rounded-circle mb-4" style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), var(--primary-hover));">
+                    <div class="p-4 rounded-4 feature-card">
+                        <div class="d-inline-flex align-items-center justify-content-center text-white rounded-circle mb-4 feature-icon-wrap">
                             <i class="bi bi-compass fs-1"></i>
                         </div>
                         <h4 class="fw-bold mb-3">Guías Expertos</h4>
@@ -90,8 +90,8 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="p-4 rounded-4" style="transition: all 0.3s; cursor: default;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-                        <div class="d-inline-flex align-items-center justify-content-center text-white rounded-circle mb-4" style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), var(--primary-hover));">
+                    <div class="p-4 rounded-4 feature-card">
+                        <div class="d-inline-flex align-items-center justify-content-center text-white rounded-circle mb-4 feature-icon-wrap">
                             <i class="bi bi-star fs-1"></i>
                         </div>
                         <h4 class="fw-bold mb-3">Experiencia Premium</h4>
@@ -106,7 +106,7 @@
     <section id="destinos" class="packages-section">
         <div class="container">
             <div class="section-title">
-                <span class="text-uppercase fw-bold" style="color: var(--primary); letter-spacing: 2px; font-size: 0.85rem;">Lo más pedido</span>
+                <span class="text-uppercase fw-bold text-subtitle">Lo más pedido</span>
                 <h2>Destinos Exclusivos</h2>
                 <p>Nuestra selección curada de las mejores experiencias a lo largo del Perú. Encuentra el viaje perfecto que estabas esperando.</p>
             </div>
@@ -122,10 +122,10 @@
     </section>
 
     <!-- CALL TO ACTION -->
-    <section class="py-5" style="background: linear-gradient(135deg, var(--dark), #1f2937); color: white;">
+    <section class="py-5 section-cta">
         <div class="container py-5 text-center">
-            <h2 class="display-5 fw-bold text-white mb-4" style="font-family: 'Outfit', sans-serif;">¿Listo para la aventura de tu vida?</h2>
-            <p class="lead mb-5 opacity-75" style="font-weight: 300; max-width: 600px; margin: 0 auto;">Nuestros asesores están disponibles para diseñar y perfeccionar el itinerario ideal para ti y tu familia.</p>
+            <h2 class="display-5 fw-bold text-white mb-4 section-cta-title">¿Listo para la aventura de tu vida?</h2>
+            <p class="lead mb-5 opacity-75 section-cta-desc">Nuestros asesores están disponibles para diseñar y perfeccionar el itinerario ideal para ti y tu familia.</p>
             <a href="contacto.jsp" class="btn btn-primary-custom btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg">Contactar Asesor <i class="bi bi-chat-right-text ms-2"></i></a>
         </div>
     </section>

@@ -10,19 +10,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css?v=2.0">
 </head>
-<body style="background-color: var(--light-gray);">
+<body class="body-contacto">
 
     <jsp:include page="componentes/navbar.jsp"></jsp:include>
 
     <!-- SECCIÓN PRINCIPAL -->
-    <section class="py-5" style="margin-top: 100px;">
+    <section class="py-5 section-contacto">
         <div class="container">
             <div class="row g-4 justify-content-center">
                 <!-- FORMULARIO -->
                 <div class="col-lg-7">
-                    <div class="card-tour h-100 border-0" style="background: white; border-radius: 20px;">
+                    <div class="card-tour h-100 border-0 card-contacto">
                         <div class="body p-5">
-                            <h3 class="fw-bold mb-4" style="color: var(--dark); font-family: 'Outfit', sans-serif;">
+                            <h3 class="fw-bold mb-4 card-contacto-title">
                                 <i class="bi bi-envelope-paper-fill text-primary me-2"></i> Envíanos un mensaje
                             </h3>
                             <form id="contactForm">
@@ -56,14 +56,14 @@
 
                 <!-- INFORMACIÓN DE CONTACTO -->
                 <div class="col-lg-5">
-                    <div class="card-tour h-100 border-0" style="background: white; border-radius: 20px;">
+                    <div class="card-tour h-100 border-0 card-contacto">
                         <div class="body p-5">
-                            <h3 class="fw-bold mb-4" style="color: var(--dark); font-family: 'Outfit', sans-serif;">
+                            <h3 class="fw-bold mb-4 card-contacto-title">
                                 <i class="bi bi-geo-alt-fill text-danger me-2"></i> Nuestras Sedes
                             </h3>
                             
                             <div class="d-flex mb-4">
-                                <div class="icon-wrap bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; flex-shrink: 0;">
+                                <div class="icon-wrap bg-light rounded-circle d-flex align-items-center justify-content-center me-3 icon-wrap-contacto">
                                     <i class="bi bi-building fs-5 text-primary"></i>
                                 </div>
                                 <div>
@@ -73,7 +73,7 @@
                             </div>
                             
                             <div class="d-flex mb-4">
-                                <div class="icon-wrap bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; flex-shrink: 0;">
+                                <div class="icon-wrap bg-light rounded-circle d-flex align-items-center justify-content-center me-3 icon-wrap-contacto">
                                     <i class="bi bi-building fs-5 text-primary"></i>
                                 </div>
                                 <div>
@@ -93,9 +93,9 @@
 
                             <h5 class="fw-bold mb-3">Síguenos en Redes</h5>
                             <div class="d-flex gap-2">
-                                <a href="#" class="btn btn-light rounded-circle" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;"><i class="bi bi-facebook fs-5" style="color: #1877F2;"></i></a>
-                                <a href="#" class="btn btn-light rounded-circle" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;"><i class="bi bi-instagram fs-5" style="color: #E4405F;"></i></a>
-                                <a href="#" class="btn btn-light rounded-circle" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;"><i class="bi bi-tiktok fs-5" style="color: #000000;"></i></a>
+                                <a href="#" class="btn btn-light rounded-circle btn-social-contacto"><i class="bi bi-facebook fs-5 icon-facebook"></i></a>
+                                <a href="#" class="btn btn-light rounded-circle btn-social-contacto"><i class="bi bi-instagram fs-5 icon-instagram"></i></a>
+                                <a href="#" class="btn btn-light rounded-circle btn-social-contacto"><i class="bi bi-tiktok fs-5 icon-tiktok"></i></a>
                             </div>
                         </div>
                     </div>

@@ -4,8 +4,8 @@
     <div class="container">
         <div class="row g-4">
             <div class="col-lg-4 pe-lg-5">
-                <h3 style="font-family: 'Outfit', sans-serif; font-weight: 800; color: white;">Perú<span style="color: var(--primary);">Chasqui</span></h3>
-                <p class="mt-3" style="color: rgba(255,255,255,0.7); font-size: 0.95rem;">Explora los destinos más impresionantes del Perú con expertos locales. Tu aventura comienza aquí.</p>
+                <h3 class="footer-brand">Perú<span class="footer-brand-span">Chasqui</span></h3>
+                <p class="mt-3 footer-desc">Explora los destinos más impresionantes del Perú con expertos locales. Tu aventura comienza aquí.</p>
                 <div class="d-flex gap-3 mt-4">
                     <a href="#" class="text-white fs-5"><i class="bi bi-facebook"></i></a>
                     <a href="#" class="text-white fs-5"><i class="bi bi-instagram"></i></a>
@@ -30,10 +30,10 @@
             </div>
             <div class="col-lg-4 col-md-4">
                 <h5>Suscríbete</h5>
-                <p style="font-size: 0.9rem;">Recibe las mejores ofertas y tips de viaje.</p>
+                <p class="footer-newsletter-text">Recibe las mejores ofertas y tips de viaje.</p>
                 <div class="input-group mt-3">
                     <input type="email" class="form-control rounded-start-pill border-0 px-4 py-2" placeholder="Tu correo electrónico">
-                    <button class="btn btn-primary-custom rounded-end-pill rounded-start-0 m-0" style="padding-left: 20px; padding-right: 20px;" type="button">Unirme</button>
+                    <button class="btn btn-primary-custom rounded-end-pill rounded-start-0 m-0 btn-newsletter" type="button">Unirme</button>
                 </div>
             </div>
         </div>

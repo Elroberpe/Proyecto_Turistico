@@ -13,18 +13,18 @@
     <jsp:include page="componentes/navbar.jsp"></jsp:include>
 
     <!-- HEADER DE REGION -->
-    <header class="region-header" style="background-image: url('assets/img/sierra/cusco_noche.jpeg');">
+    <header class="region-header bg-sierra">
         <div class="text-center">
-            <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow" style="font-family: 'Inter', sans-serif;">Tocando el cielo andino</span>
+            <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow badge-hero">Tocando el cielo andino</span>
             <h1>Sierra Peruana</h1>
         </div>
     </header>
 
     <!-- CATALOGO -->
-    <section class="packages-section" style="border-radius: 30px 30px 0 0; margin-top: -30px; position: relative; z-index: 10;">
+    <section class="packages-section packages-section-custom">
         <div class="container">
             <div class="section-title">
-                <span class="text-uppercase fw-bold" style="color: var(--primary); letter-spacing: 2px; font-size: 0.85rem;">Aventura de Altura</span>
+                <span class="text-uppercase fw-bold text-subtitle">Misticismo y Cultura</span>
                 <h2>Paquetes en la Sierra</h2>
                 <p>Maravíllate con el imponente imperio Inca, paisajes montañosos que roban el aliento y tradiciones milenarias vivas.</p>
             </div>

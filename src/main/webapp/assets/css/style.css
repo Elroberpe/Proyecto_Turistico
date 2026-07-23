@@ -322,3 +322,140 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center;
     font-size: 0.9rem;
 }
+
+/* ================== EXTRA STYLES (FROM INLINE) ================== */
+
+/* Footer */
+.footer-brand {
+    font-family: 'Outfit', sans-serif; 
+    font-weight: 800; 
+    color: white;
+}
+.footer-brand span {
+    color: var(--primary);
+}
+.footer-desc {
+    color: rgba(255,255,255,0.7); 
+    font-size: 0.95rem;
+}
+.footer-newsletter-text {
+    font-size: 0.9rem;
+}
+.btn-newsletter {
+    padding-left: 20px; 
+    padding-right: 20px;
+}
+
+/* Modal Reserva */
+.modal-custom-content {
+    border-radius: var(--radius-lg);
+}
+.modal-custom-title {
+    font-family: 'Outfit', sans-serif; 
+    font-weight: 700; 
+    font-size: 1.5rem;
+}
+.modal-icon-primary {
+    color: var(--primary);
+}
+.modal-subtitle {
+    font-size: 1.05rem;
+}
+.form-input-custom {
+    border-radius: var(--radius-sm);
+}
+.precio-container-bg {
+    background: rgba(13, 148, 136, 0.05); 
+    border-radius: var(--radius-md);
+}
+.precio-display {
+    font-family: 'Outfit', sans-serif; 
+    font-size: 2.2rem; 
+    color: var(--primary);
+}
+
+/* Contacto */
+.body-contacto {
+    background-color: var(--light);
+}
+.section-contacto {
+    margin-top: 100px;
+}
+.card-contacto {
+    background: white; 
+    border-radius: 20px;
+}
+.card-contacto-title {
+    color: var(--dark); 
+    font-family: 'Outfit', sans-serif;
+}
+.icon-wrap-contacto {
+    width: 50px; 
+    height: 50px; 
+    flex-shrink: 0;
+}
+.btn-social-contacto {
+    width: 45px; 
+    height: 45px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+}
+.icon-facebook { color: #1877F2; }
+.icon-instagram { color: #E4405F; }
+.icon-tiktok { color: #000000; }
+
+/* Regions (Costa, Selva, Sierra) & Index */
+.bg-costa { background-image: url('../img/costa/punta_sal.jpg'); }
+.bg-selva { background-image: url('../img/selva/Iquitos_amazonas.jpg'); }
+.bg-sierra { background-image: url('../img/sierra/machu_picchu.jpg'); }
+
+.badge-hero {
+    font-family: 'Inter', sans-serif;
+}
+.title-primary-span {
+    color: var(--primary);
+}
+.packages-section-custom {
+    border-radius: 30px 30px 0 0; 
+    margin-top: -30px; 
+    position: relative; 
+    z-index: 10;
+}
+.text-subtitle {
+    color: var(--primary); 
+    letter-spacing: 2px; 
+    font-size: 0.85rem;
+}
+.section-features {
+    background: var(--white); 
+    margin-top: -30px; 
+    position: relative; 
+    z-index: 10; 
+    border-radius: 30px 30px 0 0; 
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+}
+.feature-card {
+    transition: all 0.3s; 
+    cursor: default;
+}
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+.feature-icon-wrap {
+    width: 80px; 
+    height: 80px; 
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+}
+.section-cta {
+    background: linear-gradient(135deg, var(--dark), #1f2937); 
+    color: white;
+}
+.section-cta-title {
+    font-family: 'Outfit', sans-serif;
+}
+.section-cta-desc {
+    font-weight: 300; 
+    max-width: 600px; 
+    margin: 0 auto;
+}
