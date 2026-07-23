@@ -35,32 +35,65 @@ function cargarResumenReserva() {
 
     if (container) {
         container.innerHTML = `
-            <h3 class="mb-4 text-primary"><i class="bi bi-receipt"></i> Factura Electrónica</h3>
-            <div class="invoice-detail">
-                <div class="row"><div class="col-6 text-muted">Destino:</div>
-                    <div class="col-6 fw-bold">${reserva.destino.nombre}</div></div>
-                <div class="row"><div class="col-6 text-muted">Tipo de viaje:</div>
-                    <div class="col-6 fw-bold">${reserva.tipoViaje === 'roundtrip' ? 'Ida y Vuelta' : 'Solo Ida'}</div></div>
-                <div class="row"><div class="col-6 text-muted">Salida:</div>
-                    <div class="col-6 fw-bold">${reserva.fechaSalida}</div></div>
-                ${reserva.fechaRetorno
-                    ? `<div class="row"><div class="col-6 text-muted">Retorno:</div>
-                       <div class="col-6 fw-bold">${reserva.fechaRetorno}</div></div>`
-                    : ''}
-                <div class="row"><div class="col-6 text-muted">Noches:</div>
-                    <div class="col-6 fw-bold">${reserva.noches}</div></div>
-                <div class="row"><div class="col-6 text-muted">Pasajeros:</div>
-                    <div class="col-6 fw-bold">${reserva.pasajeros}</div></div>
-                <hr>
-                <div class="row"><div class="col-6 text-muted">Subtotal:</div>
-                    <div class="col-6">S/ ${reserva.subtotal.toFixed(2)}</div></div>
-                <div class="row"><div class="col-6 text-muted">IGV (18%):</div>
-                    <div class="col-6">S/ ${reserva.igv.toFixed(2)}</div></div>
-                <div class="row"><div class="col-6 fw-bold">TOTAL:</div>
-                    <div class="col-6 fw-bold total-grande">S/ ${reserva.precioTotal.toFixed(2)}</div></div>
-            </div>
-            <div class="alert alert-info mt-3 small">
-                <i class="bi bi-info-circle"></i> Pago 100% seguro. Datos encriptados.
+            <div class="bg-white p-4" style="border-radius: var(--radius-md); box-shadow: var(--shadow-soft);">
+                <div class="text-center mb-4 pb-3 border-bottom">
+                    <div class="d-inline-block bg-primary text-white p-3 rounded-circle mb-3 shadow-sm">
+                        <i class="bi bi-receipt fs-3"></i>
+                    </div>
+                    <h3 class="text-dark fw-bold mb-0">Resumen de Viaje</h3>
+                    <p class="text-muted small">ID Reserva: #${reserva.id}</p>
+                </div>
+                
+                <div class="invoice-detail px-2">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted"><i class="bi bi-geo-alt me-2 text-primary"></i>Destino:</span>
+                        <span class="fw-bold text-end">${reserva.destino.nombre}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted"><i class="bi bi-arrow-left-right me-2 text-primary"></i>Tipo:</span>
+                        <span class="fw-bold">${reserva.tipoViaje === 'roundtrip' ? 'Ida y Vuelta' : 'Solo Ida'}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted"><i class="bi bi-calendar-check me-2 text-primary"></i>Salida:</span>
+                        <span class="fw-bold">${reserva.fechaSalida}</span>
+                    </div>
+                    ${reserva.fechaRetorno
+                        ? `<div class="d-flex justify-content-between align-items-center mb-3">
+                             <span class="text-muted"><i class="bi bi-calendar-x me-2 text-primary"></i>Retorno:</span>
+                             <span class="fw-bold">${reserva.fechaRetorno}</span>
+                           </div>`
+                        : ''}
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted"><i class="bi bi-moon me-2 text-primary"></i>Noches:</span>
+                        <span class="fw-bold">${reserva.noches}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span class="text-muted"><i class="bi bi-people me-2 text-primary"></i>Pasajeros:</span>
+                        <span class="fw-bold">${reserva.pasajeros}</span>
+                    </div>
+                    
+                    <div class="p-3 bg-light rounded-4 mb-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted small">Subtotal:</span>
+                            <span class="fw-semibold text-dark">S/ ${reserva.subtotal.toFixed(2)}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                            <span class="text-muted small">IGV (18%):</span>
+                            <span class="fw-semibold text-dark">S/ ${reserva.igv.toFixed(2)}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <span class="fw-bold text-dark fs-5">TOTAL</span>
+                            <span class="fw-bold fs-4 text-primary">S/ ${reserva.precioTotal.toFixed(2)}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-success d-flex align-items-center border-0 small shadow-sm mt-3" role="alert">
+                    <i class="bi bi-shield-check fs-4 me-2"></i>
+                    <div>
+                        Pago 100% seguro. Transacción encriptada de extremo a extremo.
+                    </div>
+                </div>
             </div>
         `;
     }
