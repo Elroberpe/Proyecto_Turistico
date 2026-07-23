@@ -14,19 +14,8 @@
 
     <jsp:include page="componentes/navbar.jsp"></jsp:include>
 
-    <!-- HEADER SÓLIDO / GRADIENTE SIN IMAGEN -->
-    <section class="py-5 text-center text-white" style="background: linear-gradient(135deg, var(--dark), #1f2937); margin-top: 76px;">
-        <div class="container py-5">
-            <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow" style="font-family: 'Inter', sans-serif;">Atención Personalizada 24/7</span>
-            <h1 class="display-4 fw-bold" style="font-family: 'Outfit', sans-serif;">Ponte en Contacto</h1>
-            <p class="lead opacity-75 mx-auto" style="max-width: 600px; font-weight: 300;">
-                ¿Tienes dudas sobre un paquete o deseas un viaje a tu medida? Nuestros expertos están listos para ayudarte.
-            </p>
-        </div>
-    </section>
-
     <!-- SECCIÓN PRINCIPAL -->
-    <section class="py-5" style="margin-top: -40px; position: relative; z-index: 10;">
+    <section class="py-5" style="margin-top: 100px;">
         <div class="container">
             <div class="row g-4 justify-content-center">
                 <!-- FORMULARIO -->
