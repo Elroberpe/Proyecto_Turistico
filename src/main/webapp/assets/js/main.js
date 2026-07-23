@@ -232,7 +232,7 @@ function calcularPrecio() {
   const { igv, total } = calcularPrecioConImpuestos(subtotal);
 
   const precioSolesSpan = document.getElementById('precioSoles');
-  if (precioSolesSpan) precioSolesSpan.textContent = \`S/ \${total.toFixed(2)}\`;
+  if (precioSolesSpan) precioSolesSpan.textContent = `S/ ${total.toFixed(2)}`;
 
   window.precioActual = { subtotal, igv, total, noches, pasajeros, destino };
   return total;
