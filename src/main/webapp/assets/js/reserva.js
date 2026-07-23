@@ -17,7 +17,20 @@ function cargarResumenReserva() {
         return;
     }
 
-    const reserva   = JSON.parse(reservaStr);
+    let reserva = null;
+    try {
+        reserva = JSON.parse(reservaStr);
+        // Validacion de seguridad para evitar TypeError si el JSON esta corrupto o incompleto
+        if (!reserva || !reserva.destino || typeof reserva.subtotal !== 'number') {
+            throw new Error("Datos de reserva incompletos o corruptos");
+        }
+    } catch (e) {
+        console.error("Error parsing reservaActual:", e);
+        localStorage.removeItem('reservaActual');
+        window.location.href = 'index.jsp';
+        return;
+    }
+
     const container = document.getElementById('resumenReserva');
 
     if (container) {
