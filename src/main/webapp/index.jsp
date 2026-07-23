@@ -110,59 +110,9 @@
                 <h2>Destinos Exclusivos</h2>
                 <p>Nuestra selección curada de las mejores experiencias a lo largo del Perú. Encuentra el viaje perfecto que estabas esperando.</p>
             </div>
-            <!-- Contenedor dinámico (JS rellena esto si está implementado para el index o mostramos estáticos si no) -->
-            <div class="row g-4 justify-content-center">
-                <!-- Fallback Content (En caso que region.js no opere en index) -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="card-tour">
-                        <div class="img-wrap">
-                            <img src="assets/img/sierra/Colca.jpg" alt="Cusco">
-                            <span class="badge-region">Sierra</span>
-                        </div>
-                        <div class="body">
-                            <h3>Aventura Andina</h3>
-                            <div class="meta"><i class="bi bi-geo-alt me-1"></i> Cusco, Perú</div>
-                            <div class="precio-container">
-                                <div class="precio">S/ 1,250.00 <br><small> / persona</small></div>
-                                <a href="sierra.jsp" class="btn btn-outline-dark rounded-pill btn-sm fw-bold px-3 py-2">Ver más</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-4 col-md-6">
-                    <div class="card-tour">
-                        <div class="img-wrap">
-                            <img src="assets/img/selva/Tarapoto_laguna.jpg" alt="Iquitos">
-                            <span class="badge-region">Selva</span>
-                        </div>
-                        <div class="body">
-                            <h3>Ruta Amazónica</h3>
-                            <div class="meta"><i class="bi bi-geo-alt me-1"></i> Iquitos, Perú</div>
-                            <div class="precio-container">
-                                <div class="precio">S/ 980.00 <br><small> / persona</small></div>
-                                <a href="selva.jsp" class="btn btn-outline-dark rounded-pill btn-sm fw-bold px-3 py-2">Ver más</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="card-tour">
-                        <div class="img-wrap">
-                            <img src="assets/img/pimentel.webp" alt="Paracas">
-                            <span class="badge-region">Costa</span>
-                        </div>
-                        <div class="body">
-                            <h3>Sol y Olas</h3>
-                            <div class="meta"><i class="bi bi-geo-alt me-1"></i> Ica, Perú</div>
-                            <div class="precio-container">
-                                <div class="precio">S/ 650.00 <br><small> / persona</small></div>
-                                <a href="costa.jsp" class="btn btn-outline-dark rounded-pill btn-sm fw-bold px-3 py-2">Ver más</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <!-- Contenedor dinámico rellenado por main.js -->
+            <div id="paquetesContainer" class="row g-4 justify-content-center">
+                <!-- El Javascript inyectará las tarjetas de paquetes destacados aquí -->
             </div>
             
             <div class="text-center mt-5">
