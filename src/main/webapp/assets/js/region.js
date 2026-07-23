@@ -8,7 +8,6 @@ let paquetesActuales = [];
 document.addEventListener('DOMContentLoaded', async () => {
     await obtenerTipoCambio();
     await cargaPaquetesDesdeServidor();
-    cargarDestinosSelect();
     cargarDestinosRegion();
 });
 
@@ -40,20 +39,6 @@ async function obtenerTipoCambio() {
     } catch (e) {
         tipoCambioActual = 0.27;
     }
-}
-
-function cargarDestinosSelect() {
-    const select = document.getElementById('destinoSelect');
-    if (!select) return;
-
-    select.length = 1;
-
-    paquetesActuales.forEach(p => {
-        const option = document.createElement('option');
-        option.value = p.idPaquete;
-        option.textContent = `${p.nombre} - S/ ${Number(p.precioSoles).toFixed(2)}`;
-        select.appendChild(option);
-    });
 }
 
 function cargarDestinosRegion() {

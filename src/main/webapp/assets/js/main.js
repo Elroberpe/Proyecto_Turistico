@@ -27,21 +27,9 @@ async function inicializarDatos() {
     console.warn("API global no disponible aún. ", e);
   }
   
-  cargarDestinosEnSelect();
   cargarPaquetesDestacados();
 }
 
-function cargarDestinosEnSelect() {
-  const destinoSelect = document.getElementById('destinoSelect');
-  if (!destinoSelect) return;
-  destinoSelect.innerHTML = '<option value="">Selecciona un destino</option>';
-  destinosGlobales.forEach(destino => {
-    const option = document.createElement('option');
-    option.value = destino.idPaquete || destino.id;
-    option.textContent = `${destino.nombre} (${destino.region ? destino.region.toUpperCase() : ''})`;
-    destinoSelect.appendChild(option);
-  });
-}
 
 function cargarPaquetesDestacados() {
   const container = document.getElementById('paquetesContainer');
