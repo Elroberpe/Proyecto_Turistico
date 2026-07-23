@@ -140,6 +140,7 @@ function procesarReserva() {
     let reservas = JSON.parse(localStorage.getItem('reservasChasqui')) || [];
     reservas.push(reserva);
     localStorage.setItem('reservasChasqui', JSON.stringify(reservas));
+    localStorage.setItem('reservaActual', JSON.stringify(reserva));
     window.location.href = 'reserva.jsp';
 }
   
