@@ -66,7 +66,7 @@
                                 <td>1</td>
                                 <td>Costa (1)</td>
                                 <td>Tour Paracas</td>
-                                <td>Ica, PerÃº</td>
+                                <td>Ica, Perù</td>
                                 <td>S/ 350.00</td>
                                 <td><span class="badge bg-success">Activo</span></td>
                                 <td>
@@ -78,7 +78,7 @@
                                 <td>2</td>
                                 <td>Sierra (2)</td>
                                 <td>Aventura Andina</td>
-                                <td>Cusco, PerÃº</td>
+                                <td>Cusco, Perù</td>
                                 <td>S/ 1200.00</td>
                                 <td><span class="badge bg-danger">Inactivo</span></td>
                                 <td>

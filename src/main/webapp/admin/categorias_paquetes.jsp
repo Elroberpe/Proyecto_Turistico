@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin Tur√≠stico - Categor√≠as de Paquetes</title>
+    <title>Panel Admin TurÏstico - Categor√≠as de Paquetes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
             </div>
             <ul class="list-unstyled components">
                 <li><a href="index.jsp"><i class="bi bi-house-door me-2"></i> Dashboard</a></li>
-                <li class="active"><a href="categorias_paquetes.jsp"><i class="bi bi-tags me-2"></i> Categor√≠as</a></li>
+                <li class="active"><a href="categorias_paquetes.jsp"><i class="bi bi-tags me-2"></i> CategorÏas</a></li>
                 <li><a href="paquetes.jsp"><i class="bi bi-box-seam me-2"></i> Paquetes</a></li>
                 <li><a href="clientes.jsp"><i class="bi bi-person-badge me-2"></i> Clientes</a></li>
                 <li><a href="usuarios.jsp"><i class="bi bi-people me-2"></i> Usuarios</a></li>
@@ -54,7 +54,7 @@
                             <tr>
                                 <th>ID Categor√≠a</th>
                                 <th>Nombre</th>
-                                <th>Descripci√≥n</th>
+                                <th>DescripciÚn</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -62,7 +62,7 @@
                             <tr>
                                 <td>1</td>
                                 <td>Costa</td>
-                                <td>Paquetes tur√≠sticos a destinos de playa y mar.</td>
+                                <td>Paquetes turÏsticos a destinos de playa y mar.</td>
                                 <td>
                                     <button class="btn btn-sm btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#categoriaModal"><i class="bi bi-pencil"></i></button>
                                     <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
@@ -71,7 +71,7 @@
                             <tr>
                                 <td>2</td>
                                 <td>Sierra</td>
-                                <td>Tours enfocados en monta√±a, cultura andina y fr√≠o.</td>
+                                <td>Tours enfocados en montaÒaa, cultura andina y frÏo.</td>
                                 <td>
                                     <button class="btn btn-sm btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#categoriaModal"><i class="bi bi-pencil"></i></button>
                                     <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
@@ -89,17 +89,17 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header bg-primary-custom text-white">
-            <h5 class="modal-title">Detalle de Categor√≠a</h5>
+            <h5 class="modal-title">Detalle de CategorÏa</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <form>
               <div class="mb-3">
-                <label class="form-label">Nombre de Categor√≠a</label>
+                <label class="form-label">Nombre de CategorÏa</label>
                 <input type="text" class="form-control" name="nombre" placeholder="Ej. Selva" required>
               </div>
               <div class="mb-3">
-                <label class="form-label">Descripci√≥n</label>
+                <label class="form-label">DescripciÚn</label>
                 <textarea class="form-control" name="descripcion" rows="3" required></textarea>
               </div>
               <div class="text-end mt-3">

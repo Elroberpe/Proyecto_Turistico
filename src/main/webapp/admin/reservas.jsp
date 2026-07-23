@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin Tur√≠stico - Reservas</title>
+    <title>Panel Admin TurÏstico - Reservas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -41,7 +41,7 @@
             </nav>
 
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Gesti√≥n de Reservas</h2>
+                <h2>GestiÚn de Reservas</h2>
                 <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#reservaModal">
                     <i class="bi bi-plus-circle"></i> Nueva Reserva
                 </button>
@@ -117,7 +117,7 @@
                     <label class="form-label">Cliente (ID Usuario)</label>
                     <select class="form-select" name="id_usuario" required>
                         <option value="">Seleccionar Cliente</option>
-                        <option value="3">Carlos Ram√≠rez</option>
+                        <option value="3">Carlos Ramirez</option>
                         <option value="4">Ana Smith</option>
                     </select>
                   </div>

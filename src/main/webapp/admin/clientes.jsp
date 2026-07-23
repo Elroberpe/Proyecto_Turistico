@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin Turístico - Clientes</title>
+    <title>Panel Admin Tur�stico - Clientes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -56,7 +56,7 @@
                                 <th>Nombres</th>
                                 <th>Apellidos</th>
                                 <th>Email</th>
-                                <th>Teléfono</th>
+                                <th>Telefono</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -64,7 +64,7 @@
                             <tr>
                                 <td>3</td>
                                 <td>Carlos</td>
-                                <td>Ramírez</td>
+                                <td>Ramirez</td>
                                 <td>carlos.ramirez@mail.com</td>
                                 <td>987654321</td>
                                 <td>
@@ -112,7 +112,7 @@
                   </div>
               </div>
               <div class="mb-3">
-                <label class="form-label">Contraseña</label>
+                <label class="form-label">Contrase�a</label>
                 <input type="password" class="form-control" name="password" required>
               </div>
               <div class="text-end mt-3">

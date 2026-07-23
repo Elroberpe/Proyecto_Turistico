@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin TurÃ­stico - Pagos</title>
+    <title>Panel Admin Turìstico - Pagos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
             </div>
             <ul class="list-unstyled components">
                 <li><a href="index.jsp"><i class="bi bi-house-door me-2"></i> Dashboard</a></li>
-                <li><a href="categorias_paquetes.jsp"><i class="bi bi-tags me-2"></i> CategorÃ­as</a></li>
+                <li><a href="categorias_paquetes.jsp"><i class="bi bi-tags me-2"></i> Categorìas</a></li>
                 <li><a href="paquetes.jsp"><i class="bi bi-box-seam me-2"></i> Paquetes</a></li>
                 <li><a href="clientes.jsp"><i class="bi bi-person-badge me-2"></i> Clientes</a></li>
                 <li><a href="usuarios.jsp"><i class="bi bi-people me-2"></i> Usuarios</a></li>
@@ -41,7 +41,7 @@
             </nav>
 
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>GestiÃ³n de Pagos</h2>
+                <h2>Gestiòn de Pagos</h2>
                 <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#pagoModal">
                     <i class="bi bi-plus-circle"></i> Registrar Pago
                 </button>
@@ -54,7 +54,7 @@
                             <tr>
                                 <th>ID Pago</th>
                                 <th>Reserva (ID)</th>
-                                <th>MÃ©todo de Pago</th>
+                                <th>Mètodo de Pago</th>
                                 <th>Monto</th>
                                 <th>Estado</th>
                                 <th>Fecha de Pago</th>
