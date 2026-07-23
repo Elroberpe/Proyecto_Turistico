@@ -41,7 +41,7 @@
             </nav>
 
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>GestiÃ³n de Usuarios</h2>
+                <h2>Gestiòn de Usuarios</h2>
                 <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#usuarioModal">
                     <i class="bi bi-person-plus"></i> Nuevo Usuario
                 </button>
