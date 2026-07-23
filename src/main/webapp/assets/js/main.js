@@ -6,8 +6,6 @@ let destinosGlobales = []; // Cache para buscador
 document.addEventListener('DOMContentLoaded', async () => {
   await obtenerTipoCambio();
   await inicializarDatos();
-  cargarEquipoAsesores();
-  initHoverPreview();
   cargarDestinoDesdeURL();
 });
 
@@ -82,35 +80,6 @@ function cargarPaquetesDestacados() {
   });
 }
 
-function cargarEquipoAsesores() {
-  const teamData = [
-    { nombre:"María Fernández", cargo:"Especialista en Sierra", img:"https://i.pravatar.cc/300?img=47" },
-    { nombre:"Jorge Ramírez", cargo:"Especialista en Costa", img:"https://i.pravatar.cc/300?img=12" },
-    { nombre:"Lucía Torres", cargo:"Especialista en Selva", img:"https://i.pravatar.cc/300?img=32" },
-    { nombre:"Diego Salazar", cargo:"Asesor de viajes grupales", img:"https://i.pravatar.cc/300?img=51" }
-  ];
-  const container = document.getElementById('teamContainer');
-  if (!container) return;
-  container.innerHTML = '';
-  teamData.forEach(miembro => {
-    const col = document.createElement('div');
-    col.className = 'col-md-3 col-sm-6';
-    col.innerHTML = `
-      <div class="team-card">
-        <img src="${miembro.img}" alt="${miembro.nombre}">
-        <h4>${miembro.nombre}</h4>
-        <p>${miembro.cargo}</p>
-        <div class="social-links">
-          <a href="#"><i class="bi bi-twitter"></i></a>
-          <a href="#"><i class="bi bi-instagram"></i></a>
-          <a href="#"><i class="bi bi-facebook"></i></a>
-        </div>
-      </div>
-    `;
-    container.appendChild(col);
-  });
-}
-
 function cargarDestinoDesdeURL() {
   const urlParams = new URLSearchParams(window.location.search);
   const destinoId = urlParams.get('destino');
@@ -137,5 +106,3 @@ async function obtenerTipoCambio() {
     tipoCambioActual = 0.27;
   }
 }
-
-function initHoverPreview() {}
