@@ -52,7 +52,7 @@
           </div>
 
           <div id="validationMsg" class="text-danger small mt-2 col-12 text-center"></div>
-          <input type="submit" id="btnSubmitOculto" class="btn-submit-hidden">
+          <input type="submit" id="btnSubmitOculto" class="d-none">
         </form>
       </div>
       <div class="modal-footer border-top-0 pt-0 pb-4 pb-md-5 px-4 px-md-5 d-flex justify-content-between">
