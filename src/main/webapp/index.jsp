@@ -126,7 +126,7 @@
         <div class="container py-5 text-center">
             <h2 class="display-5 fw-bold text-white mb-4" style="font-family: 'Outfit', sans-serif;">¿Listo para la aventura de tu vida?</h2>
             <p class="lead mb-5 opacity-75" style="font-weight: 300; max-width: 600px; margin: 0 auto;">Nuestros asesores están disponibles para diseñar y perfeccionar el itinerario ideal para ti y tu familia.</p>
-            <a href="contacto.html" class="btn btn-primary-custom btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg">Contactar Asesor <i class="bi bi-chat-right-text ms-2"></i></a>
+            <a href="contacto.jsp" class="btn btn-primary-custom btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg">Contactar Asesor <i class="bi bi-chat-right-text ms-2"></i></a>
         </div>
     </section>
 

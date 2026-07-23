@@ -24,7 +24,7 @@
                 <h5>Compañía</h5>
                 <ul>
                     <li><a href="#">Sobre Nosotros</a></li>
-                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><a href="contacto.jsp">Contacto</a></li>
                     <li><a href="#">Términos y Condiciones</a></li>
                 </ul>
             </div>
