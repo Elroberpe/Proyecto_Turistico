@@ -140,7 +140,7 @@ function procesarReserva() {
     let reservas = JSON.parse(localStorage.getItem('reservasChasqui')) || [];
     reservas.push(reserva);
     localStorage.setItem('reservasChasqui', JSON.stringify(reservas));
-    window.location.href = 'reserva.html';
+    window.location.href = 'reserva.jsp';
 }
   
 function setFechasMinimas() {
