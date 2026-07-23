@@ -373,6 +373,9 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 2.2rem; 
     color: var(--primary);
 }
+.btn-submit-hidden {
+    display: none;
+}
 
 /* Contacto */
 .body-contacto {
@@ -408,7 +411,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Regions (Costa, Selva, Sierra) & Index */
 .bg-costa { background-image: url('../img/costa/punta_sal.jpg'); }
 .bg-selva { background-image: url('../img/selva/Iquitos_amazonas.jpg'); }
-.bg-sierra { background-image: url('../img/sierra/machu_picchu.jpg'); }
+.bg-sierra { background-image: url('../img/sierra/machupicchu.jpeg'); }
 
 .badge-hero {
     font-family: 'Inter', sans-serif;
