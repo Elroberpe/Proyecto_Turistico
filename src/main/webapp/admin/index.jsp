@@ -22,7 +22,7 @@
             </div>
             <ul class="list-unstyled components">
                 <li class="active"><a href="index.jsp"><i class="bi bi-house-door me-2"></i> Dashboard</a></li>
-                <li><a href="categorias_paquetes.jsp"><i class="bi bi-tags me-2"></i> Categorìas</a></li>
+                <li><a href="/admin/categorias"><i class="bi bi-tags me-2"></i> Categorìas</a></li>
                 <li><a href="paquetes.jsp"><i class="bi bi-box-seam me-2"></i> Paquetes</a></li>
                 <li><a href="clientes.jsp"><i class="bi bi-person-badge me-2"></i> Clientes</a></li>
                 <li><a href="usuarios.jsp"><i class="bi bi-people me-2"></i> Usuarios</a></li>

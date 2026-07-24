@@ -1,15 +1,22 @@
+<%@ page import="java.util.List" %>
+<%@ page import="com.turismo.modelo.CategoriaPaquete" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin Turìstico - CategorÃ­as de Paquetes</title>
+    <title>Admin Turìstico - CategorÃ­as de Paquetes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+	
+	<%
+		List<CategoriaPaquete> categorias = (List<CategoriaPaquete>) request.getAttribute("categorias");
+	%>
+
     <div class="d-flex">
         <!-- Sidebar -->
         <nav id="sidebar">
@@ -18,7 +25,7 @@
             </div>
             <ul class="list-unstyled components">
                 <li><a href="index.jsp"><i class="bi bi-house-door me-2"></i> Dashboard</a></li>
-                <li class="active"><a href="categorias_paquetes.jsp"><i class="bi bi-tags me-2"></i> Categorìas</a></li>
+                <li class="active"><a href="/admin/categorias"><i class="bi bi-tags me-2"></i> Categorìas</a></li>
                 <li><a href="paquetes.jsp"><i class="bi bi-box-seam me-2"></i> Paquetes</a></li>
                 <li><a href="clientes.jsp"><i class="bi bi-person-badge me-2"></i> Clientes</a></li>
                 <li><a href="usuarios.jsp"><i class="bi bi-people me-2"></i> Usuarios</a></li>
@@ -41,8 +48,8 @@
             </nav>
 
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>CategorÃ­as de Paquetes</h2>
-                <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#categoriaModal">
+                <h2>Categorias de Paquetes</h2>
+                <button id="btnNuevo" class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#categoriaModal">
                     <i class="bi bi-plus-circle"></i> Nueva CategorÃ­a
                 </button>
             </div>
@@ -52,31 +59,42 @@
                     <table class="table table-hover table-custom align-middle">
                         <thead>
                             <tr>
-                                <th>ID CategorÃ­a</th>
+                                <th>ID Categorìa</th>
                                 <th>Nombre</th>
                                 <th>Descripciòn</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
+                        	
+                        	<%
+                        	for(CategoriaPaquete categoria : categorias){
+                        	%>                       
                             <tr>
-                                <td>1</td>
-                                <td>Costa</td>
-                                <td>Paquetes turìsticos a destinos de playa y mar.</td>
+                                <td><%=categoria.getIdCategoria() %></td>
+                                <td><%= categoria.getNombre() %></td>
+                                <td><%= categoria.getDescripcion() %></td>
                                 <td>
-                                    <button class="btn btn-sm btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#categoriaModal"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                                    <button
+									    class="btn btn-sm btn-secondary-custom btn-editar"
+									
+									    data-id="<%= categoria.getIdCategoria() %>"
+									    data-nombre="<%= categoria.getNombre() %>"
+									    data-descripcion="<%= categoria.getDescripcion() %>"
+									
+									    data-bs-toggle="modal"
+									    data-bs-target="#categoriaModal">
+									
+									    <i class="bi bi-pencil"></i>
+									
+									</button>
+                                    <button data-id="<%=categoria.getIdCategoria() %>" class="btn btn-sm btn-danger btn-eliminar"><i class="bi bi-trash"></i></button>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Sierra</td>
-                                <td>Tours enfocados en montañaa, cultura andina y frìo.</td>
-                                <td>
-                                    <button class="btn btn-sm btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#categoriaModal"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                                </td>
-                            </tr>
+                            <%
+                        	}
+                            %>
+                            
                         </tbody>
                     </table>
                 </div>
@@ -93,14 +111,16 @@
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form>
+            <form action="categorias" method="post">      
+              <input id="accion" type ="hidden" name="accion" value="guardar">
+              <input id="idCategoria" type="hidden" name="id">
               <div class="mb-3">
                 <label class="form-label">Nombre de Categorìa</label>
-                <input type="text" class="form-control" name="nombre" placeholder="Ej. Selva" required>
+                <input id="nombre" type="text" class="form-control" name="nombre" placeholder="Ej. Selva" required>
               </div>
               <div class="mb-3">
                 <label class="form-label">Descripciòn</label>
-                <textarea class="form-control" name="descripcion" rows="3" required></textarea>
+                <textarea id="descripcion"class="form-control" name="descripcion" rows="3" required></textarea>
               </div>
               <div class="text-end mt-3">
                   <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
@@ -111,9 +131,68 @@
         </div>
       </div>
     </div>
+    
+    <form id="formEliminar" action="categorias" method="post">
+    	<input type="hidden" name="accion" value="eliminar">
+    	<input type="hidden" id="idEliminar" name="id">
+    </form>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/script.js"></script>
+    <script>
+    
+    	//limpiar campos del modal
+	    document.getElementById("btnNuevo").addEventListener("click", function () {
+	
+	        document.getElementById("idCategoria").value = "";
+	        document.getElementById("nombre").value = "";
+	        document.getElementById("descripcion").value = "";
+	
+	        document.getElementById("accion").value = "guardar";
+	
+	    });
+    
+    	//llenar campos del modal
+	    document.querySelectorAll(".btn-editar").forEach(boton => {
+
+	        boton.addEventListener("click", function () {
+	
+	            document.getElementById("idCategoria").value = this.dataset.id;
+	            document.getElementById("nombre").value = this.dataset.nombre;	
+	            document.getElementById("descripcion").value = this.dataset.descripcion;	
+	            document.getElementById("accion").value ="actualizar";
+	
+	        });
+	
+	    });
+	    
+    	//crear un modal al presionar btn eliminar
+	    document.querySelectorAll(".btn-eliminar").forEach(boton=>{
+
+	        boton.addEventListener("click",function(){
+
+	            let id=this.dataset.id;
+	            Swal.fire({
+
+	                title:"¿Eliminar categoría?",
+	                text:"Esta acción no se puede deshacer.",
+	                icon:"warning",
+	                showCancelButton:true,
+	                confirmButtonText:"Sí, eliminar",
+	                cancelButtonText:"Cancelar"
+	            }).then((result)=>{
+	            	//envia un post para eliminar
+	                if(result.isConfirmed){
+	                	document.getElementById("idEliminar").value = id;
+	                	document.getElementById("formEliminar").submit();
+	                }
+	            });
+	        });
+	    });
+    </script>
+   
+    
 </body>
 </html>

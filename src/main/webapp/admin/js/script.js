@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Modal forms prevention of default submission for visual demo
-    const forms = document.querySelectorAll('form');
+    /*const forms = document.querySelectorAll('form');
     forms.forEach(form => {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -25,5 +25,5 @@ document.addEventListener('DOMContentLoaded', function () {
                 if(modalInstance) modalInstance.hide();
             });
         });
-    });
+    });*/
 });
