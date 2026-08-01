@@ -1,3 +1,8 @@
+<%@ page import="java.util.List" %>
+<%@ page import="com.turismo.modelo.Paquete" %>
+<%@ page import="com.turismo.modelo.CategoriaPaquete" %>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,6 +15,11 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+	<% 
+		List<Paquete> paquetes = (List<Paquete>) request.getAttribute("paquetes"); 
+		List<CategoriaPaquete> categorias = (List<CategoriaPaquete>) request.getAttribute("categorias");
+	%>
     <div class="d-flex">
         <!-- Sidebar -->
         <nav id="sidebar">
@@ -17,13 +27,13 @@
                 <h3 class="text-white m-0"><i class="bi bi-airplane-engines"></i> AdminTours</h3>
             </div>
             <ul class="list-unstyled components">
-                <li><a href="index.jsp"><i class="bi bi-house-door me-2"></i> Dashboard</a></li>
-                <li><a href="categorias_paquetes.jsp"><i class="bi bi-tags me-2"></i> Categorìas</a></li>
-                <li class="active"><a href="paquetes.jsp"><i class="bi bi-box-seam me-2"></i> Paquetes</a></li>
-                <li><a href="clientes.jsp"><i class="bi bi-person-badge me-2"></i> Clientes</a></li>
-                <li><a href="usuarios.jsp"><i class="bi bi-people me-2"></i> Usuarios</a></li>
-                <li><a href="reservas.jsp"><i class="bi bi-calendar-check me-2"></i> Reservas</a></li>
-                <li><a href="pagos.jsp"><i class="bi bi-credit-card me-2"></i> Pagos</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/dashboard"><i class="bi bi-house-door me-2"></i> Dashboard</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/categorias"><i class="bi bi-tags me-2"></i> Categorìas</a></li>
+                <li class="active"><a href="${pageContext.request.contextPath}/admin/paquetes"><i class="bi bi-box-seam me-2"></i> Paquetes</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/clientes"><i class="bi bi-person-badge me-2"></i> Clientes</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/usuarios"><i class="bi bi-people me-2"></i> Usuarios</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/reservas"><i class="bi bi-calendar-check me-2"></i> Reservas</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/pagos"><i class="bi bi-credit-card me-2"></i> Pagos</a></li>
             </ul>
         </nav>
 
@@ -42,7 +52,7 @@
 
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Gestiòn de Paquetes</h2>
-                <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#paqueteModal">
+                <button id="btnNuevo" class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#paqueteModal">
                     <i class="bi bi-plus-circle"></i> Nuevo Paquete
                 </button>
             </div>
@@ -62,30 +72,29 @@
                             </tr>
                         </thead>
                         <tbody>
+                        	<% for(Paquete paquete : paquetes){ %>
                             <tr>
-                                <td>1</td>
-                                <td>Costa (1)</td>
-                                <td>Tour Paracas</td>
-                                <td>Ica, Perù</td>
-                                <td>S/ 350.00</td>
-                                <td><span class="badge bg-success">Activo</span></td>
+                                <td><%=paquete.getIdPaquete() %></td>
+                                <td><% 
+							        	for (CategoriaPaquete categoria : categorias) {
+							            	if (categoria.getIdCategoria() == paquete.getIdCategoria()) {
+							   		 %>
+							                <%= categoria.getNombre() %>
+							    	<%
+							                break;
+							            }
+							        }
+							    %></td>
+                                <td><%=paquete.getNombre() %></td>
+                                <td><%=paquete.getDestino() %></td>
+                                <td><%=paquete.getPrecioSoles() %></td>
+                                <td><span class="badge bg-success"><%=paquete.getEstado()%></span></td>
                                 <td>
                                     <button class="btn btn-sm btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#paqueteModal"><i class="bi bi-pencil"></i></button>
                                     <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Sierra (2)</td>
-                                <td>Aventura Andina</td>
-                                <td>Cusco, Perù</td>
-                                <td>S/ 1200.00</td>
-                                <td><span class="badge bg-danger">Inactivo</span></td>
-                                <td>
-                                    <button class="btn btn-sm btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#paqueteModal"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                                </td>
-                            </tr>
+                          <% }%>
                         </tbody>
                     </table>
                 </div>
@@ -102,61 +111,93 @@
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form>
-              <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <label class="form-label">Nombre del Paquete</label>
-                    <input type="text" class="form-control" name="nombre" required>
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <label class="form-label">CategorÃ­a</label>
-                    <select class="form-select" name="id_categoria" required>
-                        <option value="">Seleccione CategorÃ­a</option>
-                        <option value="1">Costa</option>
-                        <option value="2">Sierra</option>
-                        <option value="3">Selva</option>
-                    </select>
-                  </div>
-              </div>
-              <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <label class="form-label">Destino</label>
-                    <input type="text" class="form-control" name="destino" required>
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <label class="form-label">Precio (Soles)</label>
-                    <input type="number" step="0.01" class="form-control" name="precio_soles" required>
-                  </div>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">DescripciÃ³n</label>
-                <textarea class="form-control" name="descripcion" rows="3" required></textarea>
-              </div>
-              <div class="row">
-                  <div class="col-md-8 mb-3">
-                      <label class="form-label">URL de Imagen (Opcional)</label>
-                      <input type="text" class="form-control" name="imagenUrl">
-                  </div>
-                  <div class="col-md-4 mb-3">
-                    <label class="form-label">Estado</label>
-                    <select class="form-select" name="estado" required>
-                        <option value="activo">Activo</option>
-                        <option value="inactivo">Inactivo</option>
-                    </select>
-                  </div>
-              </div>
-              <div class="text-end mt-3">
-                  <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                  <button type="submit" class="btn btn-primary-custom">Guardar Paquete</button>
-              </div>
-            </form>
+            <form action="paquetes" method="post" enctype="multipart/form-data">
+            	<input id="accion" type ="hidden" name="accion" value="guardar">
+			    <input type="hidden" id="idPaquete" name="idPaquete">
+			
+			    <div class="row">
+			        <div class="col-md-6 mb-3">
+			            <label for="nombre" class="form-label">Nombre del Paquete</label>
+			            <input id="nombre" type="text" class="form-control" name="nombre" required>
+			        </div>
+			
+			        <div class="col-md-6 mb-3">
+			            <label for="idCategoria" class="form-label">Categoría</label>
+			            <select id="idCategoria" class="form-select" name="id_categoria" required>
+			                <option value="">Seleccione Categoría</option>
+			                <% for(CategoriaPaquete categoria : categorias){ %>
+			                 <option value="<%=categoria.getIdCategoria()%>">
+					           <%=categoria.getNombre()%>
+					         </option>
+			                  <% } %>
+			            </select>
+			        </div>
+			    </div>
+			
+			    <div class="row">
+			        <div class="col-md-6 mb-3">
+			            <label for="destino" class="form-label">Destino</label>
+			            <input id="destino" type="text" class="form-control" name="destino" required>
+			        </div>
+			
+			        <div class="col-md-6 mb-3">
+			            <label for="precioSoles" class="form-label">Precio (Soles)</label>
+			            <input id="precioSoles" type="number" step="0.01" class="form-control" name="precioSoles" required>
+			        </div>
+			    </div>
+			
+			    <div class="mb-3">
+			        <label for="descripcion" class="form-label">Descripción</label>
+			        <textarea id="descripcion" class="form-control" name="descripcion" rows="3" required></textarea>
+			    </div>
+			
+			    <div class="row">
+			        <div class="col-md-8 mb-3">
+			            <label for="imagenUrl" class="form-label">Imagen Opcional</label>
+			            <input id="imagen" type="file" class="form-control" name="imagen"  accept="image/*">
+			        </div>
+			
+			        <div class="col-md-4 mb-3">
+			            <label for="estado" class="form-label">Estado</label>
+			            <select id="estado" class="form-select" name="estado" required>
+			                <option value="activo">Activo</option>
+			                <option value="inactivo">Inactivo</option>
+			            </select>
+			        </div>
+			    </div>
+			
+			    <div class="text-end mt-3">
+			        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+			            Cancelar
+			        </button>
+			
+			        <button type="submit" class="btn btn-primary-custom">
+			            Guardar Paquete
+			        </button>
+			    </div>
+			</form>
           </div>
         </div>
       </div>
     </div>
-
+    
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script src="js/script.js"></script>
+    <script >
+  		//limpiar campos del modal
+    	document.getElementById("btnNuevo").addEventListener("click", function () {
+    		 document.getElementById("idPaquete").value = "";
+    		 document.getElementById("nombre").value = "";
+    		 document.getElementById("idCategoria").selectedIndex = 0;
+    		 document.getElementById("destino").value = "";
+    		 document.getElementById("precioSoles").value = "";
+    		 document.getElementById("descripcion").value = "";
+    		 document.getElementById("imagenUrl").value = "";
+    		 document.getElementById("estado").value = "activo";
+    	});
+    
+    </script>
+    
 </body>
 </html>

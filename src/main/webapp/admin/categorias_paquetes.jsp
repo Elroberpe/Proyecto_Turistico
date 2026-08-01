@@ -24,13 +24,13 @@
                 <h3 class="text-white m-0"><i class="bi bi-airplane-engines"></i> AdminTours</h3>
             </div>
             <ul class="list-unstyled components">
-                <li><a href="index.jsp"><i class="bi bi-house-door me-2"></i> Dashboard</a></li>
-                <li class="active"><a href="/admin/categorias"><i class="bi bi-tags me-2"></i> Categorìas</a></li>
-                <li><a href="paquetes.jsp"><i class="bi bi-box-seam me-2"></i> Paquetes</a></li>
-                <li><a href="clientes.jsp"><i class="bi bi-person-badge me-2"></i> Clientes</a></li>
-                <li><a href="usuarios.jsp"><i class="bi bi-people me-2"></i> Usuarios</a></li>
-                <li><a href="reservas.jsp"><i class="bi bi-calendar-check me-2"></i> Reservas</a></li>
-                <li><a href="pagos.jsp"><i class="bi bi-credit-card me-2"></i> Pagos</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/dashboard"><i class="bi bi-house-door me-2"></i> Dashboard</a></li>
+                <li class="active"><a href="${pageContext.request.contextPath}/admin/categorias"><i class="bi bi-tags me-2"></i> Categorìas</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/paquetes"><i class="bi bi-box-seam me-2"></i> Paquetes</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/clientes"><i class="bi bi-person-badge me-2"></i> Clientes</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/usuarios"><i class="bi bi-people me-2"></i> Usuarios</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/reservas"><i class="bi bi-calendar-check me-2"></i> Reservas</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/pagos"><i class="bi bi-credit-card me-2"></i> Pagos</a></li>
             </ul>
         </nav>
 
@@ -154,7 +154,7 @@
 	
 	    });
     
-    	//llenar campos del modal
+    	//llenar campos del modal al editar
 	    document.querySelectorAll(".btn-editar").forEach(boton => {
 
 	        boton.addEventListener("click", function () {

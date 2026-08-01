@@ -18,23 +18,25 @@ public class Paquete {
     }
 
     // Constructor sin id (para registrar)
-    public Paquete(int idCategoria, String nombre, String destino, String imagenUrl,
+    public Paquete(int idCategoria, String nombre, String destino, String descripcion ,String imagenUrl,
                    BigDecimal precioSoles, String estado) {
         this.idCategoria = idCategoria;
         this.nombre = nombre;
         this.destino = destino;
+        this.descripcion = descripcion;
         this.imagenUrl = imagenUrl;
         this.precioSoles = precioSoles;
         this.estado = estado;
     }
 
     // Constructor completo
-    public Paquete(int idPaquete, int idCategoria, String nombre, String destino,
+    public Paquete(int idPaquete, int idCategoria, String nombre, String destino,String descripcion,
                    String imagenUrl, BigDecimal precioSoles, String estado) {
         this.idPaquete = idPaquete;
         this.idCategoria = idCategoria;
         this.nombre = nombre;
         this.destino = destino;
+        this.descripcion = descripcion;
         this.imagenUrl = imagenUrl;
         this.precioSoles = precioSoles;
         this.estado = estado;
