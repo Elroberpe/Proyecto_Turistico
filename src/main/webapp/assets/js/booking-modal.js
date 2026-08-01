@@ -162,6 +162,11 @@ window.seleccionarDestinoHtml = function(btn) {
     const nombre = btn.getAttribute('data-nombre');
     const precio = parseFloat(btn.getAttribute('data-precio'));
 
+    const destinoSelect = document.getElementById('destinoSelect');
+    if (destinoSelect) {
+        destinoSelect.value = id;
+    }
+
     paqueteSeleccionadoHtml = {
         idPaquete: id,
         nombre: nombre,
