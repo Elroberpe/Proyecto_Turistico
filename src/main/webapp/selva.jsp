@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="com.turismo.modelo.Paquete" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -29,7 +31,37 @@
                 <p>Navega el río más caudaloso del mundo, descubre especies exóticas y alójate en lodges de ensueño inmersos en la naturaleza.</p>
             </div>
             <div class="row g-4" id="destinosContainer">
-                <!-- Se renderiza desde JS (region.js) -->
+                <% 
+                    List<Paquete> lista = (List<Paquete>) request.getAttribute("paquetes");
+                    if(lista != null && !lista.isEmpty()) {
+                        for(Paquete p : lista) {
+                %>
+                <div class="col-md-4">
+                    <div class="card-tour">
+                        <div class="img-wrap">
+                            <img src="<%= p.getImagenUrl() %>" alt="<%= p.getNombre() %>">
+                            <span class="badge-region"><i class="bi bi-geo-alt"></i> <%= p.getDestino() %></span>
+                        </div>
+                        <div class="body">
+                            <h3><%= p.getNombre() %></h3>
+                            <div class="meta mb-2">"<%= p.getDescripcion() %>"</div>
+                            <div class="d-flex justify-content-between align-items-end mt-3">
+                                <div class="precio">S/ <%= String.format(java.util.Locale.US, "%.2f", p.getPrecioSoles()) %><small> / persona</small></div>
+                                <button class="btn-card-action" onclick="seleccionarDestinoHtml(this)" data-id="<%= p.getIdPaquete() %>" data-nombre="<%= p.getNombre() %>" data-precio="<%= p.getPrecioSoles() %>">Seleccionar <i class="bi bi-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% 
+                        }
+                    } else {
+                %>
+                <div class="col-12 text-center text-muted">
+                    No hay paquetes disponibles para esta región.
+                </div>
+                <% 
+                    }
+                %>
             </div>
         </div>
     </section>
@@ -39,6 +71,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/booking-modal.js?v=2.1"></script>
-    <script src="assets/js/region.js?v=2.1"></script>
+    <!-- <script src="assets/js/region.js?v=2.1"></script> -->
 </body>
 </html>

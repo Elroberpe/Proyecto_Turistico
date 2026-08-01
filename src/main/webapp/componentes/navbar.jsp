@@ -18,13 +18,13 @@ Usuario usuario = (Usuario) session.getAttribute("usuario");
                     <a class="nav-link <%= request.getRequestURI().contains("index.jsp") ? "active" : "" %>" href="index.jsp">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <%= request.getRequestURI().contains("costa.jsp") ? "active" : "" %>" href="costa.jsp">Costa</a>
+                    <a class="nav-link <%= "Costa".equalsIgnoreCase(request.getParameter("region")) ? "active" : "" %>" href="${pageContext.request.contextPath}/catalogo?region=Costa">Costa</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <%= request.getRequestURI().contains("sierra.jsp") ? "active" : "" %>" href="sierra.jsp">Sierra</a>
+                    <a class="nav-link <%= "Sierra".equalsIgnoreCase(request.getParameter("region")) ? "active" : "" %>" href="${pageContext.request.contextPath}/catalogo?region=Sierra">Sierra</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <%= request.getRequestURI().contains("selva.jsp") ? "active" : "" %>" href="selva.jsp">Selva</a>
+                    <a class="nav-link <%= "Selva".equalsIgnoreCase(request.getParameter("region")) ? "active" : "" %>" href="${pageContext.request.contextPath}/catalogo?region=Selva">Selva</a>
                 </li>
                 
                 <%
