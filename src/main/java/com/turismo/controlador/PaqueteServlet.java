@@ -74,7 +74,7 @@ public class PaqueteServlet extends HttpServlet {
         request.setAttribute("categorias", listaCategorias);
         
 
-        request.getRequestDispatcher("paquetes.jsp")
+        request.getRequestDispatcher("/WEB-INF/admin/paquetes.jsp")
                 .forward(request, response);
     }
 

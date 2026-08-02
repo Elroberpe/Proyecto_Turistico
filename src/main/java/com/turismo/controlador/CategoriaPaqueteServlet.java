@@ -57,7 +57,7 @@ public class CategoriaPaqueteServlet extends HttpServlet {
         List<CategoriaPaquete> lista = categoriaDAO.listar();
 
         request.setAttribute("categorias", lista);
-        request.getRequestDispatcher("categorias_paquetes.jsp")
+        request.getRequestDispatcher("/WEB-INF/admin/categorias_paquetes.jsp")
                 .forward(request, response);
     }
 

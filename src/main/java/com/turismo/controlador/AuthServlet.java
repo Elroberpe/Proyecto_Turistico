@@ -46,7 +46,7 @@ public class AuthServlet extends HttpServlet {
 
         if ("logout".equals(accion)) {
             request.getSession().invalidate();
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("index.jsp");
         }
     }
 
@@ -64,7 +64,7 @@ public class AuthServlet extends HttpServlet {
             session.setAttribute("usuario", usuario);
 
             if (usuario.getIdRol() == 2) {
-                response.sendRedirect("admin/dashboard.jsp");
+                response.sendRedirect("admin/dashboard");
             } else {
                 String redirect = request.getParameter("redirect");
                 if ("reserva".equals(redirect)) {

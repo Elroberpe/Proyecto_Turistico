@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin Turìstico - Pagos</title>
+    <title>Panel Admin Turìstico - Usuarios</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/admin/css/style.css">
 </head>
 <body>
     <div class="d-flex">
@@ -21,9 +21,9 @@
                 <li><a href="${pageContext.request.contextPath}/admin/categorias"><i class="bi bi-tags me-2"></i> Categorìas</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/paquetes"><i class="bi bi-box-seam me-2"></i> Paquetes</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/clientes"><i class="bi bi-person-badge me-2"></i> Clientes</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/usuarios"><i class="bi bi-people me-2"></i> Usuarios</a></li>
+                <li class="active"><a href="${pageContext.request.contextPath}/admin/usuarios"><i class="bi bi-people me-2"></i> Usuarios</a></li>
                 <li><a href="${pageContext.request.contextPath}/admin/reservas"><i class="bi bi-calendar-check me-2"></i> Reservas</a></li>
-                <li class="active"><a href="${pageContext.request.contextPath}/admin/pagos"><i class="bi bi-credit-card me-2"></i> Pagos</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/pagos"><i class="bi bi-credit-card me-2"></i> Pagos</a></li>
             </ul>
         </nav>
 
@@ -41,9 +41,9 @@
             </nav>
 
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Gestiòn de Pagos</h2>
-                <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#pagoModal">
-                    <i class="bi bi-plus-circle"></i> Registrar Pago
+                <h2>Gestiòn de Usuarios</h2>
+                <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#usuarioModal">
+                    <i class="bi bi-person-plus"></i> Nuevo Usuario
                 </button>
             </div>
             
@@ -52,37 +52,37 @@
                     <table class="table table-hover table-custom align-middle">
                         <thead>
                             <tr>
-                                <th>ID Pago</th>
-                                <th>Reserva (ID)</th>
-                                <th>Mètodo de Pago</th>
-                                <th>Monto</th>
-                                <th>Estado</th>
-                                <th>Fecha de Pago</th>
+                                <th>ID</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
+                                <th>Email</th>
+                                <th>Telèfono</th>
+                                <th>Rol (ID)</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>1</td>
-                                <td>2</td>
-                                <td>Tarjeta (1)</td>
-                                <td>S/ 4800.00</td>
-                                <td><span class="badge bg-success">Pagado</span></td>
-                                <td>2026-07-22 14:30:00</td>
+                                <td>Maria</td>
+                                <td>Garcia</td>
+                                <td>maria.admin@example.com</td>
+                                <td>987654321</td>
+                                <td><span class="badge bg-primary">Admin (1)</span></td>
                                 <td>
-                                    <button class="btn btn-sm btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#pagoModal"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-sm btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#usuarioModal"><i class="bi bi-pencil"></i></button>
                                     <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
                                 </td>
                             </tr>
                             <tr>
                                 <td>2</td>
-                                <td>1</td>
-                                <td>Yape (2)</td>
-                                <td>S/ 700.00</td>
-                                <td><span class="badge bg-warning text-dark">Reembolsado</span></td>
-                                <td>2026-07-23 09:15:00</td>
+                                <td>Juan</td>
+                                <td>Perez</td>
+                                <td>juan.perez@example.com</td>
+                                <td>912345678</td>
+                                <td><span class="badge bg-info text-dark">Empleado (2)</span></td>
                                 <td>
-                                    <button class="btn btn-sm btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#pagoModal"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-sm btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#usuarioModal"><i class="bi bi-pencil"></i></button>
                                     <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
                                 </td>
                             </tr>
@@ -93,49 +93,54 @@
         </div>
     </div>
 
-    <!-- Modal Formulario Pago -->
-    <div class="modal fade" id="pagoModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
+    <!-- Modal Formulario Usuario -->
+    <div class="modal fade" id="usuarioModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header bg-primary-custom text-white">
-            <h5 class="modal-title">Detalle de Pago</h5>
+            <h5 class="modal-title">Detalle de Usuario</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <form>
-              <div class="mb-3">
-                <label class="form-label">ID Reserva</label>
-                <select class="form-select" name="id_reserva" required>
-                    <option value="">Seleccione Reserva</option>
-                    <option value="1">Reserva 1</option>
-                    <option value="2">Reserva 2</option>
-                </select>
+              <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Nombres</label>
+                    <input type="text" class="form-control" name="nombre" required>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Apellidos</label>
+                    <input type="text" class="form-control" name="apellidos" required>
+                  </div>
               </div>
               <div class="row">
                   <div class="col-md-6 mb-3">
-                    <label class="form-label">Monto</label>
-                    <input type="number" step="0.01" class="form-control" name="monto" required>
+                    <label class="form-label">Correo ElectrÃ³nico</label>
+                    <input type="email" class="form-control" name="email" required>
                   </div>
                   <div class="col-md-6 mb-3">
-                    <label class="form-label">MÃ©todo de Pago</label>
-                    <select class="form-select" name="id_metodo" required>
-                        <option value="1">Tarjeta</option>
-                        <option value="2">Yape</option>
-                        <option value="3">Plin</option>
+                    <label class="form-label">TelÃ©fono</label>
+                    <input type="text" class="form-control" name="telefono">
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" name="password" required>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Rol</label>
+                    <select class="form-select" name="id_rol" required>
+                        <option value="">Seleccionar Rol</option>
+                        <option value="1">Administrador (1)</option>
+                        <option value="2">Empleado (2)</option>
+                        <option value="3">Cliente (3)</option>
                     </select>
                   </div>
               </div>
-              <div class="mb-3">
-                <label class="form-label">Estado del Pago</label>
-                <select class="form-select" name="estado" required>
-                    <option value="pagado">Pagado</option>
-                    <option value="rechazado">Rechazado</option>
-                    <option value="reembolsado">Reembolsado</option>
-                </select>
-              </div>
               <div class="text-end mt-3">
                   <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                  <button type="submit" class="btn btn-primary-custom">Guardar Pago</button>
+                  <button type="submit" class="btn btn-primary-custom">Guardar Usuario</button>
               </div>
             </form>
           </div>
@@ -145,6 +150,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
-    <script src="js/script.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/admin/js/script.js"></script>
 </body>
 </html>
