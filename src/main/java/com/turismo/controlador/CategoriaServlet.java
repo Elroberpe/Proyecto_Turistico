@@ -10,10 +10,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/admin/categoria")
+@WebServlet("/admin/categorias")
 public class CategoriaServlet extends HttpServlet {
 
-    private CategoriaPaqueteDao dao = new CategoriaPaqueteDao();
+	private static final long serialVersionUID = 1L;
+	private CategoriaPaqueteDao dao = new CategoriaPaqueteDao();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -51,7 +52,7 @@ public class CategoriaServlet extends HttpServlet {
         // Listar categorías
         List<CategoriaPaquete> categorias = dao.listar();
         request.setAttribute("categorias", categorias);
-        request.getRequestDispatcher("categorias_paquetes.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/admin/categorias_paquetes.jsp").forward(request, response);
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
-@WebServlet("/admin/paquete")
+@WebServlet("/admin/paquetes")
 public class PaqueteServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private PaqueteDao dao = new PaqueteDao();
@@ -44,7 +44,7 @@ public class PaqueteServlet extends HttpServlet {
         // LISTAR paquetes
         List<Paquete> paquetes = dao.listarTodos();
         request.setAttribute("paquetes", paquetes);
-        request.getRequestDispatcher("paquetes.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/admin/paquetes.jsp").forward(request, response);
     }
 
     // ============================================
