@@ -27,10 +27,6 @@
 </head>
 <body>
 	
-	<%
-		// La variable categorias ya se obtuvo en la cabecera
-	%>
-
     <div class="d-flex">
         <!-- Sidebar -->
         <nav id="sidebar">

@@ -1,6 +1,8 @@
 package com.turismo.controlador;
 
+import com.turismo.dao.CategoriaPaqueteDao;
 import com.turismo.dao.PaqueteDao;
+import com.turismo.modelo.CategoriaPaquete;
 import com.turismo.modelo.Paquete;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,6 +17,7 @@ import java.util.List;
 public class PaqueteServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private PaqueteDao dao = new PaqueteDao();
+    private CategoriaPaqueteDao categoriaDao = new CategoriaPaqueteDao();
 
     // ============================================
     // GET: Listar y Eliminar
@@ -43,7 +46,9 @@ public class PaqueteServlet extends HttpServlet {
 
         // LISTAR paquetes
         List<Paquete> paquetes = dao.listarTodos();
+        List<CategoriaPaquete> categorias = categoriaDao.listar();
         request.setAttribute("paquetes", paquetes);
+        request.setAttribute("categorias", categorias);
         request.getRequestDispatcher("/WEB-INF/admin/paquetes.jsp").forward(request, response);
     }
 
