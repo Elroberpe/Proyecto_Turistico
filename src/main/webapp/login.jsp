@@ -44,7 +44,10 @@
   <div id="loginView">
     <h3 class="text-center mb-4 fw-semibold">Iniciar sesión</h3>
     <form action="UsuarioServlet" method="post">
-      <input type="hidden" name="accion" value="login"> 
+      <input type="hidden" name="accion" value="login">
+      <% if (request.getParameter("redirect") != null) { %>
+      <input type="hidden" name="redirect" value="<%= request.getParameter("redirect") %>">
+      <% } %>
       <div class="mb-3">
         <label class="form-label fw-medium small">Correo electrónico</label>
         <input type="email" class="form-control bg-light" name="email" placeholder="tucorreo@ejemplo.com" required>
@@ -66,8 +69,11 @@
   <div id="registerView" class="d-none">
     <h3 class="text-center mb-4 fw-semibold">Crear cuenta</h3>
 
-    <form action = "UsuarioServlet" method="post">
+    <form action="UsuarioServlet" method="post">
       <input type="hidden" name="accion" value="registrar">
+      <% if (request.getParameter("redirect") != null) { %>
+      <input type="hidden" name="redirect" value="<%= request.getParameter("redirect") %>">
+      <% } %>
       <div class="mb-3">
         <label class="form-label fw-medium small">Nombres</label>
         <input type="text" class="form-control bg-light" name ="nombre" placeholder="Tus nombres" required>

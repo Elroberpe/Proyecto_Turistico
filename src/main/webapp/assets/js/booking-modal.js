@@ -124,14 +124,6 @@ function procesarReserva() {
         return;
     }
 
-    const isLoggedInInput = document.getElementById('isUserLoggedIn');
-    const isUserLoggedIn = isLoggedInInput && isLoggedInInput.value === 'true';
-
-    if (!isUserLoggedIn) {
-        window.location.href = 'login.jsp';
-        return;
-    }
-
     const tipoViaje = document.getElementById('tipoViaje')?.value;
     const reserva = {
         id: Date.now(),
@@ -150,6 +142,15 @@ function procesarReserva() {
     reservas.push(reserva);
     localStorage.setItem('reservasChasqui', JSON.stringify(reservas));
     localStorage.setItem('reservaActual', JSON.stringify(reserva));
+
+    const isLoggedInInput = document.getElementById('isUserLoggedIn');
+    const isUserLoggedIn = isLoggedInInput && isLoggedInInput.value === 'true';
+
+    if (!isUserLoggedIn) {
+        window.location.href = 'login.jsp?redirect=reserva';
+        return;
+    }
+
     window.location.href = 'reserva.jsp';
 }
   

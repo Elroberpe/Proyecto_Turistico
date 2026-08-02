@@ -76,11 +76,17 @@ public class UsuarioServlet extends HttpServlet {
             if (usuario.getIdRol() == 2) {
                 response.sendRedirect("admin/dashboard.jsp");
             } else {
-                response.sendRedirect("index.jsp");
+                String redirect = request.getParameter("redirect");
+                if ("reserva".equals(redirect)) {
+                    response.sendRedirect("reserva.jsp");
+                } else {
+                    response.sendRedirect("index.jsp");
+                }
             }
 
         } else {
-            response.sendRedirect("login.jsp?error=1");
+            String redirectParam = request.getParameter("redirect") != null ? "&redirect=" + request.getParameter("redirect") : "";
+            response.sendRedirect("login.jsp?error=1" + redirectParam);
         }
 
     }
@@ -97,10 +103,11 @@ public class UsuarioServlet extends HttpServlet {
         usuario.setTelefono(request.getParameter("telefono"));
 
 
+        String redirectParam = request.getParameter("redirect") != null ? "&redirect=" + request.getParameter("redirect") : "";
         if (dao.registrar(usuario)) {
-            response.sendRedirect("login.jsp?registro=ok");
+            response.sendRedirect("login.jsp?registro=ok" + redirectParam);
         } else {
-            response.sendRedirect("login.jsp?registro=error");
+            response.sendRedirect("login.jsp?registro=error" + redirectParam);
         }
 
     }
