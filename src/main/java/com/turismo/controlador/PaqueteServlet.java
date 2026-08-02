@@ -40,7 +40,7 @@ public class PaqueteServlet extends HttpServlet {
             } catch (NumberFormatException e) {
                 request.getSession().setAttribute("error", "❌ ID inválido.");
             }
-            response.sendRedirect("PaqueteServlet");
+            response.sendRedirect(request.getContextPath() + "/admin/paquetes");
             return;
         }
 
@@ -66,7 +66,7 @@ public class PaqueteServlet extends HttpServlet {
         } else if ("editar".equals(action)) {
             editar(request, response);
         } else {
-            response.sendRedirect("PaqueteServlet");
+            response.sendRedirect(request.getContextPath() + "/admin/paquetes");
         }
     }
 
@@ -90,7 +90,7 @@ public class PaqueteServlet extends HttpServlet {
             e.printStackTrace();
             request.getSession().setAttribute("error", "❌ Error inesperado.");
         }
-        response.sendRedirect("PaqueteServlet");
+        response.sendRedirect(request.getContextPath() + "/admin/paquetes");
     }
 
     private void editar(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -115,6 +115,6 @@ public class PaqueteServlet extends HttpServlet {
             e.printStackTrace();
             request.getSession().setAttribute("error", "❌ Error inesperado.");
         }
-        response.sendRedirect("PaqueteServlet");
+        response.sendRedirect(request.getContextPath() + "/admin/paquetes");
     }
 }
