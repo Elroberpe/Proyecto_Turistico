@@ -123,6 +123,15 @@ function procesarReserva() {
         alert('⚠️ Completa los datos');
         return;
     }
+
+    const isLoggedInInput = document.getElementById('isUserLoggedIn');
+    const isUserLoggedIn = isLoggedInInput && isLoggedInInput.value === 'true';
+
+    if (!isUserLoggedIn) {
+        window.location.href = 'login.jsp';
+        return;
+    }
+
     const tipoViaje = document.getElementById('tipoViaje')?.value;
     const reserva = {
         id: Date.now(),

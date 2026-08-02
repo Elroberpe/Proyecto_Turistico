@@ -15,6 +15,7 @@
         <form id="bookingForm" class="row g-4">
           <!-- Destino Oculto para lógica JS -->
           <input type="hidden" id="destinoSelect" value="">
+          <input type="hidden" id="isUserLoggedIn" value="<%= (session.getAttribute("usuario") != null) ? "true" : "false" %>">
 
           <div class="col-md-6">
             <label class="form-label text-uppercase small text-muted fw-bold"><i class="bi bi-arrow-left-right me-2"></i>Tipo de viaje</label>
