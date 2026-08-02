@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/admin/css/style.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/admin/css/style.css">
 </head>
 <body>
     <div class="d-flex">
@@ -17,13 +17,13 @@
                 <h3 class="text-white m-0"><i class="bi bi-airplane-engines"></i> AdminTours</h3>
             </div>
             <ul class="list-unstyled components">
-                <li><a href="${pageContext.request.contextPath}/admin/dashboard"><i class="bi bi-house-door me-2"></i> Dashboard</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/categorias"><i class="bi bi-tags me-2"></i> Categorìas</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/paquetes"><i class="bi bi-box-seam me-2"></i> Paquetes</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/clientes"><i class="bi bi-person-badge me-2"></i> Clientes</a></li>
-                <li class="active"><a href="${pageContext.request.contextPath}/admin/usuarios"><i class="bi bi-people me-2"></i> Usuarios</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/reservas"><i class="bi bi-calendar-check me-2"></i> Reservas</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/pagos"><i class="bi bi-credit-card me-2"></i> Pagos</a></li>
+                <li><a href="<%=request.getContextPath()%>/admin/dashboard"><i class="bi bi-house-door me-2"></i> Dashboard</a></li>
+                <li><a href="<%=request.getContextPath()%>/admin/categorias"><i class="bi bi-tags me-2"></i> Categorìas</a></li>
+                <li><a href="<%=request.getContextPath()%>/admin/paquetes"><i class="bi bi-box-seam me-2"></i> Paquetes</a></li>
+                <li><a href="<%=request.getContextPath()%>/admin/clientes"><i class="bi bi-person-badge me-2"></i> Clientes</a></li>
+                <li class="active"><a href="<%=request.getContextPath()%>/admin/usuarios"><i class="bi bi-people me-2"></i> Usuarios</a></li>
+                <li><a href="<%=request.getContextPath()%>/admin/reservas"><i class="bi bi-calendar-check me-2"></i> Reservas</a></li>
+                <li><a href="<%=request.getContextPath()%>/admin/pagos"><i class="bi bi-credit-card me-2"></i> Pagos</a></li>
             </ul>
         </nav>
 
@@ -150,6 +150,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
-    <script src="${pageContext.request.contextPath}/assets/admin/js/script.js"></script>
+    <script src="<%=request.getContextPath()%>/assets/admin/js/script.js"></script>
 </body>
 </html>
