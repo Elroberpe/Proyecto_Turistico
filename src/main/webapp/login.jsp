@@ -43,7 +43,7 @@
   <!-- LOGIN -->
   <div id="loginView">
     <h3 class="text-center mb-4 fw-semibold">Iniciar sesión</h3>
-    <form action="UsuarioServlet" method="post">
+    <form action="AuthServlet" method="post">
       <input type="hidden" name="accion" value="login">
       <% if (request.getParameter("redirect") != null) { %>
       <input type="hidden" name="redirect" value="<%= request.getParameter("redirect") %>">
@@ -69,7 +69,7 @@
   <div id="registerView" class="d-none">
     <h3 class="text-center mb-4 fw-semibold">Crear cuenta</h3>
 
-    <form action="UsuarioServlet" method="post">
+    <form action="AuthServlet" method="post">
       <input type="hidden" name="accion" value="registrar">
       <% if (request.getParameter("redirect") != null) { %>
       <input type="hidden" name="redirect" value="<%= request.getParameter("redirect") %>">

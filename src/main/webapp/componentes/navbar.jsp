@@ -44,7 +44,7 @@ Usuario usuario = (Usuario) session.getAttribute("usuario");
 						<li><a class="dropdown-item" href="perfil.jsp"> Mi perfil </a></li>
 						<li><a class="dropdown-item" href="misReservas.jsp"> Mis reservas </a></li>
 						<li><hr class="dropdown-divider"></li>
-						<li><a class="dropdown-item text-danger" href="UsuarioServlet?accion=logout"> Cerrar sesión </a></li>
+						<li><a class="dropdown-item text-danger" href="AuthServlet?accion=logout"> Cerrar sesión </a></li>
 					</ul>
 				</li>
 				<%
