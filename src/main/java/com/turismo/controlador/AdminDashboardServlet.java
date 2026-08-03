@@ -1,6 +1,11 @@
 package com.turismo.controlador;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+
+import com.turismo.dao.PaqueteDao;
+import com.turismo.dao.ReservaDao;
+import com.turismo.dao.UsuarioDao;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,7 +20,21 @@ public class AdminDashboardServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	
+        PaqueteDao paqueteDao = new PaqueteDao();
+        UsuarioDao usuarioDao = new UsuarioDao();
+        ReservaDao reservaDao = new ReservaDao();
 
+        int totalPaquetes = paqueteDao.contarActivos();
+        int totalClientes = usuarioDao.contarClientes();
+        int reservasMes = reservaDao.contarReservasDelMes();
+        BigDecimal ingresosMes = reservaDao.sumarIngresosDelMes();
+
+        request.setAttribute("totalPaquetes", totalPaquetes);
+        request.setAttribute("totalClientes", totalClientes);
+        request.setAttribute("reservasMes", reservasMes);
+        request.setAttribute("ingresosMes", ingresosMes);
+    	
         request.getRequestDispatcher("/WEB-INF/admin/index.jsp").forward(request, response);
     }
 }

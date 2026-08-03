@@ -1,13 +1,27 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List, com.turismo.modelo.Usuario" %>
+<%
+    List<Usuario> clientes = (List<Usuario>) request.getAttribute("clientes");
+    if (clientes == null) {
+        response.sendRedirect("ClienteServlet");
+        return;
+    }
+
+    String mensaje = (String) session.getAttribute("mensaje");
+    String error = (String) session.getAttribute("error");
+    session.removeAttribute("mensaje");
+    session.removeAttribute("error");
+%>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin Tur�stico - Clientes</title>
+    <title>Panel Admin - Clientes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/admin/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="d-flex">
@@ -27,7 +41,6 @@
             </ul>
         </nav>
 
-        <!-- Page Content -->
         <div id="content">
             <nav class="navbar navbar-expand-lg navbar-light bg-white rounded shadow-sm mb-4 p-3">
                 <div class="container-fluid">
@@ -40,38 +53,68 @@
                 </div>
             </nav>
 
+            <!-- Mensajes -->
+            <% if (mensaje != null) { %>
+                <div class="alert alert-success alert-dismissible fade show">
+                    <i class="bi bi-check-circle me-2"></i> <%= mensaje %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <% } %>
+            <% if (error != null) { %>
+                <div class="alert alert-danger alert-dismissible fade show">
+                    <i class="bi bi-exclamation-triangle me-2"></i> <%= error %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <% } %>
+
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Directorio de Clientes</h2>
+                <h2>Gestión de Clientes</h2>
                 <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#clienteModal">
                     <i class="bi bi-plus-circle"></i> Nuevo Cliente
                 </button>
             </div>
-            
+
             <div class="card p-4">
                 <div class="table-responsive">
                     <table class="table table-hover table-custom align-middle">
                         <thead>
                             <tr>
-                                <th>ID Usuario</th>
-                                <th>Nombres</th>
+                                <th>ID</th>
+                                <th>Nombre</th>
                                 <th>Apellidos</th>
                                 <th>Email</th>
-                                <th>Telefono</th>
+                                <th>Teléfono</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>3</td>
-                                <td>Carlos</td>
-                                <td>Ramirez</td>
-                                <td>carlos.ramirez@mail.com</td>
-                                <td>987654321</td>
-                                <td>
-                                    <button class="btn btn-sm btn-secondary-custom" data-bs-toggle="modal" data-bs-target="#clienteModal"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                                </td>
-                            </tr>
+                            <% if (clientes.isEmpty()) { %>
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No hay clientes registrados.</td>
+                                </tr>
+                            <% } else { %>
+                                <% for (Usuario u : clientes) { %>
+                                <tr>
+                                    <td><%= u.getIdUsuario() %></td>
+                                    <td><%= u.getNombre() %></td>
+                                    <td><%= u.getApellidos() %></td>
+                                    <td><%= u.getEmail() %></td>
+                                    <td><%= u.getTelefono() %></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary-custom" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#editModal<%= u.getIdUsuario() %>">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <a href="ClienteServlet?action=eliminar&id=<%= u.getIdUsuario() %>" 
+                                           class="btn btn-sm btn-danger" 
+                                           onclick="return confirm('¿Eliminar el cliente <%= u.getNombre() %>?')">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <% } %>
+                            <% } %>
                         </tbody>
                     </table>
                 </div>
@@ -79,54 +122,103 @@
         </div>
     </div>
 
-    <!-- Modal Formulario Cliente -->
+    <!-- ======================================== -->
+    <!-- MODAL CREAR CLIENTE -->
+    <!-- ======================================== -->
     <div class="modal fade" id="clienteModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header bg-primary-custom text-white">
-            <h5 class="modal-title">Detalle de Cliente</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <!-- Por defecto id_rol = 3 (Cliente) oculto -->
-              <input type="hidden" name="id_rol" value="3">
-              <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <label class="form-label">Nombres</label>
-                    <input type="text" class="form-control" name="nombre" required>
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <label class="form-label">Apellidos</label>
-                    <input type="text" class="form-control" name="apellidos" required>
-                  </div>
-              </div>
-              <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <label class="form-label">Correo Electrónico</label>
-                    <input type="email" class="form-control" name="email" required>
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <label class="form-label">Teléfono</label>
-                    <input type="text" class="form-control" name="telefono">
-                  </div>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Contrase�a</label>
-                <input type="password" class="form-control" name="password" required>
-              </div>
-              <div class="text-end mt-3">
-                  <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                  <button type="submit" class="btn btn-primary-custom">Guardar Cliente</button>
-              </div>
-            </form>
-          </div>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary-custom text-white">
+                    <h5 class="modal-title">Nuevo Cliente</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="ClienteServlet" method="post">
+                        <input type="hidden" name="action" value="crear">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nombre</label>
+                                <input type="text" class="form-control" name="nombre" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Apellidos</label>
+                                <input type="text" class="form-control" name="apellidos" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" name="email" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Teléfono</label>
+                                <input type="text" class="form-control" name="telefono">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" name="password" required>
+                            </div>
+                        </div>
+                        <div class="text-end mt-3">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary-custom">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
+
+    <!-- ======================================== -->
+    <!-- MODALES EDITAR -->
+    <!-- ======================================== -->
+    <% for (Usuario u : clientes) { %>
+    <div class="modal fade" id="editModal<%= u.getIdUsuario() %>" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-white">
+                    <h5 class="modal-title">Editar Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="ClienteServlet" method="post">
+                        <input type="hidden" name="action" value="editar">
+                        <input type="hidden" name="id" value="<%= u.getIdUsuario() %>">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nombre</label>
+                                <input type="text" class="form-control" name="nombre" value="<%= u.getNombre() %>" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Apellidos</label>
+                                <input type="text" class="form-control" name="apellidos" value="<%= u.getApellidos() %>" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" name="email" value="<%= u.getEmail() %>" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Teléfono</label>
+                                <input type="text" class="form-control" name="telefono" value="<%= u.getTelefono() %>">
+                            </div>
+                        </div>
+                        <div class="text-end mt-3">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-warning">Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
-    <script src="<%=request.getContextPath()%>/assets/admin/js/script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>

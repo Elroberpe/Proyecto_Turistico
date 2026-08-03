@@ -45,7 +45,7 @@ public class CategoriaServlet extends HttpServlet {
             } catch (NumberFormatException e) {
                 request.getSession().setAttribute("error", "❌ ID inválido.");
             }
-            response.sendRedirect("CategoriaServlet");
+            response.sendRedirect(request.getContextPath() + "/admin/categorias");
             return;
         }
 
@@ -66,7 +66,7 @@ public class CategoriaServlet extends HttpServlet {
         // Validar campos obligatorios
         if (nombre == null || nombre.trim().isEmpty()) {
             request.getSession().setAttribute("error", "❌ El nombre es obligatorio.");
-            response.sendRedirect("CategoriaServlet");
+            response.sendRedirect(request.getContextPath() + "/admin/categorias");
             return;
         }
 
@@ -87,7 +87,7 @@ public class CategoriaServlet extends HttpServlet {
                 String idParam = request.getParameter("id");
                 if (idParam == null || idParam.isEmpty()) {
                     request.getSession().setAttribute("error", "❌ ID no proporcionado.");
-                    response.sendRedirect("CategoriaServlet");
+                    response.sendRedirect(request.getContextPath() + "/admin/categorias");
                     return;
                 }
 
@@ -112,6 +112,6 @@ public class CategoriaServlet extends HttpServlet {
             request.getSession().setAttribute("error", "❌ Error inesperado.");
         }
 
-        response.sendRedirect("CategoriaServlet");
+        response.sendRedirect(request.getContextPath() + "/admin/categorias");
     }
 }

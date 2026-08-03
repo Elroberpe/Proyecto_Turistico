@@ -3,7 +3,7 @@
 <%
     List<CategoriaPaquete> categorias = (List<CategoriaPaquete>) request.getAttribute("categorias");
     if (categorias == null) {
-        response.sendRedirect("CategoriaServlet");
+        response.sendRedirect(request.getContextPath() + "/admin/categorias");
         return;
     }
 
