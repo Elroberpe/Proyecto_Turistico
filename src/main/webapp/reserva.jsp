@@ -78,6 +78,8 @@
                                     <p class="text-muted small mb-0">Código de referencia: <strong
                                             class="text-dark">CH-2026-001</strong></p>
                                 </div>
+                            </div>
+
                             <div id="paymentErrorMsg" class="alert alert-danger d-none mt-3 shadow-sm rounded-4 text-center py-2 small fw-semibold" role="alert"></div>
 
                             <button type="submit" class="btn btn-primary-custom w-100 mt-3 btn-lg rounded-pill fw-bold">
