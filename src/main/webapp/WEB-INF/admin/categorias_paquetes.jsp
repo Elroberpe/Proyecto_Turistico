@@ -132,7 +132,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="<%=request.getContextPath()%>/admin/categorias" method="post">
-                        <input id="accion" type="hidden" name="action" value="crear">
+                        <input id="accion" type="hidden" name="accion" value="guardar">
                         <input id="idCategoria" type="hidden" name="id">
                         <div class="mb-3">
                             <label class="form-label">Nombre de Categoría</label>
@@ -153,7 +153,7 @@
     </div>
 
     <form id="formEliminar" action="<%=request.getContextPath()%>/admin/categorias" method="post">
-        <input type="hidden" name="action" value="eliminar">
+        <input type="hidden" name="accion" value="eliminar">
         <input type="hidden" id="idEliminar" name="id">
     </form>
 
@@ -167,7 +167,7 @@
             document.getElementById("idCategoria").value = "";
             document.getElementById("nombre").value = "";
             document.getElementById("descripcion").value = "";
-            document.getElementById("accion").value = "crear";
+            document.getElementById("accion").value = "guardar";
         });
 
         // Llenar campos del modal al editar
@@ -176,7 +176,7 @@
                 document.getElementById("idCategoria").value = this.dataset.id;
                 document.getElementById("nombre").value = this.dataset.nombre;
                 document.getElementById("descripcion").value = this.dataset.descripcion;
-                document.getElementById("accion").value = "editar";
+                document.getElementById("accion").value = "actualizar";
             });
         });
 
