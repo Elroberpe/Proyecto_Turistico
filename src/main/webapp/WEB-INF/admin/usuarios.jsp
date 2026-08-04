@@ -70,7 +70,7 @@
 
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Gestión de Usuarios</h2>
-                <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#usuarioModal">
+                <button id="btnNuevo" class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#usuarioModal">
                     <i class="bi bi-person-plus"></i> Nuevo Usuario
                 </button>
             </div>
@@ -108,9 +108,15 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-secondary-custom" 
+                                        <button class="btn btn-sm btn-secondary-custom btn-editar" 
+                                                data-id="<%= u.getIdUsuario() %>"
+                                                data-nombre="<%= u.getNombre() %>"
+                                                data-apellidos="<%= u.getApellidos() %>"
+                                                data-email="<%= u.getEmail() %>"
+                                                data-telefono="<%= u.getTelefono() != null ? u.getTelefono() : "" %>"
+                                                data-rol="<%= u.getIdRol() %>"
                                                 data-bs-toggle="modal" 
-                                                data-bs-target="#editModal<%= u.getIdUsuario() %>">
+                                                data-bs-target="#usuarioModal">
                                             <i class="bi bi-pencil"></i>
                                         </button>
                                         <button class="btn btn-sm btn-danger btn-eliminar" data-id="<%= u.getIdUsuario() %>" data-nombre="<%= u.getNombre() %>">
@@ -128,46 +134,47 @@
     </div>
 
     <!-- ======================================== -->
-    <!-- MODAL CREAR USUARIO -->
+    <!-- MODAL ÚNICO USUARIO (CREAR / EDITAR) -->
     <!-- ======================================== -->
     <div class="modal fade" id="usuarioModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
-          <div class="modal-header bg-primary-custom text-white">
-            <h5 class="modal-title">Nuevo Usuario</h5>
+          <div class="modal-header bg-primary-custom text-white" id="modalHeader">
+            <h5 class="modal-title" id="usuarioModalTitle">Nuevo Usuario</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <form action="<%=request.getContextPath()%>/admin/usuarios" method="post">
-              <input type="hidden" name="action" value="crear">
+              <input type="hidden" id="actionUsuario" name="action" value="crear">
+              <input type="hidden" id="idUsuario" name="id">
               <div class="row">
                   <div class="col-md-6 mb-3">
                     <label class="form-label">Nombres</label>
-                    <input type="text" class="form-control" name="nombre" required>
+                    <input type="text" class="form-control" id="nombreUsuario" name="nombre" required>
                   </div>
                   <div class="col-md-6 mb-3">
                     <label class="form-label">Apellidos</label>
-                    <input type="text" class="form-control" name="apellidos" required>
+                    <input type="text" class="form-control" id="apellidosUsuario" name="apellidos" required>
                   </div>
               </div>
               <div class="row">
                   <div class="col-md-6 mb-3">
                     <label class="form-label">Correo Electrónico</label>
-                    <input type="email" class="form-control" name="email" required>
+                    <input type="email" class="form-control" id="emailUsuario" name="email" required>
                   </div>
                   <div class="col-md-6 mb-3">
                     <label class="form-label">Teléfono</label>
-                    <input type="text" class="form-control" name="telefono">
+                    <input type="text" class="form-control" id="telefonoUsuario" name="telefono">
                   </div>
               </div>
               <div class="row">
-                  <div class="col-md-6 mb-3">
+                  <div class="col-md-6 mb-3" id="passwordContainer">
                     <label class="form-label">Contraseña</label>
-                    <input type="password" class="form-control" name="password" required>
+                    <input type="password" class="form-control" id="passwordUsuario" name="password">
                   </div>
                   <div class="col-md-6 mb-3">
                     <label class="form-label">Rol</label>
-                    <select class="form-select" name="id_rol" required>
+                    <select class="form-select" id="rolUsuario" name="id_rol" required>
                         <option value="2">Administrador</option>
                         <option value="1">Cliente</option>
                     </select>
@@ -175,68 +182,13 @@
               </div>
               <div class="text-end mt-3">
                   <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                  <button type="submit" class="btn btn-primary-custom">Guardar Usuario</button>
+                  <button type="submit" class="btn btn-primary-custom" id="btnGuardarModal">Guardar Usuario</button>
               </div>
             </form>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- ========================================== -->
-    <!-- MODALES EDITAR (uno por cada usuario) 		-->
-    <!-- ========================================== -->
-    <% for (Usuario u : usuarios) { %>
-    <div class="modal fade" id="editModal<%= u.getIdUsuario() %>" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-warning text-white">
-                    <h5 class="modal-title">Editar Usuario: <%= u.getNombre() %></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="<%=request.getContextPath()%>/admin/usuarios" method="post">
-                        <input type="hidden" name="action" value="editar">
-                        <input type="hidden" name="id" value="<%= u.getIdUsuario() %>">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Nombres</label>
-                                <input type="text" class="form-control" name="nombre" value="<%= u.getNombre() %>" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Apellidos</label>
-                                <input type="text" class="form-control" name="apellidos" value="<%= u.getApellidos() %>" required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Email</label>
-                                <input type="email" class="form-control" name="email" value="<%= u.getEmail() %>" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Teléfono</label>
-                                <input type="text" class="form-control" name="telefono" value="<%= u.getTelefono() != null ? u.getTelefono() : "" %>">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Rol</label>
-                                <select class="form-select" name="id_rol">
-                                    <option value="2" <%= u.getIdRol() == 2 ? "selected" : "" %>>Administrador</option>
-                                    <option value="1" <%= u.getIdRol() == 1 ? "selected" : "" %>>Cliente</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="text-end mt-3">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-warning">Actualizar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <% } %>
 
     <form id="formEliminar" action="<%=request.getContextPath()%>/admin/usuarios" method="post">
         <input type="hidden" name="action" value="eliminar">
@@ -247,6 +199,40 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Limpiar formulario para nuevo usuario
+        document.getElementById("btnNuevo").addEventListener("click", function () {
+            document.getElementById("actionUsuario").value = "crear";
+            document.getElementById("idUsuario").value = "";
+            document.getElementById("nombreUsuario").value = "";
+            document.getElementById("apellidosUsuario").value = "";
+            document.getElementById("emailUsuario").value = "";
+            document.getElementById("telefonoUsuario").value = "";
+            document.getElementById("passwordUsuario").value = "";
+            document.getElementById("passwordUsuario").required = true;
+            document.getElementById("passwordContainer").style.display = "block";
+            document.getElementById("rolUsuario").value = "2";
+            document.getElementById("usuarioModalTitle").textContent = "Nuevo Usuario";
+            document.getElementById("btnGuardarModal").className = "btn btn-primary-custom";
+        });
+
+        // Llenar formulario para editar usuario
+        document.querySelectorAll(".btn-editar").forEach(boton => {
+            boton.addEventListener("click", function () {
+                document.getElementById("actionUsuario").value = "editar";
+                document.getElementById("idUsuario").value = this.dataset.id;
+                document.getElementById("nombreUsuario").value = this.dataset.nombre;
+                document.getElementById("apellidosUsuario").value = this.dataset.apellidos;
+                document.getElementById("emailUsuario").value = this.dataset.email;
+                document.getElementById("telefonoUsuario").value = this.dataset.telefono;
+                document.getElementById("passwordUsuario").required = false;
+                document.getElementById("passwordContainer").style.display = "none";
+                document.getElementById("rolUsuario").value = this.dataset.rol;
+                document.getElementById("usuarioModalTitle").textContent = "Editar Usuario: " + this.dataset.nombre;
+                document.getElementById("btnGuardarModal").className = "btn btn-warning";
+            });
+        });
+
+        // Eliminar con SweetAlert2
         document.querySelectorAll(".btn-eliminar").forEach(boton => {
             boton.addEventListener("click", function () {
                 let id = this.dataset.id;
