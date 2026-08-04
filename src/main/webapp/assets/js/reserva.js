@@ -182,9 +182,11 @@ function procesarPago() {
     if (metodoPago === 'yape') idMetodoInt = 2;
     else if (metodoPago === 'plin') idMetodoInt = 3;
 
+    const tipoViajeParam = (reserva.tipoViaje === 'oneway' || reserva.tipoViaje === 'ida') ? 'ida' : 'idavuelta';
+
     const params = new URLSearchParams();
     params.append('id_paquete', idPaquete);
-    params.append('tipo_viaje', reserva.tipoViaje || 'roundtrip');
+    params.append('tipo_viaje', tipoViajeParam);
     params.append('fecha_salida', reserva.fechaSalida);
     params.append('fecha_retorno', reserva.fechaRetorno || '');
     params.append('num_pasajeros', reserva.pasajeros || 1);

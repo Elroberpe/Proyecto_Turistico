@@ -105,7 +105,7 @@
                                     <td>#<%= r.getIdReserva() %></td>
                                     <td><%= r.getNombreUsuario() != null ? r.getNombreUsuario() : "ID #" + r.getIdUsuario() %></td>
                                     <td><%= r.getNombrePaquete() != null ? r.getNombrePaquete() : "ID #" + r.getIdPaquete() %></td>
-                                    <td><%= "roundtrip".equalsIgnoreCase(r.getTipoViaje()) ? "Ida y Vuelta" : "Solo Ida" %></td>
+                                    <td><%= ("idavuelta".equalsIgnoreCase(r.getTipoViaje()) || "roundtrip".equalsIgnoreCase(r.getTipoViaje())) ? "Ida y Vuelta" : "Solo Ida" %></td>
                                     <td><%= r.getFechaSalida() %></td>
                                     <td><%= r.getFechaRetorno() != null ? r.getFechaRetorno() : "-" %></td>
                                     <td><%= r.getNumPasajeros() %></td>
@@ -194,8 +194,8 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Tipo de Viaje</label>
                                 <select class="form-select" name="tipo_viaje" required>
-                                    <option value="roundtrip">Ida y Vuelta</option>
-                                    <option value="oneway">Solo Ida</option>
+                                    <option value="idavuelta">Ida y Vuelta</option>
+                                    <option value="ida">Solo Ida</option>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -273,8 +273,8 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Tipo de Viaje</label>
                                 <select class="form-select" name="tipo_viaje" required>
-                                    <option value="roundtrip" <%= "roundtrip".equalsIgnoreCase(r.getTipoViaje()) ? "selected" : "" %>>Ida y Vuelta</option>
-                                    <option value="oneway" <%= "oneway".equalsIgnoreCase(r.getTipoViaje()) ? "selected" : "" %>>Solo Ida</option>
+                                    <option value="idavuelta" <%= ("idavuelta".equalsIgnoreCase(r.getTipoViaje()) || "roundtrip".equalsIgnoreCase(r.getTipoViaje())) ? "selected" : "" %>>Ida y Vuelta</option>
+                                    <option value="ida" <%= ("ida".equalsIgnoreCase(r.getTipoViaje()) || "oneway".equalsIgnoreCase(r.getTipoViaje())) ? "selected" : "" %>>Solo Ida</option>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">

@@ -44,7 +44,9 @@ public class ProcesarPagoServlet extends HttpServlet {
 
         try {
             int idPaquete = Integer.parseInt(request.getParameter("id_paquete"));
-            String tipoViaje = request.getParameter("tipo_viaje");
+            String tipoViajeRaw = request.getParameter("tipo_viaje");
+            String tipoViaje = ("oneway".equalsIgnoreCase(tipoViajeRaw) || "ida".equalsIgnoreCase(tipoViajeRaw) || "Solo Ida".equalsIgnoreCase(tipoViajeRaw)) ? "ida" : "idavuelta";
+            
             String fechaSalidaStr = request.getParameter("fecha_salida");
             String fechaRetornoStr = request.getParameter("fecha_retorno");
             int numPasajeros = Integer.parseInt(request.getParameter("num_pasajeros"));
@@ -68,7 +70,7 @@ public class ProcesarPagoServlet extends HttpServlet {
             Reserva r = new Reserva();
             r.setIdUsuario(usuario.getIdUsuario());
             r.setIdPaquete(idPaquete);
-            r.setTipoViaje(tipoViaje != null ? tipoViaje : "roundtrip");
+            r.setTipoViaje(tipoViaje);
             r.setFechaSalida(Date.valueOf(fechaSalidaStr));
             if (fechaRetornoStr != null && !fechaRetornoStr.trim().isEmpty()) {
                 r.setFechaRetorno(Date.valueOf(fechaRetornoStr));

@@ -84,7 +84,9 @@ public class ReservaServlet extends HttpServlet {
             Reserva r = new Reserva();
             r.setIdUsuario(Integer.parseInt(request.getParameter("id_usuario")));
             r.setIdPaquete(Integer.parseInt(request.getParameter("id_paquete")));
-            r.setTipoViaje(request.getParameter("tipo_viaje"));
+            String tipoViajeRaw = request.getParameter("tipo_viaje");
+            String tipoViaje = ("oneway".equalsIgnoreCase(tipoViajeRaw) || "ida".equalsIgnoreCase(tipoViajeRaw) || "Solo Ida".equalsIgnoreCase(tipoViajeRaw)) ? "ida" : "idavuelta";
+            r.setTipoViaje(tipoViaje);
             r.setFechaSalida(Date.valueOf(request.getParameter("fecha_salida")));
 
             String fechaRetorno = request.getParameter("fecha_retorno");
@@ -135,7 +137,9 @@ public class ReservaServlet extends HttpServlet {
             r.setIdReserva(id);
             r.setIdUsuario(Integer.parseInt(request.getParameter("id_usuario")));
             r.setIdPaquete(Integer.parseInt(request.getParameter("id_paquete")));
-            r.setTipoViaje(request.getParameter("tipo_viaje"));
+            String tipoViajeRaw = request.getParameter("tipo_viaje");
+            String tipoViaje = ("oneway".equalsIgnoreCase(tipoViajeRaw) || "ida".equalsIgnoreCase(tipoViajeRaw) || "Solo Ida".equalsIgnoreCase(tipoViajeRaw)) ? "ida" : "idavuelta";
+            r.setTipoViaje(tipoViaje);
             r.setFechaSalida(Date.valueOf(request.getParameter("fecha_salida")));
 
             String fechaRetorno = request.getParameter("fecha_retorno");
