@@ -30,7 +30,7 @@ public class ReservaServlet extends HttpServlet {
         List<Reserva> reservas = reservaDao.listarTodos();
         request.setAttribute("reservas", reservas);
 
-        List<Usuario> usuarios = usuarioDao.listar();
+        List<Usuario> usuarios = usuarioDao.listarClientes();
         List<Paquete> paquetes = paqueteDao.listarTodos();
         request.setAttribute("usuarios", usuarios);
         request.setAttribute("paquetes", paquetes);

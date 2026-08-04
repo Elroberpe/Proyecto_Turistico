@@ -211,6 +211,7 @@ public class ReservaDao {
 	         Statement st = con.createStatement();
 	         ResultSet rs = st.executeQuery(sql)) {
 	        if (rs.next()) {
+	        	System.out.println("reservas" + rs.getInt(1));
 	            return rs.getInt(1);
 	        }
 	    } catch (SQLException e) {
