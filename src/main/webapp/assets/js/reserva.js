@@ -164,25 +164,67 @@ function procesarPago() {
     // Deshabilitar botón y mostrar estado "procesando" para evitar doble envío
     const btnPagar       = document.querySelector('#paymentForm button[type="submit"]');
     const textoOriginal  = btnPagar.innerHTML;
-    btnPagar.innerHTML   = '<i class="bi bi-hourglass-split"></i> Procesando...';
+    btnPagar.innerHTML   = '<i class="bi bi-hourglass-split"></i> Procesando y guardando en BD...';
     btnPagar.disabled    = true;
 
-    // Simular procesamiento de 2 segundos y luego confirmar la reserva
-    setTimeout(() => {
-        const reserva      = JSON.parse(localStorage.getItem('reservaActual'));
-        let confirmadas    = JSON.parse(localStorage.getItem('reservasConfirmadas')) || [];
+    const reservaStr = localStorage.getItem('reservaActual');
+    if (!reservaStr) {
+        alert('❌ No hay datos de reserva activos.');
+        btnPagar.innerHTML = textoOriginal;
+        btnPagar.disabled = false;
+        return;
+    }
 
-        // Agregar estado y fecha de pago al objeto de reserva
-        confirmadas.push({
-            ...reserva,
-            estado    : 'confirmada',
-            fechaPago : new Date().toLocaleString()
-        });
+    const reserva = JSON.parse(reservaStr);
+    const idPaquete = (reserva.destino && (reserva.destino.idPaquete || reserva.destino.id)) ? (reserva.destino.idPaquete || reserva.destino.id) : 1;
+    
+    let idMetodoInt = 1;
+    if (metodoPago === 'yape') idMetodoInt = 2;
+    else if (metodoPago === 'plin') idMetodoInt = 3;
 
-        localStorage.setItem('reservasConfirmadas', JSON.stringify(confirmadas));
-        localStorage.removeItem('reservaActual');   // Limpiar reserva activa
+    const params = new URLSearchParams();
+    params.append('id_paquete', idPaquete);
+    params.append('tipo_viaje', reserva.tipoViaje || 'roundtrip');
+    params.append('fecha_salida', reserva.fechaSalida);
+    params.append('fecha_retorno', reserva.fechaRetorno || '');
+    params.append('num_pasajeros', reserva.pasajeros || 1);
+    params.append('precio_total', reserva.precioTotal);
+    params.append('id_metodo', idMetodoInt);
 
-        alert('✅ ¡Pago exitoso! Tu reserva ha sido confirmada. Revisa tu correo.');
-        window.location.href = 'index.jsp';
-    }, 2000); // 2000 ms = 2 segundos
+    fetch('procesarPago', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        },
+        body: params.toString()
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            let confirmadas = JSON.parse(localStorage.getItem('reservasConfirmadas')) || [];
+            confirmadas.push({
+                ...reserva,
+                idReservaBD: data.idReserva,
+                idPagoBD: data.idPago,
+                estado: 'confirmada',
+                fechaPago: new Date().toLocaleString()
+            });
+
+            localStorage.setItem('reservasConfirmadas', JSON.stringify(confirmadas));
+            localStorage.removeItem('reservaActual');   // Limpiar reserva activa
+
+            alert(`✅ ¡Pago y Reserva registrados con éxito!\n\nID Reserva en BD: #${data.idReserva}\nID Pago en BD: #${data.idPago}\n\nTu reserva ya se encuentra reflejada en el sistema.`);
+            window.location.href = 'index.jsp';
+        } else {
+            alert('❌ ' + data.mensaje);
+            btnPagar.innerHTML = textoOriginal;
+            btnPagar.disabled = false;
+        }
+    })
+    .catch(error => {
+        console.error('Error al procesar pago:', error);
+        alert('❌ Ocurrió un error inesperado al conectar con el servidor.');
+        btnPagar.innerHTML = textoOriginal;
+        btnPagar.disabled = false;
+    });
 }
