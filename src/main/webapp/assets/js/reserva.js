@@ -130,11 +130,29 @@ function initEventosPago() {
     }
 }
 
+// ==================== FUNCIONES DE NOTIFICACIÓN EN INTERFAZ ====================
+function mostrarError(mensaje) {
+    const errorEl = document.getElementById('paymentErrorMsg');
+    if (errorEl) {
+        errorEl.textContent = mensaje;
+        errorEl.classList.remove('d-none');
+    } else {
+        console.error("Error de Pago:", mensaje);
+    }
+}
+
+function ocultarError() {
+    const errorEl = document.getElementById('paymentErrorMsg');
+    if (errorEl) {
+        errorEl.classList.add('d-none');
+        errorEl.textContent = '';
+    }
+}
+
 // ==================== PROCESAR PAGO ====================
-// Valida los datos del método de pago con expresiones regulares.
-// Simula el procesamiento con setTimeout (2 segundos).
-// Guarda la reserva como confirmada en localStorage y redirige al inicio.
+// Valida los datos del método de pago y envía la transacción al backend.
 function procesarPago() {
+    ocultarError();
     const metodoPago = document.getElementById('metodoPago').value;
 
     // Validación de datos de tarjeta mediante expresiones regulares
@@ -148,15 +166,15 @@ function procesarPago() {
         const regexFecha   = /^(0[1-9]|1[0-2])\/\d{2}$/; // formato MM/AA
 
         if (!regexTarjeta.test(numeroTarjeta.replace(/\s/g, ''))) {
-            alert('❌ Número de tarjeta inválido (debe tener 16 dígitos)');
+            mostrarError('❌ Número de tarjeta inválido (debe tener 16 dígitos)');
             return;
         }
         if (!regexCVV.test(cvv)) {
-            alert('❌ CVV inválido (3 dígitos)');
+            mostrarError('❌ CVV inválido (3 dígitos)');
             return;
         }
         if (!regexFecha.test(fechaExp)) {
-            alert('❌ Fecha de expiración inválida (MM/AA)');
+            mostrarError('❌ Fecha de expiración inválida (MM/AA)');
             return;
         }
     }
@@ -169,7 +187,7 @@ function procesarPago() {
 
     const reservaStr = localStorage.getItem('reservaActual');
     if (!reservaStr) {
-        alert('❌ No hay datos de reserva activos.');
+        mostrarError('❌ No hay datos de reserva activos.');
         btnPagar.innerHTML = textoOriginal;
         btnPagar.disabled = false;
         return;
@@ -239,18 +257,17 @@ function procesarPago() {
                     };
                 }
             } else {
-                alert(`✅ ¡Pago y Reserva registrados con éxito!\n\nID Reserva en BD: #${data.idReserva}\nID Pago en BD: #${data.idPago}`);
                 window.location.href = 'index.jsp';
             }
         } else {
-            alert('❌ ' + data.mensaje);
+            mostrarError('❌ ' + data.mensaje);
             btnPagar.innerHTML = textoOriginal;
             btnPagar.disabled = false;
         }
     })
     .catch(error => {
         console.error('Error al procesar pago:', error);
-        alert('❌ Ocurrió un error inesperado al conectar con el servidor.');
+        mostrarError('❌ Ocurrió un error inesperado al conectar con el servidor.');
         btnPagar.innerHTML = textoOriginal;
         btnPagar.disabled = false;
     });
