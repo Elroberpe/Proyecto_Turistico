@@ -69,6 +69,44 @@
         </div>
     </div>
 
+    <!-- MODAL DE ÉXITO DE PAGO -->
+    <div class="modal fade" id="modalExitoPago" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalExitoPagoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+                <div class="modal-body text-center p-4 p-md-5">
+                    <div class="mb-3 text-success">
+                        <i class="bi bi-check-circle-fill display-1"></i>
+                    </div>
+                    <h3 class="fw-bold mb-2 text-dark" id="modalExitoPagoLabel">¡Pago y Reserva Confirmados!</h3>
+                    <p class="text-muted small mb-4">Tu transacción ha sido procesada y registrada exitosamente en el sistema.</p>
+                    
+                    <div class="bg-light p-3 rounded-4 mb-4 text-start">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted small">ID Reserva BD:</span>
+                            <strong class="text-dark" id="confirmIdReserva">#0</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted small">ID Pago BD:</span>
+                            <strong class="text-dark" id="confirmIdPago">#0</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted small">Destino:</span>
+                            <strong class="text-dark" id="confirmDestino">-</strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted small">Total Pagado:</span>
+                            <strong class="text-primary fs-5" id="confirmTotal">S/ 0.00</strong>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-primary-custom w-100 btn-lg rounded-pill fw-bold" id="btnAceptarExito">
+                        Aceptar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- COMPONENTES COMPARTIDOS -->
     <jsp:include page="componentes/modal_reserva.jsp"></jsp:include>
     <jsp:include page="componentes/footer.jsp"></jsp:include>

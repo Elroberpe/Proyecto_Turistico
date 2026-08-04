@@ -215,8 +215,33 @@ function procesarPago() {
             localStorage.setItem('reservasConfirmadas', JSON.stringify(confirmadas));
             localStorage.removeItem('reservaActual');   // Limpiar reserva activa
 
-            alert(`✅ ¡Pago y Reserva registrados con éxito!\n\nID Reserva en BD: #${data.idReserva}\nID Pago en BD: #${data.idPago}\n\nTu reserva ya se encuentra reflejada en el sistema.`);
-            window.location.href = 'index.jsp';
+            // Poblar datos del modal
+            const elIdReserva = document.getElementById('confirmIdReserva');
+            const elIdPago = document.getElementById('confirmIdPago');
+            const elDestino = document.getElementById('confirmDestino');
+            const elTotal = document.getElementById('confirmTotal');
+            const btnAceptar = document.getElementById('btnAceptarExito');
+
+            if (elIdReserva) elIdReserva.textContent = `#${data.idReserva}`;
+            if (elIdPago) elIdPago.textContent = `#${data.idPago}`;
+            if (elDestino) elDestino.textContent = reserva.destino ? reserva.destino.nombre : 'Paquete Turístico';
+            if (elTotal) elTotal.textContent = `S/ ${reserva.precioTotal.toFixed(2)}`;
+
+            const modalEl = document.getElementById('modalExitoPago');
+            if (modalEl) {
+                const modal = new bootstrap.Modal(modalEl);
+                modal.show();
+
+                if (btnAceptar) {
+                    btnAceptar.onclick = function() {
+                        modal.hide();
+                        window.location.href = 'index.jsp';
+                    };
+                }
+            } else {
+                alert(`✅ ¡Pago y Reserva registrados con éxito!\n\nID Reserva en BD: #${data.idReserva}\nID Pago en BD: #${data.idPago}`);
+                window.location.href = 'index.jsp';
+            }
         } else {
             alert('❌ ' + data.mensaje);
             btnPagar.innerHTML = textoOriginal;
