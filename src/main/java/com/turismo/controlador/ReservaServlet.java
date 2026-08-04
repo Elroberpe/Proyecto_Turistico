@@ -30,25 +30,7 @@ public class ReservaServlet extends HttpServlet {
         String action = request.getParameter("action");
 
         if ("eliminar".equals(action)) {
-            try {
-                int id = Integer.parseInt(request.getParameter("id"));
-                
-                // ✅ Solo se puede eliminar si está pendiente o cancelada
-                Reserva reserva = reservaDao.obtenerPorId(id);
-                if (reserva != null && "pagada".equals(reserva.getEstado())) {
-                    request.getSession().setAttribute("error", 
-                        "❌ No se puede eliminar una reserva pagada.");
-                    response.sendRedirect(request.getContextPath() + "/admin/reservas");
-                    return;
-                }
-                
-                if (reservaDao.eliminar(id)) {
-                    request.getSession().setAttribute("mensaje", "✅ Reserva eliminada.");
-                }
-            } catch (NumberFormatException e) {
-                request.getSession().setAttribute("error", "❌ ID inválido.");
-            }
-            response.sendRedirect(request.getContextPath() + "/admin/reservas");
+            eliminar(request, response);
             return;
         }
 
@@ -68,17 +50,29 @@ public class ReservaServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String action = request.getParameter("action");
+        if (action == null) {
+            action = "";
+        }
 
-        if ("crear".equals(action)) {
-            crear(request, response);
-        } else if ("editar".equals(action)) {
-            editar(request, response);
-        } else {
-            response.sendRedirect(request.getContextPath() + "/admin/reservas");
+        switch (action) {
+            case "crear":
+                crear(request, response);
+                break;
+            case "editar":
+                editar(request, response);
+                break;
+            case "eliminar":
+                eliminar(request, response);
+                break;
+            default:
+                response.sendRedirect(request.getContextPath() + "/admin/reservas");
+                break;
         }
     }
 
-    // ✅ CREAR: Solo permite "pendiente"
+    // ============================================
+    // CREAR RESERVA (FORZADO A PENDIENTE)
+    // ============================================
     private void crear(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             Reserva r = new Reserva();
@@ -96,21 +90,23 @@ public class ReservaServlet extends HttpServlet {
 
             r.setNumPasajeros(Integer.parseInt(request.getParameter("num_pasajeros")));
             r.setPrecioTotal(new BigDecimal(request.getParameter("precio_total")));
-            r.setEstado("pendiente"); // ✅ FORZADO a pendiente
+            r.setEstado("pendiente"); // FORZADO a pendiente
 
             if (reservaDao.crear(r)) {
                 request.getSession().setAttribute("mensaje", "✅ Reserva creada (Pendiente de pago).");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al crear.");
+                request.getSession().setAttribute("error", "❌ Error al crear la reserva.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado.");
+            request.getSession().setAttribute("error", "❌ Error inesperado al crear reserva.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/reservas");
     }
 
-    // ✅ EDITAR: Solo permite cambiar a "pendiente" o "cancelada"
+    // ============================================
+    // EDITAR RESERVA
+    // ============================================
     private void editar(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
@@ -124,7 +120,7 @@ public class ReservaServlet extends HttpServlet {
             }
             String estadoAnterior = reservaAnterior.getEstado();
 
-            // ✅ Si la reserva está pagada, no se puede editar (solo desde pagos)
+            // Si la reserva está pagada, no se puede editar (solo desde pagos)
             if ("pagada".equals(estadoAnterior)) {
                 request.getSession().setAttribute("error", 
                     "❌ No se puede editar una reserva pagada. Use el módulo de Pagos.");
@@ -149,16 +145,46 @@ public class ReservaServlet extends HttpServlet {
 
             r.setNumPasajeros(Integer.parseInt(request.getParameter("num_pasajeros")));
             r.setPrecioTotal(new BigDecimal(request.getParameter("precio_total")));
-            r.setEstado(request.getParameter("estado")); // pendiente o cancelada
+            r.setEstado(request.getParameter("estado"));
 
             if (reservaDao.actualizar(r)) {
                 request.getSession().setAttribute("mensaje", "✅ Reserva actualizada.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al actualizar.");
+                request.getSession().setAttribute("error", "❌ Error al actualizar la reserva.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado.");
+            request.getSession().setAttribute("error", "❌ Error inesperado al editar reserva.");
+        }
+        response.sendRedirect(request.getContextPath() + "/admin/reservas");
+    }
+
+    // ============================================
+    // ELIMINAR RESERVA
+    // ============================================
+    private void eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            
+            // Solo se puede eliminar si está pendiente o cancelada
+            Reserva reserva = reservaDao.obtenerPorId(id);
+            if (reserva != null && "pagada".equals(reserva.getEstado())) {
+                request.getSession().setAttribute("error", 
+                    "❌ No se puede eliminar una reserva pagada.");
+                response.sendRedirect(request.getContextPath() + "/admin/reservas");
+                return;
+            }
+            
+            if (reservaDao.eliminar(id)) {
+                request.getSession().setAttribute("mensaje", "✅ Reserva eliminada.");
+            } else {
+                request.getSession().setAttribute("error", "❌ Error al eliminar la reserva.");
+            }
+        } catch (NumberFormatException e) {
+            request.getSession().setAttribute("error", "❌ ID inválido.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.getSession().setAttribute("error", "❌ Error inesperado al eliminar reserva.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/reservas");
     }
