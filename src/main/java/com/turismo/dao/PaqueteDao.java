@@ -208,5 +208,37 @@ public class PaqueteDao {
         }
         return 0;
     }
- 
+
+	// ============================================
+	// LISTAR PAQUETES ACTIVOS
+	// ============================================
+    public List<Paquete> listarActivos() {
+        List<Paquete> lista = new ArrayList<>();
+        String sql = "SELECT p.*, c.nombre as categoria_nombre FROM paquetes p " +
+                     "JOIN categorias_paquetes c ON p.id_categoria = c.id_categoria " +
+                     "WHERE p.estado = 'activo' " +
+                     "ORDER BY p.nombre ASC";
+
+        try (Connection con = ConexionDB.obtenerConexion();
+             Statement st = con.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            while (rs.next()) {
+                Paquete p = new Paquete();
+                p.setIdPaquete(rs.getInt("id_paquete"));
+                p.setIdCategoria(rs.getInt("id_categoria"));
+                p.setCategoriaNombre(rs.getString("categoria_nombre"));
+                p.setNombre(rs.getString("nombre"));
+                p.setDestino(rs.getString("destino"));
+                p.setDescripcion(rs.getString("descripcion"));
+                p.setImagenUrl(rs.getString("imagenUrl"));
+                p.setPrecioSoles(rs.getBigDecimal("precio_soles"));
+                p.setEstado(rs.getString("estado"));
+                lista.add(p);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
 }
