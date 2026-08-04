@@ -72,7 +72,7 @@
 
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Gestión de Reservas</h2>
-                <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#reservaModal">
+                <button id="btnNuevo" class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#reservaModal">
                     <i class="bi bi-calendar-plus"></i> Nueva Reserva
                 </button>
             </div>
@@ -127,9 +127,18 @@
                                                 <i class="bi bi-pencil"></i>
                                             </button>
                                         <% } else { %>
-                                            <button class="btn btn-sm btn-secondary-custom" 
+                                            <button class="btn btn-sm btn-secondary-custom btn-editar" 
+                                                    data-id="<%= r.getIdReserva() %>"
+                                                    data-usuario="<%= r.getIdUsuario() %>"
+                                                    data-paquete="<%= r.getIdPaquete() %>"
+                                                    data-tipoviaje="<%= r.getTipoViaje() %>"
+                                                    data-pasajeros="<%= r.getNumPasajeros() %>"
+                                                    data-salida="<%= r.getFechaSalida() %>"
+                                                    data-retorno="<%= r.getFechaRetorno() != null ? r.getFechaRetorno() : "" %>"
+                                                    data-total="<%= r.getPrecioTotal() %>"
+                                                    data-estado="<%= r.getEstado() %>"
                                                     data-bs-toggle="modal" 
-                                                    data-bs-target="#editModal<%= r.getIdReserva() %>">
+                                                    data-bs-target="#reservaModal">
                                                 <i class="bi bi-pencil"></i>
                                             </button>
                                             <button class="btn btn-sm btn-danger btn-eliminar" data-id="<%= r.getIdReserva() %>">
@@ -148,22 +157,23 @@
     </div>
 
     <!-- ======================================== -->
-    <!-- MODAL CREAR RESERVA -->
+    <!-- MODAL ÚNICO RESERVA (CREAR / EDITAR) -->
     <!-- ======================================== -->
     <div class="modal fade" id="reservaModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-primary-custom text-white">
-                    <h5 class="modal-title">Nueva Reserva</h5>
+                <div class="modal-header bg-primary-custom text-white" id="reservaModalHeader">
+                    <h5 class="modal-title" id="reservaModalTitle">Nueva Reserva</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <form action="<%=request.getContextPath()%>/admin/reservas" method="post">
-                        <input type="hidden" name="action" value="crear">
+                        <input type="hidden" id="actionReserva" name="action" value="crear">
+                        <input type="hidden" id="idReserva" name="id">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Cliente</label>
-                                <select class="form-select" name="id_usuario" required>
+                                <select class="form-select" id="usuarioReserva" name="id_usuario" required>
                                     <option value="">Seleccionar cliente</option>
                                     <% if (usuarios != null) {
                                         for (Usuario u : usuarios) { %>
@@ -176,7 +186,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Paquete Turístico</label>
-                                <select class="form-select" name="id_paquete" required>
+                                <select class="form-select" id="paqueteReserva" name="id_paquete" required>
                                     <option value="">Seleccionar paquete</option>
                                     <% if (paquetes != null) {
                                         for (Paquete p : paquetes) { %>
@@ -191,129 +201,48 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Tipo de Viaje</label>
-                                <select class="form-select" name="tipo_viaje" required>
+                                <select class="form-select" id="tipoViajeReserva" name="tipo_viaje" required>
                                     <option value="idavuelta">Ida y Vuelta</option>
                                     <option value="ida">Solo Ida</option>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Pasajeros</label>
-                                <input type="number" class="form-control" name="num_pasajeros" min="1" value="1" required>
+                                <input type="number" class="form-control" id="numPasajerosReserva" name="num_pasajeros" min="1" value="1" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Fecha Salida</label>
-                                <input type="date" class="form-control" name="fecha_salida" required>
+                                <input type="date" class="form-control" id="fechaSalidaReserva" name="fecha_salida" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Fecha Retorno</label>
-                                <input type="date" class="form-control" name="fecha_retorno">
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Precio Total (S/)</label>
-                            <input type="number" step="0.01" class="form-control" name="precio_total" required placeholder="0.00">
-                        </div>
-                        <div class="text-end mt-3">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary-custom">Guardar Reserva</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- MODALES EDITAR (uno por cada reserva) 		-->
-    <!-- ========================================== -->
-    <% for (Reserva r : reservas) { 
-        if (!"pagada".equalsIgnoreCase(r.getEstado())) { %>
-    <div class="modal fade" id="editModal<%= r.getIdReserva() %>" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-warning text-white">
-                    <h5 class="modal-title">Editar Reserva #<%= r.getIdReserva() %></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="<%=request.getContextPath()%>/admin/reservas" method="post">
-                        <input type="hidden" name="action" value="editar">
-                        <input type="hidden" name="id" value="<%= r.getIdReserva() %>">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Cliente</label>
-                                <select class="form-select" name="id_usuario" required>
-                                    <% if (usuarios != null) {
-                                        for (Usuario u : usuarios) { %>
-                                        <option value="<%= u.getIdUsuario() %>" <%= (u.getIdUsuario() == r.getIdUsuario()) ? "selected" : "" %>>
-                                            <%= u.getNombre() %> <%= u.getApellidos() %>
-                                        </option>
-                                    <%  }
-                                    } %>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Paquete Turístico</label>
-                                <select class="form-select" name="id_paquete" required>
-                                    <% if (paquetes != null) {
-                                        for (Paquete p : paquetes) { %>
-                                        <option value="<%= p.getIdPaquete() %>" <%= (p.getIdPaquete() == r.getIdPaquete()) ? "selected" : "" %>>
-                                            <%= p.getNombre() %>
-                                        </option>
-                                    <%  }
-                                    } %>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Tipo de Viaje</label>
-                                <select class="form-select" name="tipo_viaje" required>
-                                    <option value="idavuelta" <%= ("idavuelta".equalsIgnoreCase(r.getTipoViaje()) || "roundtrip".equalsIgnoreCase(r.getTipoViaje())) ? "selected" : "" %>>Ida y Vuelta</option>
-                                    <option value="ida" <%= ("ida".equalsIgnoreCase(r.getTipoViaje()) || "oneway".equalsIgnoreCase(r.getTipoViaje())) ? "selected" : "" %>>Solo Ida</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Pasajeros</label>
-                                <input type="number" class="form-control" name="num_pasajeros" value="<%= r.getNumPasajeros() %>" min="1" required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Fecha Salida</label>
-                                <input type="date" class="form-control" name="fecha_salida" value="<%= r.getFechaSalida() %>" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Fecha Retorno</label>
-                                <input type="date" class="form-control" name="fecha_retorno" value="<%= r.getFechaRetorno() != null ? r.getFechaRetorno() : "" %>">
+                                <input type="date" class="form-control" id="fechaRetornoReserva" name="fecha_retorno">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Precio Total (S/)</label>
-                                <input type="number" step="0.01" class="form-control" name="precio_total" value="<%= r.getPrecioTotal() %>" required>
+                                <input type="number" step="0.01" class="form-control" id="precioTotalReserva" name="precio_total" required placeholder="0.00">
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-6 mb-3" id="estadoReservaContainer" style="display: none;">
                                 <label class="form-label">Estado</label>
-                                <select class="form-select" name="estado" required>
-                                    <option value="pendiente" <%= "pendiente".equalsIgnoreCase(r.getEstado()) ? "selected" : "" %>>Pendiente</option>
-                                    <option value="cancelada" <%= "cancelada".equalsIgnoreCase(r.getEstado()) ? "selected" : "" %>>Cancelada</option>
+                                <select class="form-select" id="estadoReserva" name="estado">
+                                    <option value="pendiente">Pendiente</option>
+                                    <option value="cancelada">Cancelada</option>
                                 </select>
                             </div>
                         </div>
                         <div class="text-end mt-3">
                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-warning">Actualizar</button>
+                            <button type="submit" class="btn btn-primary-custom" id="btnGuardarReserva">Guardar Reserva</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <%  } 
-    } %>
 
     <form id="formEliminar" action="<%=request.getContextPath()%>/admin/reservas" method="post">
         <input type="hidden" name="action" value="eliminar">
@@ -324,6 +253,47 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Limpiar modal para nueva reserva
+        document.getElementById("btnNuevo").addEventListener("click", function () {
+            document.getElementById("actionReserva").value = "crear";
+            document.getElementById("idReserva").value = "";
+            document.getElementById("usuarioReserva").selectedIndex = 0;
+            document.getElementById("paqueteReserva").selectedIndex = 0;
+            document.getElementById("tipoViajeReserva").value = "idavuelta";
+            document.getElementById("numPasajerosReserva").value = "1";
+            document.getElementById("fechaSalidaReserva").value = "";
+            document.getElementById("fechaRetornoReserva").value = "";
+            document.getElementById("precioTotalReserva").value = "";
+            document.getElementById("estadoReservaContainer").style.display = "none";
+            document.getElementById("reservaModalTitle").textContent = "Nueva Reserva";
+            document.getElementById("btnGuardarReserva").className = "btn btn-primary-custom";
+        });
+
+        // Llenar modal para editar reserva
+        document.querySelectorAll(".btn-editar").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                document.getElementById("actionReserva").value = "editar";
+                document.getElementById("idReserva").value = this.dataset.id;
+                document.getElementById("usuarioReserva").value = this.dataset.usuario;
+                document.getElementById("paqueteReserva").value = this.dataset.paquete;
+                let tipo = this.dataset.tipoviaje;
+                if (tipo === "roundtrip" || tipo === "idavuelta") {
+                    document.getElementById("tipoViajeReserva").value = "idavuelta";
+                } else {
+                    document.getElementById("tipoViajeReserva").value = "ida";
+                }
+                document.getElementById("numPasajerosReserva").value = this.dataset.pasajeros;
+                document.getElementById("fechaSalidaReserva").value = this.dataset.salida;
+                document.getElementById("fechaRetornoReserva").value = this.dataset.retorno;
+                document.getElementById("precioTotalReserva").value = this.dataset.total;
+                document.getElementById("estadoReservaContainer").style.display = "block";
+                document.getElementById("estadoReserva").value = this.dataset.estado;
+                document.getElementById("reservaModalTitle").textContent = "Editar Reserva #" + this.dataset.id;
+                document.getElementById("btnGuardarReserva").className = "btn btn-warning";
+            });
+        });
+
+        // Eliminar con SweetAlert2
         document.querySelectorAll(".btn-eliminar").forEach(function (btn) {
             btn.addEventListener("click", function () {
                 let id = this.dataset.id;
