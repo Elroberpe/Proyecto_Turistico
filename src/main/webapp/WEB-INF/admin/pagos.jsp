@@ -7,7 +7,7 @@
         return;
     }
 
-    // ✅ Obtener reservas pendientes
+    // Obtener reservas pendientes
     List<Reserva> reservasPendientes = (List<Reserva>) request.getAttribute("reservasPendientes");
 
     String mensaje = (String) session.getAttribute("mensaje");
@@ -71,7 +71,7 @@
 
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Gestión de Pagos</h2>
-                <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#pagoModal">
+                <button id="btnNuevo" class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#pagoModal">
                     <i class="bi bi-plus-circle"></i> Nuevo Pago
                 </button>
             </div>
@@ -112,9 +112,14 @@
                                     </td>
                                     <td><%= p.getFechaPago() != null ? p.getFechaPago() : "-" %></td>
                                     <td>
-                                        <button class="btn btn-sm btn-secondary-custom" 
+                                        <button class="btn btn-sm btn-secondary-custom btn-editar" 
+                                                data-id="<%= p.getIdPago() %>"
+                                                data-reserva="<%= p.getIdReserva() %>"
+                                                data-metodo="<%= p.getIdMetodo() %>"
+                                                data-monto="<%= p.getMonto() %>"
+                                                data-estado="<%= p.getEstado() %>"
                                                 data-bs-toggle="modal" 
-                                                data-bs-target="#editModal<%= p.getIdPago() %>">
+                                                data-bs-target="#pagoModal">
                                             <i class="bi bi-pencil"></i>
                                         </button>
                                         <button class="btn btn-sm btn-danger btn-eliminar" data-id="<%= p.getIdPago() %>">
@@ -132,20 +137,21 @@
     </div>
 
     <!-- ======================================== -->
-    <!-- MODAL CREAR PAGO -->
+    <!-- MODAL ÚNICO PAGO (CREAR / EDITAR) -->
     <!-- ======================================== -->
     <div class="modal fade" id="pagoModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-primary-custom text-white">
-                    <h5 class="modal-title">Nuevo Pago</h5>
+                <div class="modal-header bg-primary-custom text-white" id="pagoModalHeader">
+                    <h5 class="modal-title" id="pagoModalTitle">Nuevo Pago</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <form action="<%=request.getContextPath()%>/admin/pagos" method="post">
-                        <input type="hidden" name="action" value="crear">
+                        <input type="hidden" id="actionPago" name="action" value="crear">
+                        <input type="hidden" id="idPago" name="id">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-6 mb-3" id="reservaPagoContainer">
                                 <label class="form-label">Reserva</label>
                                 <select class="form-select" name="id_reserva" id="idReserva" required>
                                     <option value="">Seleccionar reserva</option>
@@ -166,7 +172,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Método de Pago</label>
-                                <select class="form-select" name="id_metodo" required>
+                                <select class="form-select" id="metodoPago" name="id_metodo" required>
                                     <option value="1">Tarjeta</option>
                                     <option value="2">Yape</option>
                                     <option value="3">Plin</option>
@@ -174,7 +180,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Estado</label>
-                                <select class="form-select" name="estado" required>
+                                <select class="form-select" id="estadoPago" name="estado" required>
                                     <option value="pagado">Pagado</option>
                                     <option value="rechazado">Rechazado</option>
                                     <option value="reembolsado">Reembolsado</option>
@@ -183,7 +189,7 @@
                         </div>
                         <div class="text-end mt-3">
                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary-custom">Guardar</button>
+                            <button type="submit" class="btn btn-primary-custom" id="btnGuardarPago">Guardar</button>
                         </div>
                     </form>
                 </div>
@@ -191,57 +197,16 @@
         </div>
     </div>
 
-    <!-- ======================================== -->
-    <!-- MODALES EDITAR -->
-    <!-- ======================================== -->
-    <% for (Pago p : pagos) { %>
-    <div class="modal fade" id="editModal<%= p.getIdPago() %>" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-warning text-white">
-                    <h5 class="modal-title">Editar Pago #<%= p.getIdPago() %></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="<%=request.getContextPath()%>/admin/pagos" method="post">
-                        <input type="hidden" name="action" value="editar">
-                        <input type="hidden" name="id" value="<%= p.getIdPago() %>">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Método de Pago</label>
-                                <select class="form-select" name="id_metodo" required>
-                                    <option value="1" <%= p.getIdMetodo() == 1 ? "selected" : "" %>>Tarjeta</option>
-                                    <option value="2" <%= p.getIdMetodo() == 2 ? "selected" : "" %>>Yape</option>
-                                    <option value="3" <%= p.getIdMetodo() == 3 ? "selected" : "" %>>Plin</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Monto (S/)</label>
-                                <input type="number" step="0.01" class="form-control" name="monto" value="<%= p.getMonto() %>" required>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Estado</label>
-                            <select class="form-select" name="estado" required>
-                                <option value="pagado" <%= "pagado".equals(p.getEstado()) ? "selected" : "" %>>Pagado</option>
-                                <option value="rechazado" <%= "rechazado".equals(p.getEstado()) ? "selected" : "" %>>Rechazado</option>
-                                <option value="reembolsado" <%= "reembolsado".equals(p.getEstado()) ? "selected" : "" %>>Reembolsado</option>
-                            </select>
-                            <small class="text-muted">⚠️ Cambiar el estado actualizará automáticamente el estado de la reserva.</small>
-                        </div>
-                        <div class="text-end mt-3">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-warning">Actualizar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <% } %>
+    <form id="formEliminar" action="<%=request.getContextPath()%>/admin/pagos" method="post">
+        <input type="hidden" name="action" value="eliminar">
+        <input type="hidden" id="idEliminar" name="id">
+    </form>
 
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // ✅ Auto-completar monto al seleccionar reserva
+        // Auto-completar monto al seleccionar reserva
         document.addEventListener('DOMContentLoaded', function() {
             const selectReserva = document.getElementById('idReserva');
             const montoInput = document.getElementById('montoPago');
@@ -258,17 +223,39 @@
                 });
             }
         });
-    </script>
 
-    <form id="formEliminar" action="<%=request.getContextPath()%>/admin/pagos" method="post">
-        <input type="hidden" name="action" value="eliminar">
-        <input type="hidden" id="idEliminar" name="id">
-    </form>
+        // Limpiar modal para Nuevo Pago
+        document.getElementById("btnNuevo").addEventListener("click", function () {
+            document.getElementById("actionPago").value = "crear";
+            document.getElementById("idPago").value = "";
+            document.getElementById("reservaPagoContainer").style.display = "block";
+            document.getElementById("idReserva").required = true;
+            document.getElementById("idReserva").selectedIndex = 0;
+            document.getElementById("montoPago").value = "";
+            document.getElementById("montoPago").readOnly = true;
+            document.getElementById("metodoPago").value = "1";
+            document.getElementById("estadoPago").value = "pagado";
+            document.getElementById("pagoModalTitle").textContent = "Nuevo Pago";
+            document.getElementById("btnGuardarPago").className = "btn btn-primary-custom";
+        });
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
+        // Llenar modal para Editar Pago
+        document.querySelectorAll(".btn-editar").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                document.getElementById("actionPago").value = "editar";
+                document.getElementById("idPago").value = this.dataset.id;
+                document.getElementById("reservaPagoContainer").style.display = "none";
+                document.getElementById("idReserva").required = false;
+                document.getElementById("metodoPago").value = this.dataset.metodo;
+                document.getElementById("montoPago").value = this.dataset.monto;
+                document.getElementById("montoPago").readOnly = false;
+                document.getElementById("estadoPago").value = this.dataset.estado;
+                document.getElementById("pagoModalTitle").textContent = "Editar Pago #" + this.dataset.id;
+                document.getElementById("btnGuardarPago").className = "btn btn-warning";
+            });
+        });
+
+        // Eliminar con SweetAlert2
         document.querySelectorAll(".btn-eliminar").forEach(function (btn) {
             btn.addEventListener("click", function () {
                 let id = this.dataset.id;
