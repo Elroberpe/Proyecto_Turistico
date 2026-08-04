@@ -26,6 +26,15 @@ body {
     transition: all 0.3s ease;
 }
 
+#sidebar .sidebar-footer {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+#sidebar .sidebar-footer .btn-outline-light:hover {
+    background-color: #ef4444;
+    border-color: #ef4444;
+    color: var(--white);
+}
+
 #sidebar.active {
     margin-left: -250px;
 }
