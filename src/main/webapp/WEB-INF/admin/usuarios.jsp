@@ -198,6 +198,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="<%=request.getContextPath()%>/assets/admin/js/script.js"></script>
     <script>
         // Limpiar formulario para nuevo usuario
         document.getElementById("btnNuevo").addEventListener("click", function () {
@@ -212,7 +213,6 @@
             document.getElementById("passwordContainer").style.display = "block";
             document.getElementById("rolUsuario").value = "2";
             document.getElementById("usuarioModalTitle").textContent = "Nuevo Usuario";
-            document.getElementById("btnGuardarModal").className = "btn btn-primary-custom";
         });
 
         // Llenar formulario para editar usuario
@@ -228,7 +228,7 @@
                 document.getElementById("passwordContainer").style.display = "none";
                 document.getElementById("rolUsuario").value = this.dataset.rol;
                 document.getElementById("usuarioModalTitle").textContent = "Editar Usuario: " + this.dataset.nombre;
-                document.getElementById("btnGuardarModal").className = "btn btn-warning";
+                document.getElementById("btnGuardarModal").className = "btn btn-primary-custom";
             });
         });
 

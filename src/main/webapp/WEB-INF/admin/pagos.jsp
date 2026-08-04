@@ -205,6 +205,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="<%=request.getContextPath()%>/assets/admin/js/script.js"></script>
     <script>
         // Auto-completar monto al seleccionar reserva
         document.addEventListener('DOMContentLoaded', function() {
@@ -251,7 +252,7 @@
                 document.getElementById("montoPago").readOnly = false;
                 document.getElementById("estadoPago").value = this.dataset.estado;
                 document.getElementById("pagoModalTitle").textContent = "Editar Pago #" + this.dataset.id;
-                document.getElementById("btnGuardarPago").className = "btn btn-warning";
+                document.getElementById("btnGuardarPago").className = "btn btn-primary-custom";
             });
         });
 

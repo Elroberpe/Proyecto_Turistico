@@ -23,7 +23,11 @@ body {
     min-height: 100vh;
     background-color: var(--dark);
     color: var(--white);
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+}
+
+#sidebar.active {
+    margin-left: -250px;
 }
 
 #sidebar .sidebar-header {
@@ -115,4 +119,53 @@ body {
     background-color: var(--dark);
     color: var(--white);
     border-top: none;
+}
+
+/* ======================================== */
+/* SIDEBAR TOGGLE - ACTIVE STATE */
+/* ======================================== */
+
+/* Estado oculto del sidebar */
+#sidebar.active {
+    margin-left: -250px;
+}
+
+/* Ajuste del contenido cuando el sidebar está oculto */
+#sidebar.active + #content {
+    margin-left: 0;
+    width: 100%;
+}
+
+/* Animación suave para el contenido */
+#content {
+    transition: all 0.3s ease;
+}
+
+/* Botón toggle - asegurar visibilidad */
+#sidebarCollapse {
+    background-color: var(--primary);
+    border: none;
+    color: var(--white);
+    padding: 8px 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+#sidebarCollapse:hover {
+    background-color: var(--primary-hover);
+    transform: scale(1.05);
+}
+
+/* Responsive: en móviles el sidebar se oculta por defecto */
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+        position: fixed;
+        z-index: 999;
+        height: 100vh;
+    }
+    
+    #sidebar.active {
+        margin-left: 0;
+    }
 }
