@@ -41,7 +41,7 @@ Usuario usuario = (Usuario) session.getAttribute("usuario");
 					<a class="btn btn-primary-custom dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"><%=usuario.getNombre()%></a>
 
 					<ul class="dropdown-menu dropdown-menu-end">
-						<li><a class="dropdown-item" href="${pageContext.request.contextPath}/perfil"><i class="bi bi-person me-1"></i> Mi perfil </a></li>
+						<li><a class="dropdown-item" href="${pageContext.request.contextPath}/perfil">Mi perfil </a></li>
 						<li><a class="dropdown-item" href="${pageContext.request.contextPath}/mis-reservas">Mis reservas </a></li>
 						<li><hr class="dropdown-divider"></li>
 						<li><a class="dropdown-item text-danger" href="AuthServlet?accion=logout"> Cerrar sesión </a></li>
