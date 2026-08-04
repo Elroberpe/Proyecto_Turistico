@@ -15,6 +15,7 @@ import java.util.List;
 
 @WebServlet("/admin/pagos")
 public class PagoServlet extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
     private PagoDao pagoDao = new PagoDao();
     private ReservaDao reservaDao = new ReservaDao();
@@ -25,34 +26,8 @@ public class PagoServlet extends HttpServlet {
 
         String action = request.getParameter("action");
 
-        // ============================================
-        // ✅ ELIMINAR PAGO (con actualización de reserva)
-        // ============================================
         if ("eliminar".equals(action)) {
-            try {
-                int id = Integer.parseInt(request.getParameter("id"));
-                
-                // 🔥 Obtener el pago antes de eliminarlo
-                Pago pago = pagoDao.obtenerPorId(id);
-                if (pago != null) {
-                    int idReserva = pago.getIdReserva();
-                    
-                    // Eliminar el pago
-                    if (pagoDao.eliminar(id)) {
-                        // ✅ Actualizar reserva a "pendiente"
-                        reservaDao.actualizarEstado(idReserva, "pendiente");
-                        request.getSession().setAttribute("mensaje", 
-                            "✅ Pago eliminado. Reserva #" + idReserva + " vuelta a estado Pendiente.");
-                    } else {
-                        request.getSession().setAttribute("error", "❌ Error al eliminar el pago.");
-                    }
-                } else {
-                    request.getSession().setAttribute("error", "❌ Pago no encontrado.");
-                }
-            } catch (NumberFormatException e) {
-                request.getSession().setAttribute("error", "❌ ID inválido.");
-            }
-            response.sendRedirect(request.getContextPath() + "/admin/pagos");
+            eliminar(request, response);
             return;
         }
 
@@ -72,13 +47,23 @@ public class PagoServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String action = request.getParameter("action");
+        if (action == null) {
+            action = "";
+        }
 
-        if ("crear".equals(action)) {
-            crear(request, response);
-        } else if ("editar".equals(action)) {
-            editar(request, response);
-        } else {
-            response.sendRedirect(request.getContextPath() + "/admin/pagos");
+        switch (action) {
+            case "crear":
+                crear(request, response);
+                break;
+            case "editar":
+                editar(request, response);
+                break;
+            case "eliminar":
+                eliminar(request, response);
+                break;
+            default:
+                response.sendRedirect(request.getContextPath() + "/admin/pagos");
+                break;
         }
     }
 
@@ -122,7 +107,7 @@ public class PagoServlet extends HttpServlet {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado.");
+            request.getSession().setAttribute("error", "❌ Error inesperado al crear pago.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/pagos");
     }
@@ -164,11 +149,44 @@ public class PagoServlet extends HttpServlet {
                 }
                 request.getSession().setAttribute("mensaje", "✅ Pago actualizado.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al actualizar.");
+                request.getSession().setAttribute("error", "❌ Error al actualizar el pago.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado.");
+            request.getSession().setAttribute("error", "❌ Error inesperado al editar pago.");
+        }
+        response.sendRedirect(request.getContextPath() + "/admin/pagos");
+    }
+
+    // ============================================
+    // ELIMINAR PAGO
+    // ============================================
+    private void eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            
+            // Obtener el pago antes de eliminarlo
+            Pago pago = pagoDao.obtenerPorId(id);
+            if (pago != null) {
+                int idReserva = pago.getIdReserva();
+                
+                // Eliminar el pago
+                if (pagoDao.eliminar(id)) {
+                    // Actualizar reserva a "pendiente"
+                    reservaDao.actualizarEstado(idReserva, "pendiente");
+                    request.getSession().setAttribute("mensaje", 
+                        "✅ Pago eliminado. Reserva #" + idReserva + " vuelta a estado Pendiente.");
+                } else {
+                    request.getSession().setAttribute("error", "❌ Error al eliminar el pago.");
+                }
+            } else {
+                request.getSession().setAttribute("error", "❌ Pago no encontrado.");
+            }
+        } catch (NumberFormatException e) {
+            request.getSession().setAttribute("error", "❌ ID inválido.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.getSession().setAttribute("error", "❌ Error inesperado al eliminar pago.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/pagos");
     }
