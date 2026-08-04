@@ -116,7 +116,7 @@
             </div>
             
             <div class="text-center mt-5">
-                <a href="sierra.jsp" class="btn btn-primary-custom px-5 py-3">Explorar todo el catálogo</a>
+                <a href="${pageContext.request.contextPath}/catalogo?region=Sierra" class="btn btn-primary-custom px-5 py-3">Explorar todo el catálogo</a>
             </div>
         </div>
     </section>
