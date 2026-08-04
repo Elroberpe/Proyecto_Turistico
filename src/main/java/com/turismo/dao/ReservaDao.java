@@ -236,4 +236,42 @@ public class ReservaDao {
 	    return BigDecimal.ZERO;
 	}
 	
+	// ============================================
+	// LISTAR RESERVAS POR USUARIO
+	// ============================================
+	public List<Reserva> listarPorUsuario(int idUsuario) {
+	    List<Reserva> lista = new ArrayList<>();
+	    String sql = "SELECT r.*, u.nombre as nombre_usuario, p.nombre as nombre_paquete " +
+	                 "FROM reservas r " +
+	                 "JOIN usuario u ON r.id_usuario = u.id_usuario " +
+	                 "JOIN paquetes p ON r.id_paquete = p.id_paquete " +
+	                 "WHERE r.id_usuario = ? " +
+	                 "ORDER BY r.id_reserva DESC";
+
+	    try (Connection con = ConexionDB.obtenerConexion();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ps.setInt(1, idUsuario);
+	        ResultSet rs = ps.executeQuery();
+
+	        while (rs.next()) {
+	            Reserva r = new Reserva();
+	            r.setIdReserva(rs.getInt("id_reserva"));
+	            r.setIdUsuario(rs.getInt("id_usuario"));
+	            r.setNombreUsuario(rs.getString("nombre_usuario"));
+	            r.setIdPaquete(rs.getInt("id_paquete"));
+	            r.setNombrePaquete(rs.getString("nombre_paquete"));
+	            r.setTipoViaje(rs.getString("tipo_viaje"));
+	            r.setFechaSalida(rs.getDate("fecha_salida"));
+	            r.setFechaRetorno(rs.getDate("fecha_retorno"));
+	            r.setNumPasajeros(rs.getInt("num_pasajeros"));
+	            r.setPrecioTotal(rs.getBigDecimal("precio_total"));
+	            r.setEstado(rs.getString("estado"));
+	            lista.add(r);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return lista;
+	}
 }
