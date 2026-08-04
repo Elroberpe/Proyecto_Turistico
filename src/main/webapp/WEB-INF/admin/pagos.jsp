@@ -117,11 +117,9 @@
                                                 data-bs-target="#editModal<%= p.getIdPago() %>">
                                             <i class="bi bi-pencil"></i>
                                         </button>
-                                        <a href="<%=request.getContextPath()%>/admin/pagos?action=eliminar&id=<%= p.getIdPago() %>" 
-                                           class="btn btn-sm btn-danger" 
-                                           onclick="return confirm('¿Eliminar el pago #<%= p.getIdPago() %>?')">
+                                        <button class="btn btn-sm btn-danger btn-eliminar" data-id="<%= p.getIdPago() %>">
                                             <i class="bi bi-trash"></i>
-                                        </a>
+                                        </button>
                                     </td>
                                 </tr>
                                 <% } %>
@@ -262,8 +260,33 @@
         });
     </script>
 
+    <form id="formEliminar" action="<%=request.getContextPath()%>/admin/pagos" method="post">
+        <input type="hidden" name="action" value="eliminar">
+        <input type="hidden" id="idEliminar" name="id">
+    </form>
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
-    <script src="js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.querySelectorAll(".btn-eliminar").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                let id = this.dataset.id;
+                Swal.fire({
+                    title: "¿Eliminar el pago #" + id + "?",
+                    text: "Esta acción no se puede deshacer.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Sí, eliminar",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById("idEliminar").value = id;
+                        document.getElementById("formEliminar").submit();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

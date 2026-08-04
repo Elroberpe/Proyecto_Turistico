@@ -119,9 +119,9 @@
                                             data-imagen="<%=paquete.getImagenUrl() != null ? paquete.getImagenUrl() : ""%>"
                                             data-estado="<%=paquete.getEstado()%>"
                                             data-bs-toggle="modal" data-bs-target="#paqueteModal"><i class="bi bi-pencil"></i></button>
-                                    <a href="<%=request.getContextPath()%>/admin/paquetes?action=eliminar&id=<%=paquete.getIdPaquete()%>" 
-                                       class="btn btn-sm btn-danger"
-                                       onclick="return confirm('¿Está seguro de eliminar este paquete?');"><i class="bi bi-trash"></i></a>
+                                    <button class="btn btn-sm btn-danger btn-eliminar" data-id="<%=paquete.getIdPaquete()%>" data-nombre="<%=paquete.getNombre()%>">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                           <% } } %>
@@ -213,8 +213,14 @@
       </div>
     </div>
     
+    <form id="formEliminar" action="<%=request.getContextPath()%>/admin/paquetes" method="post">
+        <input type="hidden" name="action" value="eliminar">
+        <input type="hidden" id="idEliminar" name="id">
+    </form>
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <script>
   		// Limpiar campos del modal para Nuevo Paquete
@@ -244,6 +250,27 @@
     			document.getElementById("imagenUrl").value = this.dataset.imagen;
     			document.getElementById("estado").value = this.dataset.estado;
     			document.getElementById("modalTitle").textContent = "Editar Paquete";
+    		});
+    	});
+
+    	// Confirmar eliminación con SweetAlert2
+    	document.querySelectorAll(".btn-eliminar").forEach(function (btn) {
+    		btn.addEventListener("click", function () {
+    			let id = this.dataset.id;
+    			let nombre = this.dataset.nombre || "el paquete";
+    			Swal.fire({
+    				title: "¿Eliminar paquete?",
+    				text: "Esta acción eliminará " + nombre + ". ¿Deseas continuar?",
+    				icon: "warning",
+    				showCancelButton: true,
+    				confirmButtonText: "Sí, eliminar",
+    				cancelButtonText: "Cancelar"
+    			}).then((result) => {
+    				if (result.isConfirmed) {
+    					document.getElementById("idEliminar").value = id;
+    					document.getElementById("formEliminar").submit();
+    				}
+    			});
     		});
     	});
     </script>

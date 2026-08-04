@@ -3,7 +3,7 @@
 <%
     List<Usuario> clientes = (List<Usuario>) request.getAttribute("clientes");
     if (clientes == null) {
-        response.sendRedirect("ClienteServlet");
+        response.sendRedirect(request.getContextPath() + "/admin/clientes");
         return;
     }
 
@@ -21,7 +21,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/admin/css/style.css">
 </head>
 <body>
     <div class="d-flex">
@@ -99,18 +99,16 @@
                                     <td><%= u.getNombre() %></td>
                                     <td><%= u.getApellidos() %></td>
                                     <td><%= u.getEmail() %></td>
-                                    <td><%= u.getTelefono() %></td>
+                                    <td><%= u.getTelefono() != null ? u.getTelefono() : "-" %></td>
                                     <td>
                                         <button class="btn btn-sm btn-secondary-custom" 
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#editModal<%= u.getIdUsuario() %>">
                                             <i class="bi bi-pencil"></i>
                                         </button>
-                                        <a href="ClienteServlet?action=eliminar&id=<%= u.getIdUsuario() %>" 
-                                           class="btn btn-sm btn-danger" 
-                                           onclick="return confirm('¿Eliminar el cliente <%= u.getNombre() %>?')">
+                                        <button class="btn btn-sm btn-danger btn-eliminar" data-id="<%= u.getIdUsuario() %>" data-nombre="<%= u.getNombre() %>">
                                             <i class="bi bi-trash"></i>
-                                        </a>
+                                        </button>
                                     </td>
                                 </tr>
                                 <% } %>
@@ -133,7 +131,7 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="ClienteServlet" method="post">
+                    <form action="<%=request.getContextPath()%>/admin/clientes" method="post">
                         <input type="hidden" name="action" value="crear">
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -183,7 +181,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="ClienteServlet" method="post">
+                    <form action="<%=request.getContextPath()%>/admin/clientes" method="post">
                         <input type="hidden" name="action" value="editar">
                         <input type="hidden" name="id" value="<%= u.getIdUsuario() %>">
                         <div class="row">
@@ -203,7 +201,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Teléfono</label>
-                                <input type="text" class="form-control" name="telefono" value="<%= u.getTelefono() %>">
+                                <input type="text" class="form-control" name="telefono" value="<%= u.getTelefono() != null ? u.getTelefono() : "" %>">
                             </div>
                         </div>
                         <div class="text-end mt-3">
@@ -217,8 +215,34 @@
     </div>
     <% } %>
 
+    <form id="formEliminar" action="<%=request.getContextPath()%>/admin/clientes" method="post">
+        <input type="hidden" name="action" value="eliminar">
+        <input type="hidden" id="idEliminar" name="id">
+    </form>
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
-    <script src="js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.querySelectorAll(".btn-eliminar").forEach(boton => {
+            boton.addEventListener("click", function () {
+                let id = this.dataset.id;
+                let nombre = this.dataset.nombre || "el cliente";
+                Swal.fire({
+                    title: "¿Eliminar cliente?",
+                    text: "Esta acción eliminará a " + nombre + ". ¿Deseas continuar?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Sí, eliminar",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById("idEliminar").value = id;
+                        document.getElementById("formEliminar").submit();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

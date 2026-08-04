@@ -19,32 +19,9 @@ public class PaqueteServlet extends HttpServlet {
     private PaqueteDao dao = new PaqueteDao();
     private CategoriaPaqueteDao categoriaDao = new CategoriaPaqueteDao();
 
-    // ============================================
-    // GET: Listar y Eliminar
-    // ============================================
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        String action = request.getParameter("action");
-
-        // ELIMINAR paquete
-        if ("eliminar".equals(action)) {
-            try {
-                int id = Integer.parseInt(request.getParameter("id"));
-                if (dao.eliminar(id)) {
-                    request.getSession().setAttribute("mensaje", "✅ Paquete eliminado correctamente.");
-                } else {
-                    request.getSession().setAttribute("error", "❌ Error al eliminar el paquete.");
-                }
-            } catch (NumberFormatException e) {
-                request.getSession().setAttribute("error", "❌ ID inválido.");
-            }
-            response.sendRedirect(request.getContextPath() + "/admin/paquetes");
-            return;
-        }
-
-        // LISTAR paquetes
         List<Paquete> paquetes = dao.listarTodos();
         List<CategoriaPaquete> categorias = categoriaDao.listar();
         request.setAttribute("paquetes", paquetes);
@@ -52,21 +29,28 @@ public class PaqueteServlet extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/admin/paquetes.jsp").forward(request, response);
     }
 
-    // ============================================
-    // POST: Crear y Editar
-    // ============================================
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String action = request.getParameter("action");
+        if (action == null) {
+            action = "";
+        }
 
-        if ("crear".equals(action)) {
-            crear(request, response);
-        } else if ("editar".equals(action)) {
-            editar(request, response);
-        } else {
-            response.sendRedirect(request.getContextPath() + "/admin/paquetes");
+        switch (action) {
+            case "crear":
+                crear(request, response);
+                break;
+            case "editar":
+                editar(request, response);
+                break;
+            case "eliminar":
+                eliminar(request, response);
+                break;
+            default:
+                response.sendRedirect(request.getContextPath() + "/admin/paquetes");
+                break;
         }
     }
 
@@ -88,7 +72,7 @@ public class PaqueteServlet extends HttpServlet {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado.");
+            request.getSession().setAttribute("error", "❌ Error inesperado al crear paquete.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/paquetes");
     }
@@ -113,7 +97,24 @@ public class PaqueteServlet extends HttpServlet {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado.");
+            request.getSession().setAttribute("error", "❌ Error inesperado al editar paquete.");
+        }
+        response.sendRedirect(request.getContextPath() + "/admin/paquetes");
+    }
+
+    private void eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            if (dao.eliminar(id)) {
+                request.getSession().setAttribute("mensaje", "✅ Paquete eliminado correctamente.");
+            } else {
+                request.getSession().setAttribute("error", "❌ Error al eliminar el paquete.");
+            }
+        } catch (NumberFormatException e) {
+            request.getSession().setAttribute("error", "❌ ID inválido.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.getSession().setAttribute("error", "❌ Error inesperado al eliminar paquete.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/paquetes");
     }

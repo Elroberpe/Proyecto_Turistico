@@ -12,8 +12,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/admin/usuarios")
-public class UsuarioServlet extends HttpServlet {
+@WebServlet("/admin/clientes")
+public class ClienteServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     
     private UsuarioDao dao = new UsuarioDao();
@@ -21,9 +21,9 @@ public class UsuarioServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Usuario> usuarios = dao.listar();
-        request.setAttribute("usuarios", usuarios);
-        request.getRequestDispatcher("/WEB-INF/admin/usuarios.jsp").forward(request, response);
+        List<Usuario> clientes = dao.listarClientes();
+        request.setAttribute("clientes", clientes);
+        request.getRequestDispatcher("/WEB-INF/admin/clientes.jsp").forward(request, response);
     }
 
     @Override
@@ -40,7 +40,6 @@ public class UsuarioServlet extends HttpServlet {
 
         switch (action) {
             case "crear":
-            case "registrarAdmin":
                 crear(request, response);
                 break;
             case "editar":
@@ -50,7 +49,7 @@ public class UsuarioServlet extends HttpServlet {
                 eliminar(request, response);
                 break;
             default:
-                response.sendRedirect(request.getContextPath() + "/admin/usuarios");
+                response.sendRedirect(request.getContextPath() + "/admin/clientes");
                 break;
         }
     }
@@ -63,21 +62,18 @@ public class UsuarioServlet extends HttpServlet {
             u.setEmail(request.getParameter("email"));
             u.setPassword(request.getParameter("password"));
             u.setTelefono(request.getParameter("telefono"));
-
-            String rolParam = request.getParameter("id_rol");
-            int rol = (rolParam != null && !rolParam.trim().isEmpty()) ? Integer.parseInt(rolParam) : 2;
-            u.setIdRol(rol);
+            u.setIdRol(1); // Rol Cliente
 
             if (dao.registrar(u)) {
-                request.getSession().setAttribute("mensaje", "✅ Usuario registrado correctamente.");
+                request.getSession().setAttribute("mensaje", "✅ Cliente registrado correctamente.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al registrar el usuario.");
+                request.getSession().setAttribute("error", "❌ Error al registrar el cliente.");
             }
         } catch (Exception e) {
             e.printStackTrace();
             request.getSession().setAttribute("error", "❌ Error inesperado.");
         }
-        response.sendRedirect(request.getContextPath() + "/admin/usuarios");
+        response.sendRedirect(request.getContextPath() + "/admin/clientes");
     }
 
     private void editar(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -89,31 +85,27 @@ public class UsuarioServlet extends HttpServlet {
             u.setApellidos(request.getParameter("apellidos"));
             u.setEmail(request.getParameter("email"));
             u.setTelefono(request.getParameter("telefono"));
-
-            String rolParam = request.getParameter("id_rol");
-            if (rolParam != null && !rolParam.trim().isEmpty()) {
-                u.setIdRol(Integer.parseInt(rolParam));
-            }
+            u.setIdRol(1);
 
             if (dao.actualizar(u)) {
-                request.getSession().setAttribute("mensaje", "✅ Usuario actualizado correctamente.");
+                request.getSession().setAttribute("mensaje", "✅ Cliente actualizado correctamente.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al actualizar el usuario.");
+                request.getSession().setAttribute("error", "❌ Error al actualizar el cliente.");
             }
         } catch (Exception e) {
             e.printStackTrace();
             request.getSession().setAttribute("error", "❌ Error inesperado.");
         }
-        response.sendRedirect(request.getContextPath() + "/admin/usuarios");
+        response.sendRedirect(request.getContextPath() + "/admin/clientes");
     }
 
     private void eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
             if (dao.eliminar(id)) {
-                request.getSession().setAttribute("mensaje", "✅ Usuario eliminado correctamente.");
+                request.getSession().setAttribute("mensaje", "✅ Cliente eliminado correctamente.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al eliminar el usuario.");
+                request.getSession().setAttribute("error", "❌ Error al eliminar el cliente.");
             }
         } catch (NumberFormatException e) {
             request.getSession().setAttribute("error", "❌ ID inválido.");
@@ -121,6 +113,6 @@ public class UsuarioServlet extends HttpServlet {
             e.printStackTrace();
             request.getSession().setAttribute("error", "❌ Error inesperado al eliminar.");
         }
-        response.sendRedirect(request.getContextPath() + "/admin/usuarios");
+        response.sendRedirect(request.getContextPath() + "/admin/clientes");
     }
 }

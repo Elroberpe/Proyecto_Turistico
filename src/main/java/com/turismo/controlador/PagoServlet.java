@@ -24,13 +24,6 @@ public class PagoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String action = request.getParameter("action");
-
-        if ("eliminar".equals(action)) {
-            eliminar(request, response);
-            return;
-        }
-
         // Listar pagos
         List<Pago> pagos = pagoDao.listarTodos();
         request.setAttribute("pagos", pagos);

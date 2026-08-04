@@ -27,13 +27,6 @@ public class ReservaServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String action = request.getParameter("action");
-
-        if ("eliminar".equals(action)) {
-            eliminar(request, response);
-            return;
-        }
-
         List<Reserva> reservas = reservaDao.listarTodos();
         request.setAttribute("reservas", reservas);
 
