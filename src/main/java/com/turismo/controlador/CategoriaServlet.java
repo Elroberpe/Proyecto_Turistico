@@ -27,48 +27,88 @@ public class CategoriaServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String accion = request.getParameter("accion");
+        if (accion == null) {
+            accion = "";
+        }
 
+        switch (accion) {
+            case "guardar":
+                guardar(request, response);
+                break;
+            case "actualizar":
+                actualizar(request, response);
+                break;
+            case "eliminar":
+                eliminar(request, response);
+                break;
+            default:
+                response.sendRedirect(request.getContextPath() + "/admin/categorias");
+                break;
+        }
+    }
+
+    // ============================================
+    // GUARDAR CATEGORÍA
+    // ============================================
+    private void guardar(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            if ("guardar".equals(accion)) {
-                CategoriaPaquete c = new CategoriaPaquete();
-                c.setNombre(request.getParameter("nombre").trim());
-                c.setDescripcion(request.getParameter("descripcion").trim());
+            CategoriaPaquete c = new CategoriaPaquete();
+            c.setNombre(request.getParameter("nombre").trim());
+            c.setDescripcion(request.getParameter("descripcion").trim());
 
-                if (dao.crear(c)) {
-                    request.getSession().setAttribute("mensaje", "✅ Categoría creada correctamente.");
-                } else {
-                    request.getSession().setAttribute("error", "❌ Error al crear la categoría.");
-                }
-
-            } else if ("actualizar".equals(accion)) {
-                CategoriaPaquete c = new CategoriaPaquete();
-                c.setIdCategoria(Integer.parseInt(request.getParameter("id")));
-                c.setNombre(request.getParameter("nombre").trim());
-                c.setDescripcion(request.getParameter("descripcion").trim());
-
-                if (dao.editar(c)) {
-                    request.getSession().setAttribute("mensaje", "✅ Categoría actualizada correctamente.");
-                } else {
-                    request.getSession().setAttribute("error", "❌ Error al actualizar la categoría.");
-                }
-
-            } else if ("eliminar".equals(accion)) {
-                int id = Integer.parseInt(request.getParameter("id"));
-                int count = dao.contarPaquetesPorCategoria(id);
-
-                if (count > 0) {
-                    request.getSession().setAttribute("error", "❌ No se puede eliminar. La categoría tiene " + count + " paquetes asociados.");
-                } else if (dao.eliminar(id)) {
-                    request.getSession().setAttribute("mensaje", "✅ Categoría eliminada correctamente.");
-                } else {
-                    request.getSession().setAttribute("error", "❌ Error al eliminar la categoría.");
-                }
+            if (dao.crear(c)) {
+                request.getSession().setAttribute("mensaje", "✅ Categoría creada correctamente.");
+            } else {
+                request.getSession().setAttribute("error", "❌ Error al crear la categoría.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error al procesar la solicitud.");
+            request.getSession().setAttribute("error", "❌ Error inesperado al guardar.");
         }
+        response.sendRedirect(request.getContextPath() + "/admin/categorias");
+    }
 
+    // ============================================
+    // ACTUALIZAR CATEGORÍA
+    // ============================================
+    private void actualizar(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            CategoriaPaquete c = new CategoriaPaquete();
+            c.setIdCategoria(Integer.parseInt(request.getParameter("id")));
+            c.setNombre(request.getParameter("nombre").trim());
+            c.setDescripcion(request.getParameter("descripcion").trim());
+
+            if (dao.editar(c)) {
+                request.getSession().setAttribute("mensaje", "✅ Categoría actualizada correctamente.");
+            } else {
+                request.getSession().setAttribute("error", "❌ Error al actualizar la categoría.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.getSession().setAttribute("error", "❌ Error inesperado al actualizar.");
+        }
+        response.sendRedirect(request.getContextPath() + "/admin/categorias");
+    }
+
+    // ============================================
+    // ELIMINAR CATEGORÍA
+    // ============================================
+    private void eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            int count = dao.contarPaquetesPorCategoria(id);
+
+            if (count > 0) {
+                request.getSession().setAttribute("error", "❌ No se puede eliminar. La categoría tiene " + count + " paquetes asociados.");
+            } else if (dao.eliminar(id)) {
+                request.getSession().setAttribute("mensaje", "✅ Categoría eliminada correctamente.");
+            } else {
+                request.getSession().setAttribute("error", "❌ Error al eliminar la categoría.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.getSession().setAttribute("error", "❌ Error inesperado al eliminar.");
+        }
         response.sendRedirect(request.getContextPath() + "/admin/categorias");
     }
 }
