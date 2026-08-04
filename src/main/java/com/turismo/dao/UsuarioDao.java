@@ -153,6 +153,30 @@ public class UsuarioDao {
     }
 
     // ============================================
+    // ACTUALIZAR USUARIO CON CONTRASEÑA
+    // ============================================
+    public boolean actualizarConPassword(Usuario usuario) {
+        String sql = "UPDATE usuario SET nombre = ?, apellidos = ?, email = ?, telefono = ?, password = ? WHERE id_usuario = ?";
+
+        try (Connection con = ConexionDB.obtenerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, usuario.getNombre());
+            ps.setString(2, usuario.getApellidos());
+            ps.setString(3, usuario.getEmail());
+            ps.setString(4, usuario.getTelefono());
+            ps.setString(5, usuario.getPassword());
+            ps.setInt(6, usuario.getIdUsuario());
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // ============================================
     // ELIMINAR USUARIO
     // ============================================
     public boolean eliminar(int id) {
