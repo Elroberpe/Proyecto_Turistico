@@ -151,15 +151,15 @@
                                                     <p class="fs-6 text-dark mb-2">
                                                         ¿Estás seguro de que deseas cancelar la reserva <strong>#<%= r.getIdReserva() %></strong> para <strong><%= r.getNombrePaquete() %></strong>?
                                                     </p>
-                                                    <p class="text-muted small mb-0">Esta acción cambiará el estado de la reserva a "Cancelada".</p>
+                                                    
                                                 </div>
                                                 <div class="modal-footer border-0 bg-light">
-                                                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">No, Mantener</button>
+                                                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Mantener</button>
                                                     <form action="<%= request.getContextPath() %>/mis-reservas" method="post" class="d-inline">
                                                         <input type="hidden" name="action" value="cancelar">
                                                         <input type="hidden" name="id" value="<%= r.getIdReserva() %>">
                                                         <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold">
-                                                            Sí, Cancelar Reserva
+                                                           Cancelar Reserva
                                                         </button>
                                                     </form>
                                                 </div>
