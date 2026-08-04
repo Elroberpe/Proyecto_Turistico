@@ -69,7 +69,7 @@
 
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Gestión de Clientes</h2>
-                <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#clienteModal">
+                <button id="btnNuevo" class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#clienteModal">
                     <i class="bi bi-plus-circle"></i> Nuevo Cliente
                 </button>
             </div>
@@ -101,9 +101,14 @@
                                     <td><%= u.getEmail() %></td>
                                     <td><%= u.getTelefono() != null ? u.getTelefono() : "-" %></td>
                                     <td>
-                                        <button class="btn btn-sm btn-secondary-custom" 
+                                        <button class="btn btn-sm btn-secondary-custom btn-editar" 
+                                                data-id="<%= u.getIdUsuario() %>"
+                                                data-nombre="<%= u.getNombre() %>"
+                                                data-apellidos="<%= u.getApellidos() %>"
+                                                data-email="<%= u.getEmail() %>"
+                                                data-telefono="<%= u.getTelefono() != null ? u.getTelefono() : "" %>"
                                                 data-bs-toggle="modal" 
-                                                data-bs-target="#editModal<%= u.getIdUsuario() %>">
+                                                data-bs-target="#clienteModal">
                                             <i class="bi bi-pencil"></i>
                                         </button>
                                         <button class="btn btn-sm btn-danger btn-eliminar" data-id="<%= u.getIdUsuario() %>" data-nombre="<%= u.getNombre() %>">
@@ -121,99 +126,54 @@
     </div>
 
     <!-- ======================================== -->
-    <!-- MODAL CREAR CLIENTE -->
+    <!-- MODAL ÚNICO CLIENTE (CREAR / EDITAR) -->
     <!-- ======================================== -->
     <div class="modal fade" id="clienteModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary-custom text-white">
-                    <h5 class="modal-title">Nuevo Cliente</h5>
+                    <h5 class="modal-title" id="clienteModalTitle">Nuevo Cliente</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <form action="<%=request.getContextPath()%>/admin/clientes" method="post">
-                        <input type="hidden" name="action" value="crear">
+                        <input type="hidden" id="actionCliente" name="action" value="crear">
+                        <input type="hidden" id="idCliente" name="id">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Nombre</label>
-                                <input type="text" class="form-control" name="nombre" required>
+                                <input type="text" class="form-control" id="nombreCliente" name="nombre" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Apellidos</label>
-                                <input type="text" class="form-control" name="apellidos" required>
+                                <input type="text" class="form-control" id="apellidosCliente" name="apellidos" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Email</label>
-                                <input type="email" class="form-control" name="email" required>
+                                <input type="email" class="form-control" id="emailCliente" name="email" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Teléfono</label>
-                                <input type="text" class="form-control" name="telefono">
+                                <input type="text" class="form-control" id="telefonoCliente" name="telefono">
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" id="passwordContainerCliente">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Contraseña</label>
-                                <input type="password" class="form-control" name="password" required>
+                                <input type="password" class="form-control" id="passwordCliente" name="password">
                             </div>
                         </div>
                         <div class="text-end mt-3">
                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary-custom">Guardar</button>
+                            <button type="submit" class="btn btn-primary-custom" id="btnGuardarCliente">Guardar</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- ======================================== -->
-    <!-- MODALES EDITAR -->
-    <!-- ======================================== -->
-    <% for (Usuario u : clientes) { %>
-    <div class="modal fade" id="editModal<%= u.getIdUsuario() %>" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-warning text-white">
-                    <h5 class="modal-title">Editar Cliente</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="<%=request.getContextPath()%>/admin/clientes" method="post">
-                        <input type="hidden" name="action" value="editar">
-                        <input type="hidden" name="id" value="<%= u.getIdUsuario() %>">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Nombre</label>
-                                <input type="text" class="form-control" name="nombre" value="<%= u.getNombre() %>" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Apellidos</label>
-                                <input type="text" class="form-control" name="apellidos" value="<%= u.getApellidos() %>" required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Email</label>
-                                <input type="email" class="form-control" name="email" value="<%= u.getEmail() %>" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Teléfono</label>
-                                <input type="text" class="form-control" name="telefono" value="<%= u.getTelefono() != null ? u.getTelefono() : "" %>">
-                            </div>
-                        </div>
-                        <div class="text-end mt-3">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-warning">Actualizar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <% } %>
 
     <form id="formEliminar" action="<%=request.getContextPath()%>/admin/clientes" method="post">
         <input type="hidden" name="action" value="eliminar">
@@ -224,6 +184,38 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Limpiar campos para Nuevo Cliente
+        document.getElementById("btnNuevo").addEventListener("click", function () {
+            document.getElementById("actionCliente").value = "crear";
+            document.getElementById("idCliente").value = "";
+            document.getElementById("nombreCliente").value = "";
+            document.getElementById("apellidosCliente").value = "";
+            document.getElementById("emailCliente").value = "";
+            document.getElementById("telefonoCliente").value = "";
+            document.getElementById("passwordCliente").value = "";
+            document.getElementById("passwordCliente").required = true;
+            document.getElementById("passwordContainerCliente").style.display = "block";
+            document.getElementById("clienteModalTitle").textContent = "Nuevo Cliente";
+            document.getElementById("btnGuardarCliente").className = "btn btn-primary-custom";
+        });
+
+        // Llenar campos para Editar Cliente
+        document.querySelectorAll(".btn-editar").forEach(boton => {
+            boton.addEventListener("click", function () {
+                document.getElementById("actionCliente").value = "editar";
+                document.getElementById("idCliente").value = this.dataset.id;
+                document.getElementById("nombreCliente").value = this.dataset.nombre;
+                document.getElementById("apellidosCliente").value = this.dataset.apellidos;
+                document.getElementById("emailCliente").value = this.dataset.email;
+                document.getElementById("telefonoCliente").value = this.dataset.telefono;
+                document.getElementById("passwordCliente").required = false;
+                document.getElementById("passwordContainerCliente").style.display = "none";
+                document.getElementById("clienteModalTitle").textContent = "Editar Cliente: " + this.dataset.nombre;
+                document.getElementById("btnGuardarCliente").className = "btn btn-warning";
+            });
+        });
+
+        // Eliminar con SweetAlert2
         document.querySelectorAll(".btn-eliminar").forEach(boton => {
             boton.addEventListener("click", function () {
                 let id = this.dataset.id;
