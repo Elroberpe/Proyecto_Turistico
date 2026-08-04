@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet("/AuthServlet")
+@WebServlet({"/login", "/AuthServlet"})
 public class AuthServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -34,7 +34,7 @@ public class AuthServlet extends HttpServlet {
                 break;
 
             default:
-                response.sendRedirect("login.jsp");
+                response.sendRedirect("login");
         }
     }
     
@@ -47,6 +47,8 @@ public class AuthServlet extends HttpServlet {
         if ("logout".equals(accion)) {
             request.getSession().invalidate();
             response.sendRedirect("index.jsp");
+        } else {
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
         }
     }
 
@@ -76,7 +78,7 @@ public class AuthServlet extends HttpServlet {
 
         } else {
             String redirectParam = request.getParameter("redirect") != null ? "&redirect=" + request.getParameter("redirect") : "";
-            response.sendRedirect("login.jsp?error=1" + redirectParam);
+            response.sendRedirect("login?error=1" + redirectParam);
         }
 
     }
@@ -94,9 +96,9 @@ public class AuthServlet extends HttpServlet {
 
         String redirectParam = request.getParameter("redirect") != null ? "&redirect=" + request.getParameter("redirect") : "";
         if (dao.registrar(usuario)) {
-            response.sendRedirect("login.jsp?registro=ok" + redirectParam);
+            response.sendRedirect("login?registro=ok" + redirectParam);
         } else {
-            response.sendRedirect("login.jsp?registro=error" + redirectParam);
+            response.sendRedirect("login?registro=error" + redirectParam);
         }
 
     }

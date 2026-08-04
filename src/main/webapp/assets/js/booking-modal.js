@@ -147,7 +147,7 @@ function procesarReserva() {
     const isUserLoggedIn = isLoggedInInput && isLoggedInInput.value === 'true';
 
     if (!isUserLoggedIn) {
-        window.location.href = 'login.jsp?redirect=reserva';
+        window.location.href = 'login?redirect=reserva';
         return;
     }
 

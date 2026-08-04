@@ -31,7 +31,7 @@ Usuario usuario = (Usuario) session.getAttribute("usuario");
 				if (usuario == null) {
 				%>
 					
-				<li class="nav-item ms-lg-3 mt-3 mt-lg-0"><a class="btn btn-primary-custom" href="login.jsp">Iniciar sesión </a></li>
+				<li class="nav-item ms-lg-3 mt-3 mt-lg-0"><a class="btn btn-primary-custom" href="${pageContext.request.contextPath}/login">Iniciar sesión </a></li>
 
 				<%
 				} else {

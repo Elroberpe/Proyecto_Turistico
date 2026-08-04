@@ -24,7 +24,7 @@ public class PerfilServlet extends HttpServlet {
         Usuario usuario = (session != null) ? (Usuario) session.getAttribute("usuario") : null;
 
         if (usuario == null) {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
@@ -44,7 +44,7 @@ public class PerfilServlet extends HttpServlet {
         Usuario usuario = (session != null) ? (Usuario) session.getAttribute("usuario") : null;
 
         if (usuario == null) {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
