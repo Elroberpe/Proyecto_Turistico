@@ -29,7 +29,7 @@
                         <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow badge-hero">La magia del mar</span>
                         <h1>Aventuras en la <span class="title-primary-span">Costa</span></h1>
                         <p>Playas infinitas, dunas espectaculares y la mejor gastronomía marina del mundo.</p>
-                        <a href="costa.jsp" class="btn btn-primary-custom px-4 py-3 fs-5 mt-3">Explorar Costa <i class="bi bi-arrow-right ms-2"></i></a>
+                        <a href="${pageContext.request.contextPath}/catalogo?region=Costa" class="btn btn-primary-custom px-4 py-3 fs-5 mt-3">Explorar Costa <i class="bi bi-arrow-right ms-2"></i></a>
                     </div>
                 </div>
                 
@@ -40,7 +40,7 @@
                         <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow badge-hero">Tocando el cielo andino</span>
                         <h1>Misticismo en la <span class="title-primary-span">Sierra</span></h1>
                         <p>Maravíllate con el imponente Machu Picchu y paisajes montañosos que roban el aliento.</p>
-                        <a href="sierra.jsp" class="btn btn-primary-custom px-4 py-3 fs-5 mt-3">Explorar Sierra <i class="bi bi-arrow-right ms-2"></i></a>
+                        <a href="${pageContext.request.contextPath}/catalogo?region=Sierra" class="btn btn-primary-custom px-4 py-3 fs-5 mt-3">Explorar Sierra <i class="bi bi-arrow-right ms-2"></i></a>
                     </div>
                 </div>
 
@@ -51,7 +51,7 @@
                         <span class="badge bg-primary text-white px-3 py-2 rounded-pill mb-3 shadow badge-hero">El corazón del Amazonas</span>
                         <h1>Magia en la <span class="title-primary-span">Selva</span></h1>
                         <p>Navega el río más caudaloso del mundo y descubre flora y fauna en su estado más puro.</p>
-                        <a href="selva.jsp" class="btn btn-primary-custom px-4 py-3 fs-5 mt-3">Explorar Selva <i class="bi bi-arrow-right ms-2"></i></a>
+                        <a href="${pageContext.request.contextPath}/catalogo?region=Selva" class="btn btn-primary-custom px-4 py-3 fs-5 mt-3">Explorar Selva <i class="bi bi-arrow-right ms-2"></i></a>
                     </div>
                 </div>
             </div>
