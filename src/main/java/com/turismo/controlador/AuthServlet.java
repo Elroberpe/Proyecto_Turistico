@@ -87,7 +87,8 @@ public class AuthServlet extends HttpServlet {
             HttpServletResponse response) throws IOException {
     	
     	Usuario usuario = new Usuario();
-
+    	
+    	usuario.setIdRol(1);
         usuario.setNombre(request.getParameter("nombre"));
         usuario.setApellidos(request.getParameter("apellidos"));
         usuario.setEmail(request.getParameter("email"));
