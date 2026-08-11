@@ -77,7 +77,7 @@ public class ProcesarPagoServlet extends HttpServlet {
             }
             r.setNumPasajeros(numPasajeros);
             r.setPrecioTotal(precioTotal);
-            r.setEstado("pagada");
+            r.setEstado("pendiente");
 
             boolean reservaCreada = reservaDao.crear(r);
 
@@ -98,11 +98,14 @@ public class ProcesarPagoServlet extends HttpServlet {
             boolean pagoCreado = pagoDao.crear(p);
 
             if (pagoCreado) {
+                // Ahora que el pago fue exitoso, actualizamos la reserva de "pendiente" a "pagada"
+                reservaDao.actualizarEstado(r.getIdReserva(), "pagada");
                 out.print("{\"success\": true, \"idReserva\": " + r.getIdReserva() + 
                           ", \"idPago\": " + p.getIdPago() + 
-                          ", \"mensaje\": \"¡Pago y reserva procesados correctamente!\"}");
+                          ", \"mensaje\": \"¡Pago y reserva procesados correctamente!\"}" );
             } else {
-                out.print("{\"success\": false, \"mensaje\": \"Reserva registrada, pero ocurrió un error al registrar el pago.\"}");
+                // El pago falló: la reserva queda en "pendiente" (estado consistente)
+                out.print("{\"success\": false, \"mensaje\": \"Reserva registrada, pero ocurrió un error al registrar el pago.\"}" );
             }
 
         } catch (Exception e) {
