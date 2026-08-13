@@ -39,6 +39,7 @@ public class ReservaDao {
                 r.setNumPasajeros(rs.getInt("num_pasajeros"));
                 r.setPrecioTotal(rs.getBigDecimal("precio_total"));
                 r.setEstado(rs.getString("estado"));
+                r.setFechaReserva(rs.getTimestamp("fecha_reserva"));
                 lista.add(r);
             }
         } catch (SQLException e) {
@@ -72,6 +73,7 @@ public class ReservaDao {
                 r.setNumPasajeros(rs.getInt("num_pasajeros"));
                 r.setPrecioTotal(rs.getBigDecimal("precio_total"));
                 r.setEstado(rs.getString("estado"));
+                r.setFechaReserva(rs.getTimestamp("fecha_reserva"));
                 return r;
             }
         } catch (SQLException e) {
@@ -194,6 +196,7 @@ public class ReservaDao {
 	            r.setNumPasajeros(rs.getInt("num_pasajeros"));
 	            r.setPrecioTotal(rs.getBigDecimal("precio_total"));
 	            r.setEstado(rs.getString("estado"));
+	            r.setFechaReserva(rs.getTimestamp("fecha_reserva"));
 	            lista.add(r);
 	        }
 	    } catch (SQLException e) {
@@ -268,6 +271,7 @@ public class ReservaDao {
 	            r.setNumPasajeros(rs.getInt("num_pasajeros"));
 	            r.setPrecioTotal(rs.getBigDecimal("precio_total"));
 	            r.setEstado(rs.getString("estado"));
+	            r.setFechaReserva(rs.getTimestamp("fecha_reserva"));
 	            lista.add(r);
 	        }
 	    } catch (SQLException e) {
