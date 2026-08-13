@@ -81,6 +81,7 @@
                             <tr>
                                 <th class="ps-4">ID</th>
                                 <th>Paquete Turístico</th>
+                                <th>Fecha Reserva</th>
                                 <th>Tipo Viaje</th>
                                 <th>Fecha Salida</th>
                                 <th>Fecha Retorno</th>
@@ -99,6 +100,9 @@
                                     <td class="fw-bold text-dark">
                                         <i class="bi bi-geo-alt text-primary me-1"></i>
                                         <%= r.getNombrePaquete() != null ? r.getNombrePaquete() : "Paquete #" + r.getIdPaquete() %>
+                                    </td>
+                                    <td>
+                                        <%= r.getFechaReserva() != null ? new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(r.getFechaReserva()) : "-" %>
                                     </td>
                                     <td>
                                         <span class="badge bg-light text-dark border">
@@ -151,7 +155,6 @@
                                                     <p class="fs-6 text-dark mb-2">
                                                         ¿Estás seguro de que deseas cancelar la reserva <strong>#<%= r.getIdReserva() %></strong> para <strong><%= r.getNombrePaquete() %></strong>?
                                                     </p>
-                                                    
                                                 </div>
                                                 <div class="modal-footer border-0 bg-light">
                                                     <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Mantener</button>
