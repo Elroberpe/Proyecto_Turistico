@@ -2,6 +2,8 @@
 <%@ page import="com.turismo.modelo.Reserva"%>
 <%@ page import="com.turismo.modelo.Usuario"%>
 <%@ page import="java.util.List"%>
+<%@ page import="java.math.BigDecimal"%>
+<%@ page import="java.math.RoundingMode"%>
 <%
     Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
     if (usuarioSesion == null) {
@@ -93,6 +95,9 @@
                         <tbody>
                             <% for (Reserva r : reservas) { 
                                 boolean esCancelable = !"cancelada".equalsIgnoreCase(r.getEstado());
+                                BigDecimal total = r.getPrecioTotal() != null ? r.getPrecioTotal() : BigDecimal.ZERO;
+                                BigDecimal subtotal = total.divide(new BigDecimal("1.18"), 2, RoundingMode.HALF_UP);
+                                BigDecimal igv = total.subtract(subtotal);
                             %>
                                 <tr>
                                     <td class="ps-4 fw-bold text-muted">#<%= r.getIdReserva() %></td>
@@ -125,16 +130,127 @@
                                         <% } %>
                                     </td>
                                     <td class="text-end pe-4">
-                                        <% if (esCancelable) { %>
-                                            <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3"
-                                                    data-bs-toggle="modal" data-bs-target="#modalCancelar<%= r.getIdReserva() %>">
-                                                <i class="bi bi-x-lg me-1"></i> Cancelar
+                                        <div class="d-inline-flex gap-1 align-items-center">
+                                            <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3"
+                                                    data-bs-toggle="modal" data-bs-target="#modalDetalle<%= r.getIdReserva() %>">
+                                                <i class="bi bi-receipt me-1"></i> Detalle
                                             </button>
-                                        <% } else { %>
-                                            <span class="text-muted small fst-italic">Sin acciones</span>
-                                        <% } %>
+                                            <% if (esCancelable) { %>
+                                                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3"
+                                                        data-bs-toggle="modal" data-bs-target="#modalCancelar<%= r.getIdReserva() %>">
+                                                    <i class="bi bi-x-lg me-1"></i> Cancelar
+                                                </button>
+                                            <% } %>
+                                        </div>
                                     </td>
                                 </tr>
+
+                                <!-- MODAL DETALLE DE LA RESERVA (REUTILIZANDO PAYMENT-CARD) -->
+                                <div class="modal fade" id="modalDetalle<%= r.getIdReserva() %>" tabindex="-1" aria-labelledby="modalDetalleLabel<%= r.getIdReserva() %>" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content border-0 shadow-lg" style="border-radius: var(--radius-md, 16px); overflow: hidden;">
+                                            <div class="modal-header border-0 pb-0 justify-content-end">
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body px-4 pt-0 pb-4">
+                                                <div class="text-center mb-4 pb-3 border-bottom">
+                                                    <div class="d-inline-block bg-primary text-white p-3 rounded-circle mb-3 shadow-sm" style="background-color: var(--primary) !important;">
+                                                        <i class="bi bi-receipt fs-3"></i>
+                                                    </div>
+                                                    <h3 class="text-dark fw-bold mb-0" id="modalDetalleLabel<%= r.getIdReserva() %>">Detalle de Reserva</h3>
+                                                    <p class="text-muted small mb-0">ID Reserva: #<%= r.getIdReserva() %></p>
+                                                </div>
+
+                                                <div class="invoice-detail px-2">
+                                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                                        <span class="text-muted"><i class="bi bi-geo-alt me-2 text-primary"></i>Destino:</span>
+                                                        <span class="fw-bold text-end"><%= r.getNombrePaquete() != null ? r.getNombrePaquete() : "Paquete #" + r.getIdPaquete() %></span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                                        <span class="text-muted"><i class="bi bi-arrow-left-right me-2 text-primary"></i>Tipo:</span>
+                                                        <span class="fw-bold"><%= ("idavuelta".equalsIgnoreCase(r.getTipoViaje()) || "roundtrip".equalsIgnoreCase(r.getTipoViaje())) ? "Ida y Vuelta" : "Solo Ida" %></span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                                        <span class="text-muted"><i class="bi bi-calendar-check me-2 text-primary"></i>Salida:</span>
+                                                        <span class="fw-bold"><%= r.getFechaSalida() %></span>
+                                                    </div>
+                                                    <% if (r.getFechaRetorno() != null) { %>
+                                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                                        <span class="text-muted"><i class="bi bi-calendar-x me-2 text-primary"></i>Retorno:</span>
+                                                        <span class="fw-bold"><%= r.getFechaRetorno() %></span>
+                                                    </div>
+                                                    <% } %>
+                                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                                        <span class="text-muted"><i class="bi bi-people me-2 text-primary"></i>Pasajeros:</span>
+                                                        <span class="fw-bold"><%= r.getNumPasajeros() %></span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                                        <span class="text-muted"><i class="bi bi-info-circle me-2 text-primary"></i>Estado:</span>
+                                                        <span>
+                                                            <% if ("pagada".equalsIgnoreCase(r.getEstado())) { %>
+                                                                <span class="badge bg-success rounded-pill px-3">
+                                                                    <i class="bi bi-check-circle me-1"></i> Pagada
+                                                                </span>
+                                                            <% } else if ("pendiente".equalsIgnoreCase(r.getEstado())) { %>
+                                                                <span class="badge bg-warning text-dark rounded-pill px-3">
+                                                                    <i class="bi bi-clock me-1"></i> Pendiente
+                                                                </span>
+                                                            <% } else { %>
+                                                                <span class="badge bg-danger rounded-pill px-3">
+                                                                    <i class="bi bi-x-circle me-1"></i> Cancelada
+                                                                </span>
+                                                            <% } %>
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="p-3 bg-light rounded-4 mb-4">
+                                                        <div class="d-flex justify-content-between mb-2">
+                                                            <span class="text-muted small">Subtotal:</span>
+                                                            <span class="fw-semibold text-dark">S/ <%= String.format(java.util.Locale.US, "%.2f", subtotal) %></span>
+                                                        </div>
+                                                        <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                                                            <span class="text-muted small">IGV (18%):</span>
+                                                            <span class="fw-semibold text-dark">S/ <%= String.format(java.util.Locale.US, "%.2f", igv) %></span>
+                                                        </div>
+                                                        <div class="d-flex justify-content-between align-items-center mt-2">
+                                                            <span class="fw-bold text-dark fs-5">TOTAL</span>
+                                                            <span class="fw-bold fs-4 text-primary">S/ <%= String.format(java.util.Locale.US, "%.2f", total) %></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <% if ("pagada".equalsIgnoreCase(r.getEstado())) { %>
+                                                    <div class="alert alert-success d-flex align-items-center border-0 small shadow-sm mb-3" role="alert">
+                                                        <i class="bi bi-shield-check fs-4 me-2"></i>
+                                                        <div>
+                                                            Reserva confirmada y pagada con éxito.
+                                                        </div>
+                                                    </div>
+                                                <% } else if ("pendiente".equalsIgnoreCase(r.getEstado())) { %>
+                                                    <div class="alert alert-warning d-flex align-items-center border-0 small shadow-sm mb-3" role="alert">
+                                                        <i class="bi bi-hourglass-split fs-4 me-2"></i>
+                                                        <div>
+                                                            Reserva pendiente de pago.
+                                                        </div>
+                                                    </div>
+                                                <% } else { %>
+                                                    <div class="alert alert-danger d-flex align-items-center border-0 small shadow-sm mb-3" role="alert">
+                                                        <i class="bi bi-x-octagon fs-4 me-2"></i>
+                                                        <div>
+                                                            Esta reserva ha sido cancelada.
+                                                        </div>
+                                                    </div>
+                                                <% } %>
+
+                                                <div class="d-flex justify-content-end gap-2 mt-3">
+                                                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">
+                                                        Cerrar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <!-- MODAL CONFIRMAR CANCELACIÓN PARA ESTA RESERVA -->
                                 <% if (esCancelable) { %>
