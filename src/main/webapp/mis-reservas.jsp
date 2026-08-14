@@ -43,8 +43,8 @@
                 </h2>
                 <p class="text-muted small mb-0">Gestiona y revisa el estado de todos tus viajes contratados</p>
             </div>
-            <a href="index.jsp" class="btn btn-outline-primary rounded-pill btn-sm">
-                <i class="bi bi-plus-circle me-1"></i> Explorar Más Paquetes
+            <a href="index.jsp" class="btn text-primary rounded-pill btn-sm">
+                Explorar Más Paquetes
             </a>
         </div>
 
@@ -102,7 +102,7 @@
                                 <tr>
                                     <td class="ps-4 fw-bold text-muted">#<%= r.getIdReserva() %></td>
                                     <td class="fw-bold text-dark">
-                                        <i class="bi bi-geo-alt text-primary me-1"></i>
+                                     
                                         <%= r.getNombrePaquete() != null ? r.getNombrePaquete() : "Paquete #" + r.getIdPaquete() %>
                                     </td>
                                     <td>
@@ -117,7 +117,7 @@
                                     <td>
                                         <% if ("pagada".equalsIgnoreCase(r.getEstado())) { %>
                                             <span class="badge bg-success rounded-pill px-3">
-                                                <i class="bi bi-check-circle me-1"></i> Pagada
+                                                 Pagada
                                             </span>
                                         <% } else if ("pendiente".equalsIgnoreCase(r.getEstado())) { %>
                                             <span class="badge bg-warning text-dark rounded-pill px-3">
@@ -136,8 +136,9 @@
                                                 <i class="bi bi-receipt me-1"></i> Detalle
                                             </button>
                                             <% if (esCancelable) { %>
-                                                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3"
-                                                        data-bs-toggle="modal" data-bs-target="#modalCancelar<%= r.getIdReserva() %>">
+                                                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3 btn-cancelar"
+                                                        data-id="<%= r.getIdReserva() %>"
+                                                        data-paquete="<%= r.getNombrePaquete() != null ? r.getNombrePaquete() : "Paquete #" + r.getIdPaquete() %>">
                                                     <i class="bi bi-x-lg me-1"></i> Cancelar
                                                 </button>
                                             <% } %>
@@ -252,38 +253,6 @@
                                     </div>
                                 </div>
 
-                                <!-- MODAL CONFIRMAR CANCELACIÓN PARA ESTA RESERVA -->
-                                <% if (esCancelable) { %>
-                                    <div class="modal fade" id="modalCancelar<%= r.getIdReserva() %>" tabindex="-1" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
-                                                <div class="modal-header bg-danger text-white border-0">
-                                                    <h5 class="modal-title fw-bold">
-                                                        <i class="bi bi-exclamation-triangle me-2"></i> Confirmar Cancelación
-                                                    </h5>
-                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                                </div>
-                                                <div class="modal-body p-4 text-center">
-                                                    <p class="fs-6 text-dark mb-2">
-                                                        ¿Estás seguro de que deseas cancelar la reserva <strong>#<%= r.getIdReserva() %></strong> para <strong><%= r.getNombrePaquete() %></strong>?
-                                                    </p>
-                                                    
-                                                </div>
-                                                <div class="modal-footer border-0 bg-light">
-                                                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Mantener</button>
-                                                    <form action="<%= request.getContextPath() %>/mis-reservas" method="post" class="d-inline">
-                                                        <input type="hidden" name="action" value="cancelar">
-                                                        <input type="hidden" name="id" value="<%= r.getIdReserva() %>">
-                                                        <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold">
-                                                           Cancelar Reserva
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <% } %>
-
                             <% } %>
                         </tbody>
                     </table>
@@ -293,8 +262,38 @@
 
     </div>
 
+    <!-- FORMULARIO OCULTO PARA CANCELAR RESERVA -->
+    <form id="formCancelar" action="<%= request.getContextPath() %>/mis-reservas" method="post">
+        <input type="hidden" name="action" value="cancelar">
+        <input type="hidden" id="idCancelar" name="id">
+    </form>
+
     <!-- FOOTER Y SCRIPTS -->
     <jsp:include page="componentes/footer.jsp"></jsp:include>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.querySelectorAll(".btn-cancelar").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                let id = this.dataset.id;
+                let paquete = this.dataset.paquete || "la reserva";
+                Swal.fire({
+                    title: "¿Cancelar reserva #" + id + "?",
+                    text: "Esta acción cancelará tu reserva para " + paquete + ". ¿Deseas continuar?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#dc3545",
+                    cancelButtonColor: "#6c757d",
+                    confirmButtonText: "Sí, cancelar",
+                    cancelButtonText: "No, mantener"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById("idCancelar").value = id;
+                        document.getElementById("formCancelar").submit();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
