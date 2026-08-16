@@ -105,13 +105,10 @@
     </section>
 
     <!-- COMPONENTES COMPARTIDOS -->
-    <jsp:include page="componentes/modal_reserva.jsp"></jsp:include>
     <jsp:include page="componentes/footer.jsp"></jsp:include>
 
     <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/contacto.js"></script>
-    <!-- Incluimos booking-modal para que funcione el modal desde el footer/navbar -->
-    <script src="assets/js/booking-modal.js"></script>
 </body>
 </html>
