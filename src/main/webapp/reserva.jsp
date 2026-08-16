@@ -133,13 +133,11 @@
         </div>
 
         <!-- COMPONENTES COMPARTIDOS -->
-        <jsp:include page="componentes/modal_reserva.jsp"></jsp:include>
         <jsp:include page="componentes/footer.jsp"></jsp:include>
 
         <!-- SCRIPTS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="assets/js/reserva.js?v=<%= System.currentTimeMillis() %>"></script>
-        <script src="assets/js/booking-modal.js?v=<%= System.currentTimeMillis() %>"></script>
     </body>
 
     </html>
