@@ -1,19 +1,17 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<c:if test="${not empty sessionScope.usuario}">
+    <c:redirect url="/index.jsp"/>
+</c:if>
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chasqui PERÚ | Iniciar Sesión / Registro</title>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet">
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<link
-	href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
-	rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css?v=2.0">
 </head>
 <body class="d-flex align-items-center justify-content-center vh-100">
@@ -21,40 +19,52 @@
 	<div class="card card-auth border-0 p-4 p-sm-5 mx-3 w-100">
 
 		<div class="text-center mb-4">
-			<a href="index.jsp" class="auth-brand">Perú<span>Chasqui</span></a>
+			<a href="${pageContext.request.contextPath}/index.jsp" class="auth-brand">Perú<span>Chasqui</span></a>
 		</div>
+
+		<!-- ALERTAS DE ESTADO -->
+		<c:if test="${param.error == '1'}">
+			<div class="alert alert-danger alert-dismissible fade show rounded-3 small py-2 text-center" role="alert">
+				<i class="bi bi-exclamation-circle-fill me-1"></i> Correo o contraseña incorrectos.
+				<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+			</div>
+		</c:if>
+
+		<c:if test="${param.registro == 'ok'}">
+			<div class="alert alert-success alert-dismissible fade show rounded-3 small py-2 text-center" role="alert">
+				<i class="bi bi-check-circle-fill me-1"></i> ¡Cuenta creada con éxito! Ya puedes iniciar sesión.
+				<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+			</div>
+		</c:if>
+
+		<c:if test="${param.registro == 'error'}">
+			<div class="alert alert-danger alert-dismissible fade show rounded-3 small py-2 text-center" role="alert">
+				<i class="bi bi-exclamation-triangle-fill me-1"></i> No se pudo registrar la cuenta. El correo ya podría estar en uso.
+				<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+			</div>
+		</c:if>
 
 		<!-- LOGIN -->
 		<div id="loginView">
 			<h3 class="text-center mb-4 fw-semibold">Iniciar sesión</h3>
-			<form action="AuthServlet" method="post">
+			<form action="${pageContext.request.contextPath}/AuthServlet" method="post">
 				<input type="hidden" name="accion" value="login">
-				<%
-				if (request.getParameter("redirect") != null) {
-				%>
-				<input type="hidden" name="redirect"
-					value="<%=request.getParameter("redirect")%>">
-				<%
-				}
-				%>
+				<c:if test="${not empty param.redirect}">
+					<input type="hidden" name="redirect" value="${param.redirect}">
+				</c:if>
 				<div class="mb-3">
-					<label class="form-label fw-medium small">Correo
-						electrónico</label> <input type="email" class="form-control bg-light"
-						name="email" placeholder="tucorreo@ejemplo.com" required>
+					<label class="form-label fw-medium small">Correo electrónico</label>
+					<input type="email" class="form-control bg-light" name="email" placeholder="tucorreo@ejemplo.com" required>
 				</div>
 				<div class="mb-3">
-					<label class="form-label fw-medium small">Contraseña</label> <input
-						type="password" class="form-control bg-light" name="password"
-						placeholder="••••••••" required>
+					<label class="form-label fw-medium small">Contraseña</label>
+					<input type="password" class="form-control bg-light" name="password" placeholder="••••••••" required>
 				</div>
-				<button type="submit"
-					class="btn btn-primary-custom w-100 fw-semibold mt-2 py-2">Ingresar</button>
+				<button type="submit" class="btn btn-primary-custom w-100 fw-semibold mt-2 py-2">Ingresar</button>
 			</form>
 			<div class="text-center mt-4 small text-secondary">
 				¿No tienes cuenta?
-				<button
-					class="btn btn-link p-0 m-0 align-baseline text-decoration-none fw-bold"
-					onclick="switchView('register')">Regístrate</button>
+				<button class="btn btn-link p-0 m-0 align-baseline text-decoration-none fw-bold" onclick="switchView('register')">Regístrate</button>
 			</div>
 		</div>
 
@@ -62,60 +72,46 @@
 		<div id="registerView" class="d-none">
 			<h3 class="text-center mb-4 fw-semibold">Crear cuenta</h3>
 
-			<form action="AuthServlet" method="post">
+			<form action="${pageContext.request.contextPath}/AuthServlet" method="post">
 				<input type="hidden" name="accion" value="registrar">
-				<%
-				if (request.getParameter("redirect") != null) {
-				%>
-				<input type="hidden" name="redirect"
-					value="<%=request.getParameter("redirect")%>">
-				<%
-				}
-				%>
+				<c:if test="${not empty param.redirect}">
+					<input type="hidden" name="redirect" value="${param.redirect}">
+				</c:if>
 				<div class="mb-3">
-					<label class="form-label fw-medium small">Nombres</label> <input
-						type="text" class="form-control bg-light" name="nombre"
-						placeholder="Tus nombres" required>
+					<label class="form-label fw-medium small">Nombres</label>
+					<input type="text" class="form-control bg-light" name="nombre" placeholder="Tus nombres" required>
 				</div>
 				<div class="mb-3">
-					<label class="form-label fw-medium small">Apellidos</label> <input
-						type="text" class="form-control bg-light" name="apellidos"
-						placeholder="Tus apellidos" required>
+					<label class="form-label fw-medium small">Apellidos</label>
+					<input type="text" class="form-control bg-light" name="apellidos" placeholder="Tus apellidos" required>
 				</div>
 				<div class="mb-3">
-					<label class="form-label fw-medium small">Correo
-						electrónico</label> <input type="email" class="form-control bg-light"
-						name="email" placeholder="tucorreo@ejemplo.com" required>
+					<label class="form-label fw-medium small">Correo electrónico</label>
+					<input type="email" class="form-control bg-light" name="email" placeholder="tucorreo@ejemplo.com" required>
 				</div>
 				<div class="mb-3">
-					<label class="form-label fw-medium small">Teléfono</label> <input
-						type="text" class="form-control bg-light" name="telefono"
-						placeholder="987654321">
+					<label class="form-label fw-medium small">Teléfono</label>
+					<input type="text" class="form-control bg-light" name="telefono" placeholder="987654321">
 				</div>
 				<div class="mb-3">
-					<label class="form-label fw-medium small">Contraseña</label> <input
-						type="password" class="form-control bg-light" name="password"
-						placeholder="••••••••" required>
+					<label class="form-label fw-medium small">Contraseña</label>
+					<input type="password" class="form-control bg-light" name="password" placeholder="••••••••" required>
 				</div>
-				<button type="submit"
-					class="btn btn-primary-custom w-100 fw-semibold mt-2 py-2">Registrarme</button>
+				<button type="submit" class="btn btn-primary-custom w-100 fw-semibold mt-2 py-2">Registrarme</button>
 			</form>
 			<div class="text-center mt-4 small text-secondary">
 				¿Ya tienes cuenta?
-				<button
-					class="btn btn-link p-0 m-0 align-baseline text-decoration-none fw-bold"
-					onclick="switchView('login')">Inicia sesión</button>
+				<button class="btn btn-link p-0 m-0 align-baseline text-decoration-none fw-bold" onclick="switchView('login')">Inicia sesión</button>
 			</div>
 		</div>
 
 	</div>
 
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script>
 		function switchView(view) {
-			document.getElementById('loginView').classList.toggle('d-none',
-					view === 'register');
-			document.getElementById('registerView').classList.toggle('d-none',
-					view === 'login');
+			document.getElementById('loginView').classList.toggle('d-none', view === 'register');
+			document.getElementById('registerView').classList.toggle('d-none', view === 'login');
 		}
 	</script>
 
