@@ -37,6 +37,32 @@ window.seleccionarDestino = function(id) {
     }
 };
 
+function mostrarErrorValidacion(msg) {
+    const validationMsg = document.getElementById('validationMsg');
+    if (validationMsg) {
+        validationMsg.textContent = msg || '';
+    }
+}
+
+function actualizarFechasMinimasRetorno() {
+    const fechaSalida = document.getElementById('fechaSalida');
+    const fechaRetorno = document.getElementById('fechaRetorno');
+    if (!fechaSalida || !fechaRetorno) return;
+
+    if (fechaSalida.value) {
+        const salida = new Date(fechaSalida.value + 'T00:00:00');
+        const minRetorno = new Date(salida);
+        minRetorno.setDate(minRetorno.getDate() + 1);
+        const minRetornoStr = minRetorno.toISOString().split('T')[0];
+        fechaRetorno.min = minRetornoStr;
+
+        if (fechaRetorno.value && fechaRetorno.value <= fechaSalida.value) {
+            fechaRetorno.value = '';
+            mostrarErrorValidacion('⚠️ La fecha de retorno debe ser posterior a la fecha de salida.');
+        }
+    }
+}
+
 function initEventosBuscador() {
     const tipoViaje = document.getElementById('tipoViaje');
     const destinoSelect = document.getElementById('destinoSelect');
@@ -45,15 +71,32 @@ function initEventosBuscador() {
     const pasajerosSelect = document.getElementById('pasajerosSelect');
     const bookingForm = document.getElementById('bookingForm');
   
-    if (tipoViaje) tipoViaje.addEventListener('change', () => { toggleRetorno(); calcularPrecio(); });
+    if (tipoViaje) {
+        tipoViaje.addEventListener('change', () => { 
+            toggleRetorno(); 
+            actualizarFechasMinimasRetorno();
+            calcularPrecio(); 
+        });
+    }
     if (destinoSelect) destinoSelect.addEventListener('change', calcularPrecio);
-    if (fechaSalida) fechaSalida.addEventListener('change', calcularPrecio);
-    if (fechaRetorno) fechaRetorno.addEventListener('change', calcularPrecio);
+    if (fechaSalida) {
+        fechaSalida.addEventListener('change', () => {
+            actualizarFechasMinimasRetorno();
+            calcularPrecio();
+        });
+    }
+    if (fechaRetorno) {
+        fechaRetorno.addEventListener('change', () => {
+            calcularPrecio();
+        });
+    }
     if (pasajerosSelect) pasajerosSelect.addEventListener('change', calcularPrecio);
   
     const modalEl = document.getElementById('modalReserva');
     if (modalEl) {
         modalEl.addEventListener('show.bs.modal', (event) => {
+            mostrarErrorValidacion('');
+            setFechasMinimas();
             const btn = event.relatedTarget;
             if (btn && btn.hasAttribute('data-id')) {
                 const id = btn.getAttribute('data-id');
@@ -96,12 +139,19 @@ function initEventosBuscador() {
 function toggleRetorno() {
     const tipoViaje = document.getElementById('tipoViaje');
     const retornoGroup = document.getElementById('retornoGroup');
+    const fechaRetorno = document.getElementById('fechaRetorno');
     if (tipoViaje && retornoGroup) {
         if (tipoViaje.value === 'oneway') {
             retornoGroup.style.display = 'none';
-            document.getElementById('fechaRetorno').value = '';
+            if (fechaRetorno) {
+                fechaRetorno.value = '';
+                fechaRetorno.required = false;
+            }
         } else {
             retornoGroup.style.display = 'block';
+            if (fechaRetorno) {
+                fechaRetorno.required = true;
+            }
         }
     }
 }
@@ -118,7 +168,10 @@ function calcularPrecio() {
     const fechaRetorno = document.getElementById('fechaRetorno');
     const tipoViaje = document.getElementById('tipoViaje');
     const pasajerosSelect = document.getElementById('pasajerosSelect');
+    const precioSolesSpan = document.getElementById('precioSoles');
   
+    mostrarErrorValidacion('');
+
     if (!destinoSelect || !destinoSelect.value) return 0;
   
     const destinoId = parseInt(destinoSelect.value);
@@ -131,13 +184,30 @@ function calcularPrecio() {
     if (!destino) return 0;
   
     const salidaStr = fechaSalida?.value;
-    if (!salidaStr) return 0;
+    if (!salidaStr) {
+        if (precioSolesSpan) precioSolesSpan.textContent = 'S/ 0.00';
+        window.precioActual = null;
+        return 0;
+    }
   
     let noches = 1;
     const esSoloIda = tipoViaje?.value === 'oneway';
-    if (!esSoloIda && fechaRetorno?.value) {
-        const diffTime = Math.abs(new Date(fechaRetorno.value) - new Date(salidaStr));
-        noches = Math.ceil(diffTime / (1000*60*60*24)) || 1;
+    if (!esSoloIda) {
+        const retornoStr = fechaRetorno?.value;
+        if (retornoStr) {
+            const salidaDate = new Date(salidaStr + 'T00:00:00');
+            const retornoDate = new Date(retornoStr + 'T00:00:00');
+            const diffTime = retornoDate - salidaDate;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays <= 0) {
+                mostrarErrorValidacion('⚠️ La fecha de retorno debe ser posterior a la fecha de salida.');
+                if (precioSolesSpan) precioSolesSpan.textContent = 'S/ 0.00';
+                window.precioActual = null;
+                return 0;
+            }
+            noches = diffDays;
+        }
     }
   
     const pasajeros = parseInt(pasajerosSelect?.value || 1);
@@ -145,7 +215,6 @@ function calcularPrecio() {
     const subtotal = precioS * noches * pasajeros;
     const { igv, total } = calcularPrecioConImpuestos(subtotal);
   
-    const precioSolesSpan = document.getElementById('precioSoles');
     if (precioSolesSpan) precioSolesSpan.textContent = `S/ ${total.toFixed(2)}`;
   
     window.precioActual = { subtotal, igv, total, noches, pasajeros, destino };
@@ -153,18 +222,45 @@ function calcularPrecio() {
 }
   
 function procesarReserva() {
-    if (!window.precioActual) {
-        alert('⚠️ Completa los datos');
+    const tipoViaje = document.getElementById('tipoViaje')?.value;
+    const fechaSalidaVal = document.getElementById('fechaSalida')?.value;
+    const fechaRetornoVal = document.getElementById('fechaRetorno')?.value;
+
+    if (!fechaSalidaVal) {
+        mostrarErrorValidacion('⚠️ Por favor, selecciona una fecha de salida.');
+        document.getElementById('fechaSalida')?.focus();
         return;
     }
 
-    const tipoViaje = document.getElementById('tipoViaje')?.value;
+    if (tipoViaje === 'roundtrip') {
+        if (!fechaRetornoVal) {
+            mostrarErrorValidacion('⚠️ Por favor, selecciona una fecha de retorno.');
+            document.getElementById('fechaRetorno')?.focus();
+            return;
+        }
+        const salidaDate = new Date(fechaSalidaVal + 'T00:00:00');
+        const retornoDate = new Date(fechaRetornoVal + 'T00:00:00');
+        if (retornoDate <= salidaDate) {
+            mostrarErrorValidacion('⚠️ La fecha de retorno debe ser posterior a la fecha de salida.');
+            document.getElementById('fechaRetorno')?.focus();
+            return;
+        }
+    }
+
+    if (!window.precioActual) {
+        calcularPrecio();
+        if (!window.precioActual) {
+            mostrarErrorValidacion('⚠️ Completa todos los datos requeridos para cotizar.');
+            return;
+        }
+    }
+
     const reserva = {
         id: Date.now(),
         destino: window.precioActual.destino,
         tipoViaje: tipoViaje,
-        fechaSalida: document.getElementById('fechaSalida')?.value,
-        fechaRetorno: tipoViaje === 'roundtrip' ? document.getElementById('fechaRetorno')?.value : null,
+        fechaSalida: fechaSalidaVal,
+        fechaRetorno: tipoViaje === 'roundtrip' ? fechaRetornoVal : null,
         pasajeros: window.precioActual.pasajeros,
         noches: window.precioActual.noches,
         subtotal: window.precioActual.subtotal,
@@ -194,9 +290,14 @@ function setFechasMinimas() {
     const minDate = tomorrow.toISOString().split('T')[0];
     const fechaSalida = document.getElementById('fechaSalida');
     const fechaRetorno = document.getElementById('fechaRetorno');
-    if (fechaSalida) fechaSalida.min = minDate;
-    if (fechaRetorno) fechaRetorno.min = minDate;
+    if (fechaSalida) {
+        fechaSalida.min = minDate;
+        if (!fechaSalida.value) {
+            fechaSalida.value = minDate;
+        }
+    }
+    actualizarFechasMinimasRetorno();
 }
 
-
 let paqueteSeleccionadoHtml = null;
+
