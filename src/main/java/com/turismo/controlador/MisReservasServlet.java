@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @WebServlet("/mis-reservas")
@@ -32,6 +34,7 @@ public class MisReservasServlet extends HttpServlet {
 
         List<Reserva> reservas = reservaDao.listarPorUsuario(usuario.getIdUsuario());
         request.setAttribute("reservas", reservas);
+        request.setAttribute("fechaHoy", Date.valueOf(LocalDate.now()));
         request.getRequestDispatcher("/mis-reservas.jsp").forward(request, response);
     }
 
@@ -53,18 +56,34 @@ public class MisReservasServlet extends HttpServlet {
                 int idReserva = Integer.parseInt(request.getParameter("id"));
                 Reserva r = reservaDao.obtenerPorId(idReserva);
                 if (r != null && r.getIdUsuario() == usuario.getIdUsuario()) {
+                    if ("cancelada".equalsIgnoreCase(r.getEstado())) {
+                        request.getSession().setAttribute("error", "La reserva ya se encuentra cancelada.");
+                        response.sendRedirect(request.getContextPath() + "/mis-reservas");
+                        return;
+                    }
+
+                    if (r.getFechaSalida() != null) {
+                        LocalDate hoy = LocalDate.now();
+                        LocalDate fechaSalida = r.getFechaSalida().toLocalDate();
+                        if (!fechaSalida.isAfter(hoy)) {
+                            request.getSession().setAttribute("error", "No se puede cancelar una reserva cuya fecha de viaje ya inició o ha concluido.");
+                            response.sendRedirect(request.getContextPath() + "/mis-reservas");
+                            return;
+                        }
+                    }
+
                     boolean ok = reservaDao.actualizarEstado(idReserva, "cancelada");
                     if (ok) {
-                        request.getSession().setAttribute("mensaje", "✅ La reserva #" + idReserva + " ha sido cancelada.");
+                        request.getSession().setAttribute("mensaje", "La reserva #" + idReserva + " ha sido cancelada exitosamente.");
                     } else {
-                        request.getSession().setAttribute("error", "❌ No se pudo cancelar la reserva.");
+                        request.getSession().setAttribute("error", "No se pudo cancelar la reserva.");
                     }
                 } else {
-                    request.getSession().setAttribute("error", "❌ No tienes permisos para modificar esta reserva.");
+                    request.getSession().setAttribute("error", "No tienes permisos para modificar esta reserva.");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                request.getSession().setAttribute("error", "❌ Error al procesar la cancelación.");
+                request.getSession().setAttribute("error", "Error al procesar la cancelación.");
             }
         }
 
