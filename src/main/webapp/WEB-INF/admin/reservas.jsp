@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List, com.turismo.modelo.Reserva, com.turismo.modelo.Usuario, com.turismo.modelo.Paquete" %>
+<%@ page import="java.util.List, com.turismo.modelo.Reserva, com.turismo.modelo.Usuario, com.turismo.modelo.Paquete, com.turismo.modelo.CategoriaPaquete" %>
 <%
     List<Reserva> reservas = (List<Reserva>) request.getAttribute("reservas");
     if (reservas == null) {
@@ -9,6 +9,7 @@
 
     List<Usuario> usuarios = (List<Usuario>) request.getAttribute("usuarios");
     List<Paquete> paquetes = (List<Paquete>) request.getAttribute("paquetes");
+    List<CategoriaPaquete> categorias = (List<CategoriaPaquete>) request.getAttribute("categorias");
 
     String mensaje = (String) session.getAttribute("mensaje");
     String error = (String) session.getAttribute("error");
@@ -28,9 +29,7 @@
 </head>
 <body>
     <div class="d-flex">
-        <!-- Sidebar Reutilizable -->
         <jsp:include page="componentes/sidebar.jsp" />
-
         <div id="content">
             <nav class="navbar navbar-expand-lg navbar-light bg-white rounded shadow-sm mb-4 p-3">
                 <div class="container-fluid">
@@ -43,7 +42,6 @@
                 </div>
             </nav>
 
-            <!-- Mensajes de éxito/error -->
             <% if (mensaje != null) { %>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <i class="bi bi-check-circle me-2"></i> <%= mensaje %>
@@ -72,6 +70,7 @@
                                 <th>ID</th>
                                 <th>Cliente</th>
                                 <th>Paquete</th>
+                                <th>Fecha Reserva</th>
                                 <th>Tipo Viaje</th>
                                 <th>Salida</th>
                                 <th>Retorno</th>
@@ -83,15 +82,14 @@
                         </thead>
                         <tbody>
                             <% if (reservas.isEmpty()) { %>
-                                <tr>
-                                    <td colspan="10" class="text-center text-muted">No hay reservas registradas.</td>
-                                </tr>
-                            <% } else { %>
-                                <% for (Reserva r : reservas) { %>
+                                <tr><td colspan="11" class="text-center text-muted">No hay reservas registradas.</td></tr>
+                            <% } else {
+                                for (Reserva r : reservas) { %>
                                 <tr>
                                     <td>#<%= r.getIdReserva() %></td>
                                     <td><%= r.getNombreUsuario() != null ? r.getNombreUsuario() : "ID #" + r.getIdUsuario() %></td>
                                     <td><%= r.getNombrePaquete() != null ? r.getNombrePaquete() : "ID #" + r.getIdPaquete() %></td>
+                                    <td><%= r.getFechaReserva() != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format(r.getFechaReserva()) : "-" %></td>
                                     <td><%= ("idavuelta".equalsIgnoreCase(r.getTipoViaje()) || "roundtrip".equalsIgnoreCase(r.getTipoViaje())) ? "Ida y Vuelta" : "Solo Ida" %></td>
                                     <td><%= r.getFechaSalida() %></td>
                                     <td><%= r.getFechaRetorno() != null ? r.getFechaRetorno() : "-" %></td>
@@ -110,9 +108,7 @@
                                     </td>
                                     <td>
                                         <% if ("pagada".equalsIgnoreCase(r.getEstado())) { %>
-                                            <button class="btn btn-sm btn-secondary" disabled title="No se puede editar una reserva pagada desde aquí">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
+                                            <button class="btn btn-sm btn-secondary" disabled><i class="bi bi-pencil"></i></button>
                                         <% } else { %>
                                             <button class="btn btn-sm btn-secondary-custom btn-editar" 
                                                     data-id="<%= r.getIdReserva() %>"
@@ -124,8 +120,7 @@
                                                     data-retorno="<%= r.getFechaRetorno() != null ? r.getFechaRetorno() : "" %>"
                                                     data-total="<%= r.getPrecioTotal() %>"
                                                     data-estado="<%= r.getEstado() %>"
-                                                    data-bs-toggle="modal" 
-                                                    data-bs-target="#reservaModal">
+                                                    data-bs-toggle="modal" data-bs-target="#reservaModal">
                                                 <i class="bi bi-pencil"></i>
                                             </button>
                                             <button class="btn btn-sm btn-danger btn-eliminar" data-id="<%= r.getIdReserva() %>">
@@ -134,8 +129,8 @@
                                         <% } %>
                                     </td>
                                 </tr>
-                                <% } %>
-                            <% } %>
+                            <% }
+                            } %>
                         </tbody>
                     </table>
                 </div>
@@ -144,19 +139,20 @@
     </div>
 
     <!-- ======================================== -->
-    <!-- MODAL ÚNICO RESERVA (CREAR / EDITAR) -->
+    <!-- MODAL ÚNICO (NUEVA / EDICIÓN)           -->
     <!-- ======================================== -->
     <div class="modal fade" id="reservaModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-primary-custom text-white" id="reservaModalHeader">
+                <div class="modal-header bg-primary-custom text-white">
                     <h5 class="modal-title" id="reservaModalTitle">Nueva Reserva</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="<%=request.getContextPath()%>/admin/reservas" method="post">
+                    <form action="<%=request.getContextPath()%>/admin/reservas" method="post" id="formReserva">
                         <input type="hidden" id="actionReserva" name="action" value="crear">
                         <input type="hidden" id="idReserva" name="id">
+
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Cliente</label>
@@ -172,20 +168,34 @@
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
+                                <label class="form-label">Filtrar por Región</label>
+                                <select class="form-select" id="filtroCategoria">
+                                    <option value="0">Todas las regiones</option>
+                                    <% if (categorias != null) {
+                                        for (CategoriaPaquete cat : categorias) { %>
+                                        <option value="<%= cat.getIdCategoria() %>"><%= cat.getNombre() %></option>
+                                    <%  }
+                                    } %>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label">Paquete Turístico</label>
                                 <select class="form-select" id="paqueteReserva" name="id_paquete" required>
                                     <option value="">Seleccionar paquete</option>
                                     <% if (paquetes != null) {
                                         for (Paquete p : paquetes) { %>
-                                        <option value="<%= p.getIdPaquete() %>">
+                                        <option value="<%= p.getIdPaquete() %>" 
+                                                data-precio="<%= p.getPrecioSoles() %>"
+                                                data-categoria="<%= p.getIdCategoria() %>">
                                             <%= p.getNombre() %> - S/ <%= p.getPrecioSoles() %>
                                         </option>
                                     <%  }
                                     } %>
                                 </select>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Tipo de Viaje</label>
                                 <select class="form-select" id="tipoViajeReserva" name="tipo_viaje" required>
@@ -193,26 +203,32 @@
                                     <option value="ida">Solo Ida</option>
                                 </select>
                             </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Pasajeros</label>
                                 <input type="number" class="form-control" id="numPasajerosReserva" name="num_pasajeros" min="1" value="1" required>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Fecha Salida</label>
-                                <input type="date" class="form-control" id="fechaSalidaReserva" name="fecha_salida" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Fecha Retorno</label>
-                                <input type="date" class="form-control" id="fechaRetornoReserva" name="fecha_retorno">
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Precio Total (S/)</label>
                                 <input type="number" step="0.01" class="form-control" id="precioTotalReserva" name="precio_total" required placeholder="0.00">
                             </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Fecha Salida</label>
+                                <input type="date" class="form-control" id="fechaSalidaReserva" name="fecha_salida" required
+                                       min="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>">
+                            </div>
+                            <div class="col-md-6 mb-3" id="divFechaRetorno">
+                                <label class="form-label">Fecha Retorno <span id="retornoObligatorio" style="color:red;">*</span></label>
+                                <input type="date" class="form-control" id="fechaRetornoReserva" name="fecha_retorno">
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-md-6 mb-3" id="estadoReservaContainer" style="display: none;">
                                 <label class="form-label">Estado</label>
                                 <select class="form-select" id="estadoReserva" name="estado">
@@ -221,6 +237,7 @@
                                 </select>
                             </div>
                         </div>
+
                         <div class="text-end mt-3">
                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
                             <button type="submit" class="btn btn-primary-custom" id="btnGuardarReserva">Guardar Reserva</button>
@@ -239,13 +256,97 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="<%=request.getContextPath()%>/assets/admin/js/script.js"></script>
     <script>
-        // Limpiar modal para nueva reserva
-        document.getElementById("btnNuevo").addEventListener("click", function () {
+
+        // MOSTRAR/OCULTAR RETORNO
+        const tipoViajeSelect = document.getElementById('tipoViajeReserva');
+        const retornoInput = document.getElementById('fechaRetornoReserva');
+        const retornoObligatorio = document.getElementById('retornoObligatorio');
+        const divRetorno = document.getElementById('divFechaRetorno');
+
+        function toggleRetorno() {
+            const esIdaVuelta = tipoViajeSelect.value === 'idavuelta';
+            if (esIdaVuelta) {
+                retornoObligatorio.style.display = 'inline';
+                retornoInput.setAttribute('required', 'required');
+                divRetorno.querySelector('label').innerHTML = 'Fecha Retorno <span style="color:red;">*</span>';
+                divRetorno.style.display = 'block';
+            } else {
+                retornoObligatorio.style.display = 'none';
+                retornoInput.removeAttribute('required');
+                divRetorno.querySelector('label').innerHTML = 'Fecha Retorno';
+                divRetorno.style.display = 'none';
+                retornoInput.value = '';
+            }
+        }
+        tipoViajeSelect.addEventListener('change', toggleRetorno);
+
+
+        function calcularTotal() {
+            const select = document.getElementById("paqueteReserva");
+            const pasajeros = parseInt(document.getElementById("numPasajerosReserva").value) || 1;
+            const selectedOpt = select.options[select.selectedIndex];
+            let precioUnitario = 0;
+            if (selectedOpt && selectedOpt.value !== "") {
+                precioUnitario = parseFloat(selectedOpt.getAttribute("data-precio")) || 0;
+            }
+            const total = precioUnitario * pasajeros;
+            document.getElementById("precioTotalReserva").value = total.toFixed(2);
+        }
+        document.getElementById("paqueteReserva").addEventListener("change", calcularTotal);
+        document.getElementById("numPasajerosReserva").addEventListener("input", calcularTotal);
+
+        
+        // FILTRO POR CATEGORÍA
+        document.getElementById("filtroCategoria").addEventListener("change", function() {
+            const catId = parseInt(this.value);
+            const options = document.getElementById("paqueteReserva").options;
+            for (let i = 0; i < options.length; i++) {
+                const opt = options[i];
+                if (opt.value === "") continue;
+                const optCat = parseInt(opt.getAttribute("data-categoria"));
+                opt.style.display = (catId === 0 || optCat === catId) ? "" : "none";
+            }
+            const selected = document.getElementById("paqueteReserva");
+            if (selected.selectedIndex > 0) {
+                const selectedOpt = selected.options[selected.selectedIndex];
+                if (selectedOpt.style.display === "none") {
+                    selected.selectedIndex = 0;
+                }
+            }
+            calcularTotal();
+        });
+
+        // VALIDACIONES DE FECHAS EN CLIENTE
+        const salidaInput = document.getElementById("fechaSalidaReserva");
+        const retornoInput2 = document.getElementById("fechaRetornoReserva");
+
+        salidaInput.addEventListener("change", function() {
+            const salida = this.value;
+            if (salida) {
+                retornoInput2.setAttribute("min", salida);
+                if (retornoInput2.value && retornoInput2.value < salida) {
+                    retornoInput2.value = "";
+                    alert("La fecha de retorno no puede ser anterior a la fecha de salida.");
+                }
+            }
+        });
+
+        retornoInput2.addEventListener("change", function() {
+            const salida = salidaInput.value;
+            if (salida && this.value < salida) {
+                this.value = "";
+                alert("La fecha de retorno no puede ser anterior a la fecha de salida.");
+            }
+        });
+
+        // NUEVA RESERVA
+        document.getElementById("btnNuevo").addEventListener("click", function() {
             document.getElementById("actionReserva").value = "crear";
             document.getElementById("idReserva").value = "";
             document.getElementById("usuarioReserva").selectedIndex = 0;
+            document.getElementById("filtroCategoria").value = "0";
+            document.getElementById("filtroCategoria").dispatchEvent(new Event("change"));
             document.getElementById("paqueteReserva").selectedIndex = 0;
             document.getElementById("tipoViajeReserva").value = "idavuelta";
             document.getElementById("numPasajerosReserva").value = "1";
@@ -255,21 +356,36 @@
             document.getElementById("estadoReservaContainer").style.display = "none";
             document.getElementById("reservaModalTitle").textContent = "Nueva Reserva";
             document.getElementById("btnGuardarReserva").className = "btn btn-primary-custom";
+            toggleRetorno();
+            calcularTotal();
         });
 
-        // Llenar modal para editar reserva
-        document.querySelectorAll(".btn-editar").forEach(function (btn) {
-            btn.addEventListener("click", function () {
+
+        // EDITAR RESERVA
+        document.querySelectorAll(".btn-editar").forEach(function(btn) {
+            btn.addEventListener("click", function() {
                 document.getElementById("actionReserva").value = "editar";
                 document.getElementById("idReserva").value = this.dataset.id;
                 document.getElementById("usuarioReserva").value = this.dataset.usuario;
-                document.getElementById("paqueteReserva").value = this.dataset.paquete;
-                let tipo = this.dataset.tipoviaje;
-                if (tipo === "roundtrip" || tipo === "idavuelta") {
-                    document.getElementById("tipoViajeReserva").value = "idavuelta";
-                } else {
-                    document.getElementById("tipoViajeReserva").value = "ida";
+
+                const paqueteId = this.dataset.paquete;
+                const paqueteSelect = document.getElementById("paqueteReserva");
+                let categoriaId = 0;
+                for (let opt of paqueteSelect.options) {
+                    if (opt.value == paqueteId) {
+                        categoriaId = parseInt(opt.getAttribute("data-categoria"));
+                        break;
+                    }
                 }
+                const filtro = document.getElementById("filtroCategoria");
+                filtro.value = categoriaId > 0 ? categoriaId : "0";
+                filtro.dispatchEvent(new Event("change"));
+                paqueteSelect.value = paqueteId;
+
+
+                const tipo = (this.dataset.tipoviaje === "roundtrip" || this.dataset.tipoviaje === "idavuelta") ? "idavuelta" : "ida";
+                document.getElementById("tipoViajeReserva").value = tipo;
+
                 document.getElementById("numPasajerosReserva").value = this.dataset.pasajeros;
                 document.getElementById("fechaSalidaReserva").value = this.dataset.salida;
                 document.getElementById("fechaRetornoReserva").value = this.dataset.retorno;
@@ -277,13 +393,15 @@
                 document.getElementById("estadoReservaContainer").style.display = "block";
                 document.getElementById("estadoReserva").value = this.dataset.estado;
                 document.getElementById("reservaModalTitle").textContent = "Editar Reserva #" + this.dataset.id;
-                document.getElementById("btnGuardarReserva").className = "btn btn-primary-custom";
+                document.getElementById("btnGuardarReserva").className = "btn btn-primary-custom";                
+                toggleRetorno();
+                calcularTotal();
             });
         });
 
-        // Eliminar con SweetAlert2
-        document.querySelectorAll(".btn-eliminar").forEach(function (btn) {
-            btn.addEventListener("click", function () {
+        // ELIMINAR CON SWEETALERT
+        document.querySelectorAll(".btn-eliminar").forEach(function(btn) {
+            btn.addEventListener("click", function() {
                 let id = this.dataset.id;
                 Swal.fire({
                     title: "¿Eliminar reserva #" + id + "?",
@@ -300,6 +418,7 @@
                 });
             });
         });
+        toggleRetorno();
     </script>
 </body>
 </html>

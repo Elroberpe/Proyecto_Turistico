@@ -2,6 +2,7 @@ package com.turismo.modelo;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Reserva {
 
@@ -16,6 +17,7 @@ public class Reserva {
 	private int numPasajeros;
 	private BigDecimal precioTotal;
 	private String estado;
+	private Timestamp fechaReserva;
 
 	public Reserva() {
 	}
@@ -107,5 +109,13 @@ public class Reserva {
 
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+	
+	public Timestamp getFechaReserva() {
+	    return fechaReserva;
+	}
+
+	public void setFechaReserva(Timestamp fechaReserva) {
+	    this.fechaReserva = fechaReserva;
 	}
 }

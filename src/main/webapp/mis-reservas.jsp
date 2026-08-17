@@ -83,6 +83,7 @@
                             <tr>
                                 <th class="ps-4">ID</th>
                                 <th>Paquete Turístico</th>
+                                <th>Fecha Reserva</th>
                                 <th>Tipo Viaje</th>
                                 <th>Fecha Salida</th>
                                 <th>Fecha Retorno</th>
@@ -104,6 +105,9 @@
                                     <td class="fw-bold text-dark">
                                      
                                         <%= r.getNombrePaquete() != null ? r.getNombrePaquete() : "Paquete #" + r.getIdPaquete() %>
+                                    </td>
+                                    <td>
+                                        <%= r.getFechaReserva() != null ? new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(r.getFechaReserva()) : "-" %>
                                     </td>
                                     <td>
                                         <span class="badge bg-light text-dark border">
@@ -161,7 +165,6 @@
                                                     <h3 class="text-dark fw-bold mb-0" id="modalDetalleLabel<%= r.getIdReserva() %>">Detalle de Reserva</h3>
                                                     <p class="text-muted small mb-0">ID Reserva: #<%= r.getIdReserva() %></p>
                                                 </div>
-
                                                 <div class="invoice-detail px-2">
                                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                                         <span class="text-muted"><i class="bi bi-geo-alt me-2 text-primary"></i>Destino:</span>
