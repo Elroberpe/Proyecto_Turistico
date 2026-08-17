@@ -200,38 +200,3 @@ function setFechasMinimas() {
 
 
 let paqueteSeleccionadoHtml = null;
-
-window.seleccionarDestinoHtml = function(btn) {
-    const id = btn.getAttribute('data-id');
-    const nombre = btn.getAttribute('data-nombre');
-    const precio = parseFloat(btn.getAttribute('data-precio'));
-
-    const destinoSelect = document.getElementById('destinoSelect');
-    if (destinoSelect) {
-        destinoSelect.value = id;
-    }
-
-    paqueteSeleccionadoHtml = {
-        idPaquete: id,
-        nombre: nombre,
-        precioSoles: precio,
-        precioBase: precio
-    };
-
-    const modalDestinoNombre = document.getElementById('modalDestinoNombre');
-    if(modalDestinoNombre) {
-        modalDestinoNombre.textContent = nombre;
-    }
-    
-    window.getPaqueteParaModal = function(idParam) {
-        return paqueteSeleccionadoHtml;
-    };
-
-    const modalEl = document.getElementById('modalReserva');
-    if (modalEl) {
-        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
-        modal.show();
-    }
-    
-    setTimeout(calcularPrecio, 100);
-};
