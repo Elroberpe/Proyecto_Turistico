@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css?v=2.0">
 </head>
-<body style="background-color: var(--light-gray);">
+<body >
 
     <!-- NAVBAR -->
     <jsp:include page="componentes/navbar.jsp"></jsp:include>
@@ -116,27 +116,27 @@
                                     <td class="fw-bold text-primary">S/ <%= r.getPrecioTotal() %></td>
                                     <td>
                                         <% if ("pagada".equalsIgnoreCase(r.getEstado())) { %>
-                                            <span class="badge bg-success rounded-pill px-3">
+                                            <span class="badge bg-success px-3">
                                                  Pagada
                                             </span>
                                         <% } else if ("pendiente".equalsIgnoreCase(r.getEstado())) { %>
-                                            <span class="badge bg-warning text-dark rounded-pill px-3">
-                                                <i class="bi bi-clock me-1"></i> Pendiente
+                                            <span class="badge bg-warning text-dark px-3">
+                                                 Pendiente
                                             </span>
                                         <% } else { %>
-                                            <span class="badge bg-danger rounded-pill px-3">
-                                                <i class="bi bi-x-circle me-1"></i> Cancelada
+                                            <span class="badge bg-danger px-3">
+                                                 Cancelada
                                             </span>
                                         <% } %>
                                     </td>
                                     <td class="text-end pe-4">
                                         <div class="d-inline-flex gap-1 align-items-center">
-                                            <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3"
+                                            <button type="button" class="btn btn-sm btn-secondary"
                                                     data-bs-toggle="modal" data-bs-target="#modalDetalle<%= r.getIdReserva() %>">
-                                                <i class="bi bi-receipt me-1"></i> Detalle
+                                                <i class="bi bi-receipt me-1"></i> Ver
                                             </button>
                                             <% if (esCancelable) { %>
-                                                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3 btn-cancelar"
+                                                <button type="button" class="btn btn-sm btn-danger btn-cancelar"
                                                         data-id="<%= r.getIdReserva() %>"
                                                         data-paquete="<%= r.getNombrePaquete() != null ? r.getNombrePaquete() : "Paquete #" + r.getIdPaquete() %>">
                                                     <i class="bi bi-x-lg me-1"></i> Cancelar
@@ -190,15 +190,15 @@
                                                         <span>
                                                             <% if ("pagada".equalsIgnoreCase(r.getEstado())) { %>
                                                                 <span class="badge bg-success rounded-pill px-3">
-                                                                    <i class="bi bi-check-circle me-1"></i> Pagada
+                                                                    Pagada
                                                                 </span>
                                                             <% } else if ("pendiente".equalsIgnoreCase(r.getEstado())) { %>
                                                                 <span class="badge bg-warning text-dark rounded-pill px-3">
-                                                                    <i class="bi bi-clock me-1"></i> Pendiente
+                                                                    Pendiente
                                                                 </span>
                                                             <% } else { %>
                                                                 <span class="badge bg-danger rounded-pill px-3">
-                                                                    <i class="bi bi-x-circle me-1"></i> Cancelada
+                                                                     Cancelada
                                                                 </span>
                                                             <% } %>
                                                         </span>
