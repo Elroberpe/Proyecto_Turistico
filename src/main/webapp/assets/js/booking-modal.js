@@ -51,6 +51,40 @@ function initEventosBuscador() {
     if (fechaRetorno) fechaRetorno.addEventListener('change', calcularPrecio);
     if (pasajerosSelect) pasajerosSelect.addEventListener('change', calcularPrecio);
   
+    const modalEl = document.getElementById('modalReserva');
+    if (modalEl) {
+        modalEl.addEventListener('show.bs.modal', (event) => {
+            const btn = event.relatedTarget;
+            if (btn && btn.hasAttribute('data-id')) {
+                const id = btn.getAttribute('data-id');
+                const nombre = btn.getAttribute('data-nombre');
+                const precio = parseFloat(btn.getAttribute('data-precio')) || 0;
+
+                if (destinoSelect) {
+                    destinoSelect.value = id;
+                }
+
+                paqueteSeleccionadoHtml = {
+                    idPaquete: id,
+                    nombre: nombre,
+                    precioSoles: precio,
+                    precioBase: precio
+                };
+
+                const modalDestinoNombre = document.getElementById('modalDestinoNombre');
+                if (modalDestinoNombre) {
+                    modalDestinoNombre.textContent = nombre;
+                }
+
+                window.getPaqueteParaModal = function() {
+                    return paqueteSeleccionadoHtml;
+                };
+
+                setTimeout(calcularPrecio, 50);
+            }
+        });
+    }
+
     if (bookingForm) {
       bookingForm.addEventListener('submit', (e) => {
         e.preventDefault();

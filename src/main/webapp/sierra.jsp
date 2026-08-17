@@ -47,7 +47,7 @@
                             <div class="meta mb-2">"<%= p.getDescripcion() %>"</div>
                             <div class="d-flex justify-content-between align-items-end mt-3">
                                 <div class="precio">S/ <%= String.format(java.util.Locale.US, "%.2f", p.getPrecioSoles()) %><small> / persona</small></div>
-                                <button class="btn-card-action" onclick="seleccionarDestinoHtml(this)" data-id="<%= p.getIdPaquete() %>" data-nombre="<%= p.getNombre() %>" data-precio="<%= p.getPrecioSoles() %>">Seleccionar <i class="bi bi-arrow-right"></i></button>
+                                <button class="btn-card-action" data-bs-toggle="modal" data-bs-target="#modalReserva" data-id="<%= p.getIdPaquete() %>" data-nombre="<%= p.getNombre() %>" data-precio="<%= p.getPrecioSoles() %>">Seleccionar <i class="bi bi-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>

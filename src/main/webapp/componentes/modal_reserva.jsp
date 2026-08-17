@@ -53,12 +53,11 @@
           </div>
 
           <div id="validationMsg" class="text-danger small mt-2 col-12 text-center"></div>
-          <input type="submit" id="btnSubmitOculto" class="d-none">
         </form>
       </div>
       <div class="modal-footer border-top-0 pt-0 pb-4 pb-md-5 px-4 px-md-5 d-flex justify-content-between">
         <button type="button" class="btn text-muted fw-semibold" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary-custom w-50" id="btnConfirmarReserva" onclick="document.getElementById('btnSubmitOculto').click();">Confirmar Reserva</button>
+        <button type="submit" form="bookingForm" class="btn btn-primary-custom w-50" id="btnConfirmarReserva">Confirmar Reserva</button>
       </div>
     </div>
   </div>
