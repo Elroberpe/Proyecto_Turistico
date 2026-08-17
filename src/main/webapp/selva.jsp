@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List" %>
-<%@ page import="com.turismo.modelo.Paquete" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -31,37 +31,33 @@
                 <p>Navega el río más caudaloso del mundo, descubre especies exóticas y alójate en lodges de ensueño inmersos en la naturaleza.</p>
             </div>
             <div class="row g-4" id="destinosContainer">
-                <% 
-                    List<Paquete> lista = (List<Paquete>) request.getAttribute("paquetes");
-                    if(lista != null && !lista.isEmpty()) {
-                        for(Paquete p : lista) {
-                %>
-                <div class="col-md-4">
-                    <div class="card-tour">
-                        <div class="img-wrap">
-                            <img src="<%= p.getImagenUrl() %>" alt="<%= p.getNombre() %>">
-                            <span class="badge-region"><i class="bi bi-geo-alt"></i> <%= p.getDestino() %></span>
-                        </div>
-                        <div class="body">
-                            <h3><%= p.getNombre() %></h3>
-                            <div class="meta mb-2">"<%= p.getDescripcion() %>"</div>
-                            <div class="d-flex justify-content-between align-items-end mt-3">
-                                <div class="precio">S/ <%= String.format(java.util.Locale.US, "%.2f", p.getPrecioSoles()) %><small> / persona</small></div>
-                                <button class="btn-card-action" data-bs-toggle="modal" data-bs-target="#modalReserva" data-id="<%= p.getIdPaquete() %>" data-nombre="<%= p.getNombre() %>" data-precio="<%= p.getPrecioSoles() %>">Seleccionar <i class="bi bi-arrow-right"></i></button>
+                <c:choose>
+                    <c:when test="${not empty paquetes}">
+                        <c:forEach items="${paquetes}" var="p">
+                            <div class="col-md-4">
+                                <div class="card-tour">
+                                    <div class="img-wrap">
+                                        <img src="${p.imagenUrl}" alt="${p.nombre}">
+                                        <span class="badge-region"><i class="bi bi-geo-alt"></i> ${p.destino}</span>
+                                    </div>
+                                    <div class="body">
+                                        <h3>${p.nombre}</h3>
+                                        <div class="meta mb-2">"${p.descripcion}"</div>
+                                        <div class="d-flex justify-content-between align-items-end mt-3">
+                                            <div class="precio">S/ <fmt:formatNumber value="${p.precioSoles}" minFractionDigits="2" maxFractionDigits="2"/><small> / persona</small></div>
+                                            <button class="btn-card-action" data-bs-toggle="modal" data-bs-target="#modalReserva" data-id="${p.idPaquete}" data-nombre="${p.nombre}" data-precio="${p.precioSoles}">Seleccionar <i class="bi bi-arrow-right"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="col-12 text-center text-muted">
+                            No hay paquetes disponibles para esta región.
                         </div>
-                    </div>
-                </div>
-                <% 
-                        }
-                    } else {
-                %>
-                <div class="col-12 text-center text-muted">
-                    No hay paquetes disponibles para esta región.
-                </div>
-                <% 
-                    }
-                %>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </section>
