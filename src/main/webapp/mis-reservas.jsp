@@ -86,7 +86,8 @@
                             </thead>
                             <tbody>
                                 <c:forEach items="${reservas}" var="r">
-                                    <c:set var="esCancelable" value="${r.estado.toLowerCase() != 'cancelada'}"/>
+                                    <c:set var="esPasada" value="${not empty r.fechaSalida and not empty fechaHoy and not r.fechaSalida.after(fechaHoy)}"/>
+                                    <c:set var="esCancelable" value="${r.estado.toLowerCase() != 'cancelada' and not esPasada}"/>
                                     <c:set var="total" value="${r.precioTotal != null ? r.precioTotal : 0}"/>
                                     <c:set var="subtotal" value="${total / 1.18}"/>
                                     <c:set var="igv" value="${total - subtotal}"/>
@@ -114,6 +115,12 @@
                                         <td class="fw-bold text-primary">S/ <fmt:formatNumber value="${total}" minFractionDigits="2" maxFractionDigits="2"/></td>
                                         <td>
                                             <c:choose>
+                                                <c:when test="${r.estado.equalsIgnoreCase('cancelada')}">
+                                                    <span class="badge bg-danger px-3">Cancelada</span>
+                                                </c:when>
+                                                <c:when test="${r.estado.equalsIgnoreCase('pagada') and esPasada}">
+                                                    <span class="badge bg-info text-dark px-3">Completada</span>
+                                                </c:when>
                                                 <c:when test="${r.estado.equalsIgnoreCase('pagada')}">
                                                     <span class="badge bg-success px-3">Pagada</span>
                                                 </c:when>
@@ -121,7 +128,7 @@
                                                     <span class="badge bg-warning text-dark px-3">Pendiente</span>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <span class="badge bg-danger px-3">Cancelada</span>
+                                                    <span class="badge bg-secondary px-3">${r.estado}</span>
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
@@ -184,6 +191,12 @@
                                                             <span class="text-muted"><i class="bi bi-info-circle me-2 text-primary"></i>Estado:</span>
                                                             <span>
                                                                 <c:choose>
+                                                                    <c:when test="${r.estado.equalsIgnoreCase('cancelada')}">
+                                                                        <span class="badge bg-danger rounded-pill px-3">Cancelada</span>
+                                                                    </c:when>
+                                                                    <c:when test="${r.estado.equalsIgnoreCase('pagada') and esPasada}">
+                                                                        <span class="badge bg-info text-dark rounded-pill px-3">Completada</span>
+                                                                    </c:when>
                                                                     <c:when test="${r.estado.equalsIgnoreCase('pagada')}">
                                                                         <span class="badge bg-success rounded-pill px-3">Pagada</span>
                                                                     </c:when>
@@ -191,7 +204,7 @@
                                                                         <span class="badge bg-warning text-dark rounded-pill px-3">Pendiente</span>
                                                                     </c:when>
                                                                     <c:otherwise>
-                                                                        <span class="badge bg-danger rounded-pill px-3">Cancelada</span>
+                                                                        <span class="badge bg-secondary rounded-pill px-3">${r.estado}</span>
                                                                     </c:otherwise>
                                                                 </c:choose>
                                                             </span>
@@ -214,6 +227,18 @@
                                                     </div>
 
                                                     <c:choose>
+                                                        <c:when test="${r.estado.equalsIgnoreCase('cancelada')}">
+                                                            <div class="alert alert-danger d-flex align-items-center border-0 small shadow-sm mb-3" role="alert">
+                                                                <i class="bi bi-x-octagon fs-4 me-2"></i>
+                                                                <div>Esta reserva ha sido cancelada.</div>
+                                                            </div>
+                                                        </c:when>
+                                                        <c:when test="${r.estado.equalsIgnoreCase('pagada') and esPasada}">
+                                                            <div class="alert alert-info d-flex align-items-center border-0 small shadow-sm mb-3" role="alert">
+                                                                <i class="bi bi-check2-all fs-4 me-2"></i>
+                                                                <div>Viaje concluido exitosamente.</div>
+                                                            </div>
+                                                        </c:when>
                                                         <c:when test="${r.estado.equalsIgnoreCase('pagada')}">
                                                             <div class="alert alert-success d-flex align-items-center border-0 small shadow-sm mb-3" role="alert">
                                                                 <i class="bi bi-shield-check fs-4 me-2"></i>
@@ -227,9 +252,8 @@
                                                             </div>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <div class="alert alert-danger d-flex align-items-center border-0 small shadow-sm mb-3" role="alert">
-                                                                <i class="bi bi-x-octagon fs-4 me-2"></i>
-                                                                <div>Esta reserva ha sido cancelada.</div>
+                                                            <div class="alert alert-secondary d-flex align-items-center border-0 small shadow-sm mb-3" role="alert">
+                                                                <div>Estado de reserva: ${r.estado}.</div>
                                                             </div>
                                                         </c:otherwise>
                                                     </c:choose>
