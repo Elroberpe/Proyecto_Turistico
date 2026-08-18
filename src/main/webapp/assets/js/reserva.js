@@ -150,7 +150,7 @@ function ocultarError() {
 }
 
 // ==================== PROCESAR PAGO ====================
-// Valida los datos del método de pago y envía la transacción al backend.
+// Valida los datos del método de pago, asigna los campos ocultos y envía el formulario al servlet.
 function procesarPago() {
     ocultarError();
     const metodoPago = document.getElementById('metodoPago').value;
@@ -166,35 +166,35 @@ function procesarPago() {
         const regexFecha   = /^(0[1-9]|1[0-2])\/\d{2}$/; // formato MM/AA
 
         if (!regexTarjeta.test(numeroTarjeta.replace(/\s/g, ''))) {
-            mostrarError('❌ Número de tarjeta inválido (debe tener 16 dígitos)');
+            mostrarError('Número de tarjeta inválido (debe tener 16 dígitos)');
             return;
         }
         if (!regexCVV.test(cvv)) {
-            mostrarError('❌ CVV inválido (3 dígitos)');
+            mostrarError('CVV inválido (3 dígitos)');
             return;
         }
         if (!regexFecha.test(fechaExp)) {
-            mostrarError('❌ Fecha de expiración inválida (MM/AA)');
+            mostrarError('Fecha de expiración inválida (MM/AA)');
             return;
         }
     }
 
-    // Deshabilitar botón y mostrar estado "procesando" para evitar doble envío
-    const btnPagar       = document.querySelector('#paymentForm button[type="submit"]');
-    const textoOriginal  = btnPagar.innerHTML;
-    btnPagar.innerHTML   = '<i class="bi bi-hourglass-split"></i> Procesando y guardando en BD...';
-    btnPagar.disabled    = true;
-
     const reservaStr = localStorage.getItem('reservaActual');
     if (!reservaStr) {
-        mostrarError('❌ No hay datos de reserva activos.');
-        btnPagar.innerHTML = textoOriginal;
-        btnPagar.disabled = false;
+        mostrarError('No hay datos de reserva activos.');
         return;
     }
 
-    const reserva = JSON.parse(reservaStr);
-    const idPaquete = (reserva.destino && (reserva.destino.idPaquete || reserva.destino.id)) ? (reserva.destino.idPaquete || reserva.destino.id) : 1;
+    let reserva;
+    try {
+        reserva = JSON.parse(reservaStr);
+    } catch (e) {
+        mostrarError('Datos de reserva corruptos o incompletos.');
+        return;
+    }
+
+    const idPaquete = (reserva.destino && (reserva.destino.idPaquete || reserva.destino.id)) 
+        ? (reserva.destino.idPaquete || reserva.destino.id) : 1;
     
     let idMetodoInt = 1;
     if (metodoPago === 'yape') idMetodoInt = 2;
@@ -202,73 +202,36 @@ function procesarPago() {
 
     const tipoViajeParam = (reserva.tipoViaje === 'oneway' || reserva.tipoViaje === 'ida') ? 'ida' : 'idavuelta';
 
-    const params = new URLSearchParams();
-    params.append('id_paquete', idPaquete);
-    params.append('tipo_viaje', tipoViajeParam);
-    params.append('fecha_salida', reserva.fechaSalida);
-    params.append('fecha_retorno', reserva.fechaRetorno || '');
-    params.append('num_pasajeros', reserva.pasajeros || 1);
-    params.append('precio_total', reserva.precioTotal);
-    params.append('id_metodo', idMetodoInt);
+    // Poblar campos ocultos del formulario POST
+    const inputIdPaquete = document.getElementById('input_id_paquete');
+    const inputTipoViaje = document.getElementById('input_tipo_viaje');
+    const inputFechaSalida = document.getElementById('input_fecha_salida');
+    const inputFechaRetorno = document.getElementById('input_fecha_retorno');
+    const inputNumPasajeros = document.getElementById('input_num_pasajeros');
+    const inputPrecioTotal = document.getElementById('input_precio_total');
+    const inputIdMetodo = document.getElementById('input_id_metodo');
 
-    fetch('procesarPago', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-        },
-        body: params.toString()
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            let confirmadas = JSON.parse(localStorage.getItem('reservasConfirmadas')) || [];
-            confirmadas.push({
-                ...reserva,
-                idReservaBD: data.idReserva,
-                idPagoBD: data.idPago,
-                estado: 'confirmada',
-                fechaPago: new Date().toLocaleString()
-            });
+    if (inputIdPaquete) inputIdPaquete.value = idPaquete;
+    if (inputTipoViaje) inputTipoViaje.value = tipoViajeParam;
+    if (inputFechaSalida) inputFechaSalida.value = reserva.fechaSalida || '';
+    if (inputFechaRetorno) inputFechaRetorno.value = reserva.fechaRetorno || '';
+    if (inputNumPasajeros) inputNumPasajeros.value = reserva.pasajeros || 1;
+    if (inputPrecioTotal) inputPrecioTotal.value = reserva.precioTotal || 0;
+    if (inputIdMetodo) inputIdMetodo.value = idMetodoInt;
 
-            localStorage.setItem('reservasConfirmadas', JSON.stringify(confirmadas));
-            localStorage.removeItem('reservaActual');   // Limpiar reserva activa
+    // Deshabilitar botón y mostrar estado "procesando"
+    const btnPagar = document.querySelector('#paymentForm button[type="submit"]');
+    if (btnPagar) {
+        btnPagar.innerHTML = '<i class="bi bi-hourglass-split me-2"></i> Procesando reserva y pago...';
+        btnPagar.disabled = true;
+    }
 
-            // Poblar datos del modal
-            const elIdReserva = document.getElementById('confirmIdReserva');
-            const elIdPago = document.getElementById('confirmIdPago');
-            const elDestino = document.getElementById('confirmDestino');
-            const elTotal = document.getElementById('confirmTotal');
-            const btnAceptar = document.getElementById('btnAceptarExito');
+    // Limpiar reserva activa de localStorage
+    localStorage.removeItem('reservaActual');
 
-            if (elIdReserva) elIdReserva.textContent = `#${data.idReserva}`;
-            if (elIdPago) elIdPago.textContent = `#${data.idPago}`;
-            if (elDestino) elDestino.textContent = reserva.destino ? reserva.destino.nombre : 'Paquete Turístico';
-            if (elTotal) elTotal.textContent = `S/ ${reserva.precioTotal.toFixed(2)}`;
-
-            const modalEl = document.getElementById('modalExitoPago');
-            if (modalEl) {
-                const modal = new bootstrap.Modal(modalEl);
-                modal.show();
-
-                if (btnAceptar) {
-                    btnAceptar.onclick = function() {
-                        modal.hide();
-                        window.location.href = 'index.jsp';
-                    };
-                }
-            } else {
-                window.location.href = 'index.jsp';
-            }
-        } else {
-            mostrarError('❌ ' + data.mensaje);
-            btnPagar.innerHTML = textoOriginal;
-            btnPagar.disabled = false;
-        }
-    })
-    .catch(error => {
-        console.error('Error al procesar pago:', error);
-        mostrarError('❌ Ocurrió un error inesperado al conectar con el servidor.');
-        btnPagar.innerHTML = textoOriginal;
-        btnPagar.disabled = false;
-    });
+    // Enviar formulario al servlet ProcesarPagoServlet
+    const paymentForm = document.getElementById('paymentForm');
+    if (paymentForm) {
+        paymentForm.submit();
+    }
 }
