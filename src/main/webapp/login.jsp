@@ -30,16 +30,16 @@
 
 				<!-- ALERTAS DE ESTADO -->
 				<c:if test="${not empty sessionScope.mensaje}">
-					<div class="alert alert-success alert-dismissible fade show shadow-sm rounded-4 mb-4" role="alert">
-						<i class="bi bi-check-circle-fill me-2"></i> ${sessionScope.mensaje}
-						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					<div class="alert alert-success alert-dismissible fade show rounded-3 small py-2 text-center" role="alert">
+						<i class="bi bi-check-circle-fill me-1"></i> ${sessionScope.mensaje}
+						<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 					</div>
 					<c:remove var="mensaje" scope="session" />
 				</c:if>
 
 				<c:if test="${not empty sessionScope.error}">
-					<div class="alert alert-danger alert-dismissible fade show shadow-sm rounded-4 mb-4" role="alert">
-						<i class="bi bi-exclamation-circle-fill me-2"></i> ${sessionScope.error}
+					<div class="alert alert-danger alert-dismissible fade show rounded-3 small py-2 text-center" role="alert">
+						<i class="bi bi-exclamation-circle-fill me-1"></i> ${sessionScope.error}
 						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 					</div>
 					<c:remove var="error" scope="session" />
