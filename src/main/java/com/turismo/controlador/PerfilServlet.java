@@ -72,17 +72,17 @@ public class PerfilServlet extends HttpServlet {
 
                 if (exito) {
                     session.setAttribute("usuario", u);
-                    session.setAttribute("mensaje", "✅ Tu perfil ha sido actualizado correctamente.");
+                    session.setAttribute("mensaje", "Tu perfil ha sido actualizado correctamente.");
                 } else {
-                    session.setAttribute("error", "❌ Error al actualizar los datos en la base de datos.");
+                    session.setAttribute("error", "Error al actualizar los datos en la base de datos.");
                 }
             } else {
-                session.setAttribute("error", "❌ Usuario no encontrado.");
+                session.setAttribute("error", "Usuario no encontrado.");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            session.setAttribute("error", "❌ Error inesperado al procesar la actualización.");
+            session.setAttribute("error", "Error inesperado al procesar la actualización.");
         }
 
         response.sendRedirect(request.getContextPath() + "/perfil");
