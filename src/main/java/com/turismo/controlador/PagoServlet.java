@@ -71,7 +71,7 @@ public class PagoServlet extends HttpServlet {
             Reserva reserva = reservaDao.obtenerPorId(idReserva);
             if (reserva == null || !"pendiente".equals(reserva.getEstado())) {
                 request.getSession().setAttribute("error", 
-                    "❌ Solo se pueden pagar reservas en estado 'pendiente'.");
+                    "Solo se pueden pagar reservas en estado 'pendiente'.");
                 response.sendRedirect(request.getContextPath() + "/admin/pagos");
                 return;
             }
@@ -87,20 +87,20 @@ public class PagoServlet extends HttpServlet {
                 // Sincronizar estado de reserva según el pago
                 if ("pagado".equals(p.getEstado())) {
                     reservaDao.actualizarEstado(idReserva, "pagada");
-                    request.getSession().setAttribute("mensaje", "✅ Pago registrado. Reserva marcada como Pagada.");
+                    request.getSession().setAttribute("mensaje", "Pago registrado. Reserva marcada como Pagada.");
                 } else if ("rechazado".equals(p.getEstado())) {
                     reservaDao.actualizarEstado(idReserva, "cancelada");
-                    request.getSession().setAttribute("mensaje", "✅ Pago rechazado. Reserva cancelada.");
+                    request.getSession().setAttribute("mensaje", "Pago rechazado. Reserva cancelada.");
                 } else if ("reembolsado".equals(p.getEstado())) {
                     reservaDao.actualizarEstado(idReserva, "cancelada");
-                    request.getSession().setAttribute("mensaje", "✅ Pago reembolsado. Reserva cancelada.");
+                    request.getSession().setAttribute("mensaje", "Pago reembolsado. Reserva cancelada.");
                 }
             } else {
-                request.getSession().setAttribute("error", "❌ Error al crear el pago.");
+                request.getSession().setAttribute("error", "Error al crear el pago.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado al crear pago.");
+            request.getSession().setAttribute("error", "Error inesperado al crear pago.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/pagos");
     }
@@ -117,7 +117,7 @@ public class PagoServlet extends HttpServlet {
             // Obtener pago actual para saber el estado anterior
             Pago pagoActual = pagoDao.obtenerPorId(id);
             if (pagoActual == null) {
-                request.getSession().setAttribute("error", "❌ Pago no encontrado.");
+                request.getSession().setAttribute("error", "Pago no encontrado.");
                 response.sendRedirect(request.getContextPath() + "/admin/pagos");
                 return;
             }
@@ -140,13 +140,13 @@ public class PagoServlet extends HttpServlet {
                            && !"rechazado".equals(estadoAnterior) && !"reembolsado".equals(estadoAnterior)) {
                     reservaDao.actualizarEstado(idReserva, "cancelada");
                 }
-                request.getSession().setAttribute("mensaje", "✅ Pago actualizado.");
+                request.getSession().setAttribute("mensaje", "Pago actualizado.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al actualizar el pago.");
+                request.getSession().setAttribute("error", "Error al actualizar el pago.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado al editar pago.");
+            request.getSession().setAttribute("error", "Error inesperado al editar pago.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/pagos");
     }
@@ -168,18 +168,18 @@ public class PagoServlet extends HttpServlet {
                     // Actualizar reserva a "pendiente"
                     reservaDao.actualizarEstado(idReserva, "pendiente");
                     request.getSession().setAttribute("mensaje", 
-                        "✅ Pago eliminado. Reserva #" + idReserva + " vuelta a estado Pendiente.");
+                        "Pago eliminado. Reserva #" + idReserva + " vuelta a estado Pendiente.");
                 } else {
-                    request.getSession().setAttribute("error", "❌ Error al eliminar el pago.");
+                    request.getSession().setAttribute("error", "Error al eliminar el pago.");
                 }
             } else {
-                request.getSession().setAttribute("error", "❌ Pago no encontrado.");
+                request.getSession().setAttribute("error", "Pago no encontrado.");
             }
         } catch (NumberFormatException e) {
-            request.getSession().setAttribute("error", "❌ ID inválido.");
+            request.getSession().setAttribute("error", "ID inválido.");
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado al eliminar pago.");
+            request.getSession().setAttribute("error", "Error inesperado al eliminar pago.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/pagos");
     }
