@@ -19,7 +19,7 @@ public class AuthServlet extends HttpServlet {
     private UsuarioDao dao = new UsuarioDao();
 
     @Override
-    protected void doPost(HttpServletRequest request,HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String accion = request.getParameter("accion");
@@ -34,7 +34,7 @@ public class AuthServlet extends HttpServlet {
                 break;
 
             default:
-                response.sendRedirect("login");
+                response.sendRedirect(request.getContextPath() + "/login");
         }
     }
     
@@ -46,7 +46,7 @@ public class AuthServlet extends HttpServlet {
 
         if ("logout".equals(accion)) {
             request.getSession().invalidate();
-            response.sendRedirect("index.jsp");
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
         } else {
             request.getRequestDispatcher("/login.jsp").forward(request, response);
         }
@@ -66,19 +66,21 @@ public class AuthServlet extends HttpServlet {
             session.setAttribute("usuario", usuario);
 
             if (usuario.getIdRol() == 2) {
-                response.sendRedirect("admin/dashboard");
+                response.sendRedirect(request.getContextPath() + "/admin/dashboard");
             } else {
                 String redirect = request.getParameter("redirect");
                 if ("reserva".equals(redirect)) {
-                    response.sendRedirect("reserva.jsp");
+                    response.sendRedirect(request.getContextPath() + "/reserva.jsp");
                 } else {
-                    response.sendRedirect("index.jsp");
+                    response.sendRedirect(request.getContextPath() + "/index.jsp");
                 }
             }
 
         } else {
-            String redirectParam = request.getParameter("redirect") != null ? "&redirect=" + request.getParameter("redirect") : "";
-            response.sendRedirect("login?error=1" + redirectParam);
+            request.getSession().setAttribute("error", "Correo o contraseña incorrectos.");
+            String redirect = request.getParameter("redirect");
+            String redirectParam = (redirect != null && !redirect.trim().isEmpty()) ? "?redirect=" + redirect : "";
+            response.sendRedirect(request.getContextPath() + "/login" + redirectParam);
         }
 
     }
@@ -95,11 +97,15 @@ public class AuthServlet extends HttpServlet {
         usuario.setPassword(request.getParameter("password"));
         usuario.setTelefono(request.getParameter("telefono"));
 
-        String redirectParam = request.getParameter("redirect") != null ? "&redirect=" + request.getParameter("redirect") : "";
+        String redirect = request.getParameter("redirect");
+        String redirectParam = (redirect != null && !redirect.trim().isEmpty()) ? "?redirect=" + redirect : "";
+
         if (dao.registrar(usuario)) {
-            response.sendRedirect("login?registro=ok" + redirectParam);
+            request.getSession().setAttribute("mensaje", "Cuenta creada con éxito. Ya puedes iniciar sesión.");
+            response.sendRedirect(request.getContextPath() + "/login" + redirectParam);
         } else {
-            response.sendRedirect("login?registro=error" + redirectParam);
+            request.getSession().setAttribute("error", "No se pudo registrar la cuenta. El correo ya podría estar en uso.");
+            response.sendRedirect(request.getContextPath() + "/login" + redirectParam);
         }
 
     }
