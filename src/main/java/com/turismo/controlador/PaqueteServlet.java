@@ -66,13 +66,13 @@ public class PaqueteServlet extends HttpServlet {
             p.setEstado(request.getParameter("estado"));
 
             if (dao.crear(p)) {
-                request.getSession().setAttribute("mensaje", "✅ Paquete creado correctamente.");
+                request.getSession().setAttribute("mensaje", "Paquete creado correctamente.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al crear el paquete.");
+                request.getSession().setAttribute("error", "Error al crear el paquete.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado al crear paquete.");
+            request.getSession().setAttribute("error", "Error inesperado al crear paquete.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/paquetes");
     }
@@ -91,13 +91,13 @@ public class PaqueteServlet extends HttpServlet {
             p.setEstado(request.getParameter("estado"));
 
             if (dao.actualizar(p)) {
-                request.getSession().setAttribute("mensaje", "✅ Paquete actualizado correctamente.");
+                request.getSession().setAttribute("mensaje", "Paquete actualizado correctamente.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al actualizar el paquete.");
+                request.getSession().setAttribute("error", "Error al actualizar el paquete.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado al editar paquete.");
+            request.getSession().setAttribute("error", "Error inesperado al editar paquete.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/paquetes");
     }
@@ -106,15 +106,15 @@ public class PaqueteServlet extends HttpServlet {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
             if (dao.eliminar(id)) {
-                request.getSession().setAttribute("mensaje", "✅ Paquete eliminado correctamente.");
+                request.getSession().setAttribute("mensaje", "Paquete eliminado correctamente.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al eliminar el paquete.");
+                request.getSession().setAttribute("error", "Error al eliminar el paquete.");
             }
         } catch (NumberFormatException e) {
-            request.getSession().setAttribute("error", "❌ ID inválido.");
+            request.getSession().setAttribute("error", "ID inválido.");
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado al eliminar paquete.");
+            request.getSession().setAttribute("error", "Error inesperado al eliminar paquete.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/paquetes");
     }
