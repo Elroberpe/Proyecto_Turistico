@@ -57,13 +57,13 @@ public class CategoriaServlet extends HttpServlet {
             c.setDescripcion(request.getParameter("descripcion").trim());
 
             if (dao.crear(c)) {
-                request.getSession().setAttribute("mensaje", "✅ Categoría creada correctamente.");
+                request.getSession().setAttribute("mensaje", "Categoría creada correctamente.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al crear la categoría.");
+                request.getSession().setAttribute("error", "Error al crear la categoría.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado al guardar.");
+            request.getSession().setAttribute("error", "Error inesperado al guardar.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/categorias");
     }
@@ -79,13 +79,13 @@ public class CategoriaServlet extends HttpServlet {
             c.setDescripcion(request.getParameter("descripcion").trim());
 
             if (dao.editar(c)) {
-                request.getSession().setAttribute("mensaje", "✅ Categoría actualizada correctamente.");
+                request.getSession().setAttribute("mensaje", "Categoría actualizada correctamente.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al actualizar la categoría.");
+                request.getSession().setAttribute("error", "Error al actualizar la categoría.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado al actualizar.");
+            request.getSession().setAttribute("error", "Error inesperado al actualizar.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/categorias");
     }
@@ -99,15 +99,15 @@ public class CategoriaServlet extends HttpServlet {
             int count = dao.contarPaquetesPorCategoria(id);
 
             if (count > 0) {
-                request.getSession().setAttribute("error", "❌ No se puede eliminar. La categoría tiene " + count + " paquetes asociados.");
+                request.getSession().setAttribute("error", "No se puede eliminar. La categoría tiene " + count + " paquetes asociados.");
             } else if (dao.eliminar(id)) {
-                request.getSession().setAttribute("mensaje", "✅ Categoría eliminada correctamente.");
+                request.getSession().setAttribute("mensaje", "Categoría eliminada correctamente.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al eliminar la categoría.");
+                request.getSession().setAttribute("error", "Error al eliminar la categoría.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado al eliminar.");
+            request.getSession().setAttribute("error", "Error inesperado al eliminar.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/categorias");
     }
