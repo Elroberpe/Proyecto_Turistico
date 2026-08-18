@@ -65,13 +65,13 @@ public class ClienteServlet extends HttpServlet {
             u.setIdRol(1); // Rol Cliente
 
             if (dao.registrar(u)) {
-                request.getSession().setAttribute("mensaje", "✅ Cliente registrado correctamente.");
+                request.getSession().setAttribute("mensaje", "Cliente registrado correctamente.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al registrar el cliente.");
+                request.getSession().setAttribute("error", "Error al registrar el cliente.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado.");
+            request.getSession().setAttribute("error", "Error inesperado.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/clientes");
     }
@@ -88,13 +88,13 @@ public class ClienteServlet extends HttpServlet {
             u.setIdRol(1);
 
             if (dao.actualizar(u)) {
-                request.getSession().setAttribute("mensaje", "✅ Cliente actualizado correctamente.");
+                request.getSession().setAttribute("mensaje", "Cliente actualizado correctamente.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al actualizar el cliente.");
+                request.getSession().setAttribute("error", "Error al actualizar el cliente.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado.");
+            request.getSession().setAttribute("error", "Error inesperado.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/clientes");
     }
@@ -103,15 +103,15 @@ public class ClienteServlet extends HttpServlet {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
             if (dao.eliminar(id)) {
-                request.getSession().setAttribute("mensaje", "✅ Cliente eliminado correctamente.");
+                request.getSession().setAttribute("mensaje", "Cliente eliminado correctamente.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al eliminar el cliente.");
+                request.getSession().setAttribute("error", "Error al eliminar el cliente.");
             }
         } catch (NumberFormatException e) {
-            request.getSession().setAttribute("error", "❌ ID inválido.");
+            request.getSession().setAttribute("error", "ID inválido.");
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado al eliminar.");
+            request.getSession().setAttribute("error", "Error inesperado al eliminar.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/clientes");
     }
