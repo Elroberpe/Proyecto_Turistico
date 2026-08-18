@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -26,19 +25,21 @@ public class ProcesarPagoServlet extends HttpServlet {
     private PagoDao pagoDao = new PagoDao();
 
     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.sendRedirect(request.getContextPath() + "/reserva.jsp");
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
 
         HttpSession session = request.getSession(false);
         Usuario usuario = (session != null) ? (Usuario) session.getAttribute("usuario") : null;
 
         if (usuario == null) {
-            out.print("{\"success\": false, \"mensaje\": \"Sesión no iniciada. Por favor inicie sesión.\"}");
-            out.flush();
+            request.getSession().setAttribute("error", "Debes iniciar sesión para completar la reserva.");
+            response.sendRedirect(request.getContextPath() + "/login?redirect=reserva");
             return;
         }
 
@@ -58,7 +59,7 @@ public class ProcesarPagoServlet extends HttpServlet {
                 idMetodo = 2; // Yape
             } else if ("3".equals(metodoStr) || "plin".equalsIgnoreCase(metodoStr)) {
                 idMetodo = 3; // Plin
-            } else if (metodoStr != null && !metodoStr.isEmpty()) {
+            } else if (metodoStr != null && !metodoStr.trim().isEmpty()) {
                 try {
                     idMetodo = Integer.parseInt(metodoStr);
                 } catch (NumberFormatException e) {
@@ -80,10 +81,9 @@ public class ProcesarPagoServlet extends HttpServlet {
             r.setEstado("pendiente");
 
             boolean reservaCreada = reservaDao.crear(r);
-
             if (!reservaCreada) {
-                out.print("{\"success\": false, \"mensaje\": \"Error al crear la reserva en la base de datos.\"}");
-                out.flush();
+                request.getSession().setAttribute("error", "Error al crear la reserva en la base de datos.");
+                response.sendRedirect(request.getContextPath() + "/reserva.jsp");
                 return;
             }
 
@@ -96,22 +96,20 @@ public class ProcesarPagoServlet extends HttpServlet {
             p.setFechaPago(new Timestamp(System.currentTimeMillis()));
 
             boolean pagoCreado = pagoDao.crear(p);
-
             if (pagoCreado) {
-                // Ahora que el pago fue exitoso, actualizamos la reserva de "pendiente" a "pagada"
+                // Sincronizar estado de la reserva a "pagada"
                 reservaDao.actualizarEstado(r.getIdReserva(), "pagada");
-                out.print("{\"success\": true, \"idReserva\": " + r.getIdReserva() + 
-                          ", \"idPago\": " + p.getIdPago() + 
-                          ", \"mensaje\": \"¡Pago y reserva procesados correctamente!\"}" );
+                request.getSession().setAttribute("mensaje", "Tu reserva #" + r.getIdReserva() + " y pago han sido procesados exitosamente.");
             } else {
-                // El pago falló: la reserva queda en "pendiente" (estado consistente)
-                out.print("{\"success\": false, \"mensaje\": \"Reserva registrada, pero ocurrió un error al registrar el pago.\"}" );
+                request.getSession().setAttribute("error", "Reserva registrada (#" + r.getIdReserva() + "), pero ocurrió un problema al registrar el pago.");
             }
+
+            response.sendRedirect(request.getContextPath() + "/mis-reservas");
 
         } catch (Exception e) {
             e.printStackTrace();
-            out.print("{\"success\": false, \"mensaje\": \"Error al procesar la solicitud: " + e.getMessage() + "\"}");
+            request.getSession().setAttribute("error", "Error al procesar la reserva: " + e.getMessage());
+            response.sendRedirect(request.getContextPath() + "/reserva.jsp");
         }
-        out.flush();
     }
 }
