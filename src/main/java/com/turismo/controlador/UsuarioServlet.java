@@ -69,13 +69,13 @@ public class UsuarioServlet extends HttpServlet {
             u.setIdRol(rol);
 
             if (dao.registrar(u)) {
-                request.getSession().setAttribute("mensaje", "✅ Usuario registrado correctamente.");
+                request.getSession().setAttribute("mensaje", "Usuario registrado correctamente.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al registrar el usuario.");
+                request.getSession().setAttribute("error", "Error al registrar el usuario.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado.");
+            request.getSession().setAttribute("error", "Error inesperado.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/usuarios");
     }
@@ -96,13 +96,13 @@ public class UsuarioServlet extends HttpServlet {
             }
 
             if (dao.actualizar(u)) {
-                request.getSession().setAttribute("mensaje", "✅ Usuario actualizado correctamente.");
+                request.getSession().setAttribute("mensaje", "Usuario actualizado correctamente.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al actualizar el usuario.");
+                request.getSession().setAttribute("error", "Error al actualizar el usuario.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado.");
+            request.getSession().setAttribute("error", "Error inesperado.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/usuarios");
     }
@@ -111,15 +111,15 @@ public class UsuarioServlet extends HttpServlet {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
             if (dao.eliminar(id)) {
-                request.getSession().setAttribute("mensaje", "✅ Usuario eliminado correctamente.");
+                request.getSession().setAttribute("mensaje", "Usuario eliminado correctamente.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al eliminar el usuario.");
+                request.getSession().setAttribute("error", "Error al eliminar el usuario.");
             }
         } catch (NumberFormatException e) {
-            request.getSession().setAttribute("error", "❌ ID inválido.");
+            request.getSession().setAttribute("error", "ID inválido.");
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado al eliminar.");
+            request.getSession().setAttribute("error", "Error inesperado al eliminar.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/usuarios");
     }
