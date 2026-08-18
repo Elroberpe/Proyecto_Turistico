@@ -1,248 +1,253 @@
-// ==================== LÓGICA CENTRALIZADA DEL MODAL DE RESERVA ====================
-// Este archivo maneja todo el comportamiento del formulario flotante (modal),
-// el recálculo de precios, y el almacenamiento de la reserva.
-// Se usa tanto en la portada (index) como en las regiones.
+// =============================================================================
+// MODAL DE RESERVA - CONTROLADOR JS
+// =============================================================================
+// Administra el comportamiento del modal de reserva flotante:
+// - Selección de paquetes turísticos (vía JavaScript o atributos data-bs-* de HTML)
+// - Validación y restricciones dinámicas de fechas (ida y vuelta / solo ida)
+// - Cálculo en tiempo real del precio total (Subtotal + 18% IGV)
+// - Guardado de cotización en localStorage y redirección a checkout / login
+// =============================================================================
 
-// Nota: Depende de que main.js o region.js expongan la función 'window.getPaqueteParaModal(id)'
-// y opcionalmente definan 'tipoCambioActual'. Si no, usa valores por defecto.
+let paqueteSeleccionado = null;
+
+// Referencias a los elementos del DOM (inicializadas al cargar la página)
+let el = {};
 
 document.addEventListener('DOMContentLoaded', () => {
-    initEventosBuscador();
-    setFechasMinimas();
+    cachearElementosDOM();
+    if (!el.modal) return;
+
+    registrarEventos();
+    configurarFechasIniciales();
 });
 
-// Abre el modal y prepara el formulario para un paquete específico
-window.seleccionarDestino = function(id) {
-    const destinoSelect = document.getElementById('destinoSelect');
-    if (destinoSelect) {
-        destinoSelect.value = id;
-        destinoSelect.dispatchEvent(new Event('change'));
-    }
-    
-    const modalEl = document.getElementById('modalReserva');
-    if (modalEl) {
-        // Llama a la función definida en main.js o region.js
-        let paquete = null;
-        if (typeof window.getPaqueteParaModal === 'function') {
-            paquete = window.getPaqueteParaModal(id);
-        }
-
-        const modalDestinoNombre = document.getElementById('modalDestinoNombre');
-        if(modalDestinoNombre && paquete) {
-            modalDestinoNombre.textContent = paquete.nombre;
-        }
-        
-        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
-        modal.show();
-    }
-};
-
-function mostrarErrorValidacion(msg) {
-    const validationMsg = document.getElementById('validationMsg');
-    if (validationMsg) {
-        validationMsg.textContent = msg || '';
-    }
+// =============================================================================
+// 1. INICIALIZACIÓN Y CACHÉ DE ELEMENTOS DEL DOM
+// =============================================================================
+function cachearElementosDOM() {
+    el = {
+        modal: document.getElementById('modalReserva'),
+        form: document.getElementById('bookingForm'),
+        destinoSelect: document.getElementById('destinoSelect'),
+        destinoNombre: document.getElementById('modalDestinoNombre'),
+        tipoViaje: document.getElementById('tipoViaje'),
+        pasajeros: document.getElementById('pasajerosSelect'),
+        fechaSalida: document.getElementById('fechaSalida'),
+        fechaRetorno: document.getElementById('fechaRetorno'),
+        retornoGroup: document.getElementById('retornoGroup'),
+        precioDisplay: document.getElementById('precioSoles'),
+        validationMsg: document.getElementById('validationMsg'),
+        isLoggedIn: document.getElementById('isUserLoggedIn')
+    };
 }
 
-function actualizarFechasMinimasRetorno() {
-    const fechaSalida = document.getElementById('fechaSalida');
-    const fechaRetorno = document.getElementById('fechaRetorno');
-    if (!fechaSalida || !fechaRetorno) return;
-
-    if (fechaSalida.value) {
-        const salida = new Date(fechaSalida.value + 'T00:00:00');
-        const minRetorno = new Date(salida);
-        minRetorno.setDate(minRetorno.getDate() + 1);
-        const minRetornoStr = minRetorno.toISOString().split('T')[0];
-        fechaRetorno.min = minRetornoStr;
-
-        if (fechaRetorno.value && fechaRetorno.value <= fechaSalida.value) {
-            fechaRetorno.value = '';
-            mostrarErrorValidacion('⚠️ La fecha de retorno debe ser posterior a la fecha de salida.');
+function registrarEventos() {
+    // Cambio en tipo de viaje (Solo Ida / Ida y Vuelta)
+    el.tipoViaje?.addEventListener('change', () => {
+        const esSoloIda = el.tipoViaje.value === 'oneway';
+        if (el.retornoGroup) el.retornoGroup.style.display = esSoloIda ? 'none' : 'block';
+        if (el.fechaRetorno) {
+            el.fechaRetorno.required = !esSoloIda;
+            if (esSoloIda) el.fechaRetorno.value = '';
         }
-    }
-}
+        actualizarRestriccionRetorno();
+        calcularPrecio();
+    });
 
-function initEventosBuscador() {
-    const tipoViaje = document.getElementById('tipoViaje');
-    const destinoSelect = document.getElementById('destinoSelect');
-    const fechaSalida = document.getElementById('fechaSalida');
-    const fechaRetorno = document.getElementById('fechaRetorno');
-    const pasajerosSelect = document.getElementById('pasajerosSelect');
-    const bookingForm = document.getElementById('bookingForm');
-  
-    if (tipoViaje) {
-        tipoViaje.addEventListener('change', () => { 
-            toggleRetorno(); 
-            actualizarFechasMinimasRetorno();
-            calcularPrecio(); 
-        });
-    }
-    if (destinoSelect) destinoSelect.addEventListener('change', calcularPrecio);
-    if (fechaSalida) {
-        fechaSalida.addEventListener('change', () => {
-            actualizarFechasMinimasRetorno();
-            calcularPrecio();
-        });
-    }
-    if (fechaRetorno) {
-        fechaRetorno.addEventListener('change', () => {
-            calcularPrecio();
-        });
-    }
-    if (pasajerosSelect) pasajerosSelect.addEventListener('change', calcularPrecio);
-  
-    const modalEl = document.getElementById('modalReserva');
-    if (modalEl) {
-        modalEl.addEventListener('show.bs.modal', (event) => {
-            mostrarErrorValidacion('');
-            setFechasMinimas();
-            const btn = event.relatedTarget;
-            if (btn && btn.hasAttribute('data-id')) {
-                const id = btn.getAttribute('data-id');
-                const nombre = btn.getAttribute('data-nombre');
-                const precio = parseFloat(btn.getAttribute('data-precio')) || 0;
+    // Recálculo reactivo ante cambios en el formulario
+    el.destinoSelect?.addEventListener('change', calcularPrecio);
+    el.pasajeros?.addEventListener('change', calcularPrecio);
+    el.fechaSalida?.addEventListener('change', () => {
+        actualizarRestriccionRetorno();
+        calcularPrecio();
+    });
+    el.fechaRetorno?.addEventListener('change', calcularPrecio);
 
-                if (destinoSelect) {
-                    destinoSelect.value = id;
-                }
+    // Apertura nativa de Bootstrap (Tarjetas renderizadas en JSPs con data-bs-*)
+    el.modal?.addEventListener('show.bs.modal', (event) => {
+        mostrarError('');
+        configurarFechasIniciales();
 
-                paqueteSeleccionadoHtml = {
-                    idPaquete: id,
-                    nombre: nombre,
-                    precioSoles: precio,
-                    precioBase: precio
-                };
+        const triggerBtn = event.relatedTarget;
+        if (triggerBtn && triggerBtn.hasAttribute('data-id')) {
+            const id = triggerBtn.getAttribute('data-id');
+            const nombre = triggerBtn.getAttribute('data-nombre');
+            const precio = parseFloat(triggerBtn.getAttribute('data-precio')) || 0;
 
-                const modalDestinoNombre = document.getElementById('modalDestinoNombre');
-                if (modalDestinoNombre) {
-                    modalDestinoNombre.textContent = nombre;
-                }
+            cargarPaqueteEnModal({
+                idPaquete: id,
+                nombre: nombre,
+                precioSoles: precio,
+                precioBase: precio
+            });
+        }
+    });
 
-                window.getPaqueteParaModal = function() {
-                    return paqueteSeleccionadoHtml;
-                };
-
-                setTimeout(calcularPrecio, 50);
-            }
-        });
-    }
-
-    if (bookingForm) {
-      bookingForm.addEventListener('submit', (e) => {
+    // Envío del formulario
+    el.form?.addEventListener('submit', (e) => {
         e.preventDefault();
         procesarReserva();
-      });
-    }
+    });
 }
-  
-function toggleRetorno() {
-    const tipoViaje = document.getElementById('tipoViaje');
-    const retornoGroup = document.getElementById('retornoGroup');
-    const fechaRetorno = document.getElementById('fechaRetorno');
-    if (tipoViaje && retornoGroup) {
-        if (tipoViaje.value === 'oneway') {
-            retornoGroup.style.display = 'none';
-            if (fechaRetorno) {
-                fechaRetorno.value = '';
-                fechaRetorno.required = false;
-            }
-        } else {
-            retornoGroup.style.display = 'block';
-            if (fechaRetorno) {
-                fechaRetorno.required = true;
-            }
-        }
-    }
-}
-  
-function calcularPrecioConImpuestos(subtotal) {
-    const igv = subtotal * 0.18;
-    const total = subtotal + igv;
-    return { igv, total };
-}
-  
-function calcularPrecio() {
-    const destinoSelect = document.getElementById('destinoSelect');
-    const fechaSalida = document.getElementById('fechaSalida');
-    const fechaRetorno = document.getElementById('fechaRetorno');
-    const tipoViaje = document.getElementById('tipoViaje');
-    const pasajerosSelect = document.getElementById('pasajerosSelect');
-    const precioSolesSpan = document.getElementById('precioSoles');
-  
-    mostrarErrorValidacion('');
 
-    if (!destinoSelect || !destinoSelect.value) return 0;
-  
-    const destinoId = parseInt(destinoSelect.value);
-    
-    let destino = null;
+// =============================================================================
+// 2. GESTIÓN DEL PAQUETE SELECCIONADO
+// =============================================================================
+
+/**
+ * Carga un paquete en el modal y actualiza el título y selector.
+ */
+function cargarPaqueteEnModal(paquete) {
+    if (!paquete) return;
+    paqueteSeleccionado = paquete;
+
+    if (el.destinoSelect) el.destinoSelect.value = paquete.idPaquete || paquete.id || '';
+    if (el.destinoNombre) el.destinoNombre.textContent = paquete.nombre || 'Destino seleccionado';
+
+    calcularPrecio();
+}
+
+/**
+ * API Global: Abre el modal y selecciona un destino por su ID (usado en main.js y region.js)
+ */
+window.seleccionarDestino = function(id) {
+    if (!el.modal) cachearElementosDOM();
+
+    let paquete = null;
     if (typeof window.getPaqueteParaModal === 'function') {
-        destino = window.getPaqueteParaModal(destinoId);
+        paquete = window.getPaqueteParaModal(id);
     }
+
+    if (!paquete) {
+        paquete = { idPaquete: id, nombre: 'Destino #' + id, precioSoles: 0, precioBase: 0 };
+    }
+
+    cargarPaqueteEnModal(paquete);
+
+    const modalInstance = bootstrap.Modal.getInstance(el.modal) || new bootstrap.Modal(el.modal);
+    modalInstance.show();
+};
+
+// =============================================================================
+// 3. CONTROL Y VALIDACIÓN DE FECHAS
+// =============================================================================
+
+/**
+ * Configura la fecha mínima de salida (a partir de mañana) y sincroniza retorno.
+ */
+function configurarFechasIniciales() {
+    const manana = new Date();
+    manana.setDate(manana.getDate() + 1);
+    const minSalidaStr = manana.toISOString().split('T')[0];
+
+    if (el.fechaSalida) {
+        el.fechaSalida.min = minSalidaStr;
+        if (!el.fechaSalida.value) el.fechaSalida.value = minSalidaStr;
+    }
+    actualizarRestriccionRetorno();
+}
+
+/**
+ * Asegura que la fecha mínima de retorno sea al menos 1 día después de la salida.
+ */
+function actualizarRestriccionRetorno() {
+    if (!el.fechaSalida?.value || !el.fechaRetorno) return;
+
+    const fechaSalida = new Date(el.fechaSalida.value + 'T00:00:00');
+    const minRetorno = new Date(fechaSalida);
+    minRetorno.setDate(minRetorno.getDate() + 1);
     
-    if (!destino) return 0;
-  
-    const salidaStr = fechaSalida?.value;
-    if (!salidaStr) {
-        if (precioSolesSpan) precioSolesSpan.textContent = 'S/ 0.00';
+    el.fechaRetorno.min = minRetorno.toISOString().split('T')[0];
+
+    if (el.fechaRetorno.value && el.fechaRetorno.value <= el.fechaSalida.value) {
+        el.fechaRetorno.value = '';
+        mostrarError('⚠️ La fecha de retorno debe ser posterior a la fecha de salida.');
+    }
+}
+
+function mostrarError(mensaje) {
+    if (el.validationMsg) el.validationMsg.textContent = mensaje || '';
+}
+
+// =============================================================================
+// 4. MOTOR DE COTIZACIÓN Y CÁLCULO DE PRECIOS
+// =============================================================================
+
+function calcularPrecio() {
+    mostrarError('');
+
+    // Resolver datos del paquete actual
+    let destino = paqueteSeleccionado;
+    const destinoId = el.destinoSelect?.value;
+    if (!destino && destinoId && typeof window.getPaqueteParaModal === 'function') {
+        destino = window.getPaqueteParaModal(destinoId);
+        paqueteSeleccionado = destino;
+    }
+
+    if (!destino || !el.fechaSalida?.value) {
+        if (el.precioDisplay) el.precioDisplay.textContent = 'S/ 0.00';
         window.precioActual = null;
         return 0;
     }
-  
-    let noches = 1;
-    const esSoloIda = tipoViaje?.value === 'oneway';
-    if (!esSoloIda) {
-        const retornoStr = fechaRetorno?.value;
-        if (retornoStr) {
-            const salidaDate = new Date(salidaStr + 'T00:00:00');
-            const retornoDate = new Date(retornoStr + 'T00:00:00');
-            const diffTime = retornoDate - salidaDate;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-            if (diffDays <= 0) {
-                mostrarErrorValidacion('⚠️ La fecha de retorno debe ser posterior a la fecha de salida.');
-                if (precioSolesSpan) precioSolesSpan.textContent = 'S/ 0.00';
+    // Calcular noches
+    let noches = 1;
+    const esSoloIda = el.tipoViaje?.value === 'oneway';
+    if (!esSoloIda) {
+        if (el.fechaRetorno?.value) {
+            const salidaDate = new Date(el.fechaSalida.value + 'T00:00:00');
+            const retornoDate = new Date(el.fechaRetorno.value + 'T00:00:00');
+            const diffDias = Math.ceil((retornoDate - salidaDate) / (1000 * 60 * 60 * 24));
+
+            if (diffDias <= 0) {
+                mostrarError('⚠️ La fecha de retorno debe ser posterior a la fecha de salida.');
+                if (el.precioDisplay) el.precioDisplay.textContent = 'S/ 0.00';
                 window.precioActual = null;
                 return 0;
             }
-            noches = diffDays;
+            noches = diffDias;
         }
     }
-  
-    const pasajeros = parseInt(pasajerosSelect?.value || 1);
-    const precioS = destino.precioSoles || destino.precioBase || 0;
-    const subtotal = precioS * noches * pasajeros;
-    const { igv, total } = calcularPrecioConImpuestos(subtotal);
-  
-    if (precioSolesSpan) precioSolesSpan.textContent = `S/ ${total.toFixed(2)}`;
-  
+
+    // Cálculo financiero (Subtotal + 18% IGV)
+    const pasajeros = parseInt(el.pasajeros?.value || 1);
+    const precioBase = destino.precioSoles || destino.precioBase || 0;
+    const subtotal = precioBase * noches * pasajeros;
+    const igv = subtotal * 0.18;
+    const total = subtotal + igv;
+
+    if (el.precioDisplay) {
+        el.precioDisplay.textContent = `S/ ${total.toFixed(2)}`;
+    }
+
     window.precioActual = { subtotal, igv, total, noches, pasajeros, destino };
     return total;
 }
-  
+
+// =============================================================================
+// 5. PROCESAMIENTO Y CONFIRMACIÓN DE LA RESERVA
+// =============================================================================
+
 function procesarReserva() {
-    const tipoViaje = document.getElementById('tipoViaje')?.value;
-    const fechaSalidaVal = document.getElementById('fechaSalida')?.value;
-    const fechaRetornoVal = document.getElementById('fechaRetorno')?.value;
+    const tipoViaje = el.tipoViaje?.value;
+    const fechaSalidaVal = el.fechaSalida?.value;
+    const fechaRetornoVal = el.fechaRetorno?.value;
 
     if (!fechaSalidaVal) {
-        mostrarErrorValidacion('⚠️ Por favor, selecciona una fecha de salida.');
-        document.getElementById('fechaSalida')?.focus();
+        mostrarError('⚠️ Por favor, selecciona una fecha de salida.');
+        el.fechaSalida?.focus();
         return;
     }
 
     if (tipoViaje === 'roundtrip') {
         if (!fechaRetornoVal) {
-            mostrarErrorValidacion('⚠️ Por favor, selecciona una fecha de retorno.');
-            document.getElementById('fechaRetorno')?.focus();
+            mostrarError('⚠️ Por favor, selecciona una fecha de retorno.');
+            el.fechaRetorno?.focus();
             return;
         }
-        const salidaDate = new Date(fechaSalidaVal + 'T00:00:00');
-        const retornoDate = new Date(fechaRetornoVal + 'T00:00:00');
-        if (retornoDate <= salidaDate) {
-            mostrarErrorValidacion('⚠️ La fecha de retorno debe ser posterior a la fecha de salida.');
-            document.getElementById('fechaRetorno')?.focus();
+        if (fechaRetornoVal <= fechaSalidaVal) {
+            mostrarError('⚠️ La fecha de retorno debe ser posterior a la fecha de salida.');
+            el.fechaRetorno?.focus();
             return;
         }
     }
@@ -250,11 +255,12 @@ function procesarReserva() {
     if (!window.precioActual) {
         calcularPrecio();
         if (!window.precioActual) {
-            mostrarErrorValidacion('⚠️ Completa todos los datos requeridos para cotizar.');
+            mostrarError('⚠️ Completa todos los datos requeridos para cotizar.');
             return;
         }
     }
 
+    // Construcción del objeto reserva
     const reserva = {
         id: Date.now(),
         destino: window.precioActual.destino,
@@ -268,36 +274,18 @@ function procesarReserva() {
         precioTotal: window.precioActual.total,
         fechaReserva: new Date().toLocaleString()
     };
-    let reservas = JSON.parse(localStorage.getItem('reservasChasqui')) || [];
-    reservas.push(reserva);
-    localStorage.setItem('reservasChasqui', JSON.stringify(reservas));
+
+    // Almacenamiento en el cliente
+    const historialReservas = JSON.parse(localStorage.getItem('reservasChasqui')) || [];
+    historialReservas.push(reserva);
+    localStorage.setItem('reservasChasqui', JSON.stringify(historialReservas));
     localStorage.setItem('reservaActual', JSON.stringify(reserva));
 
-    const isLoggedInInput = document.getElementById('isUserLoggedIn');
-    const isUserLoggedIn = isLoggedInInput && isLoggedInInput.value === 'true';
-
-    if (!isUserLoggedIn) {
+    // Redirección según autenticación
+    const usuarioAutenticado = el.isLoggedIn?.value === 'true';
+    if (!usuarioAutenticado) {
         window.location.href = 'login?redirect=reserva';
-        return;
+    } else {
+        window.location.href = 'reserva.jsp';
     }
-
-    window.location.href = 'reserva.jsp';
 }
-  
-function setFechasMinimas() {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const minDate = tomorrow.toISOString().split('T')[0];
-    const fechaSalida = document.getElementById('fechaSalida');
-    const fechaRetorno = document.getElementById('fechaRetorno');
-    if (fechaSalida) {
-        fechaSalida.min = minDate;
-        if (!fechaSalida.value) {
-            fechaSalida.value = minDate;
-        }
-    }
-    actualizarFechasMinimasRetorno();
-}
-
-let paqueteSeleccionadoHtml = null;
-
