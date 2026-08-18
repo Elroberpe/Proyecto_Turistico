@@ -11,7 +11,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item">
-                    <a class="nav-link ${pageContext.request.requestURI.contains('index.jsp') || empty param.region && empty requestScope.paquetes && empty sessionScope.mensaje && pageContext.request.requestURI.endsWith('/') ? 'active' : ''}" href="${pageContext.request.contextPath}/index.jsp">Inicio</a>
+                    <a class="nav-link ${pageContext.request.servletPath == '/index.jsp' || pageContext.request.servletPath == '/' || empty pageContext.request.servletPath ? 'active' : ''}" href="${pageContext.request.contextPath}/index.jsp">Inicio</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link ${param.region == 'Costa' ? 'active' : ''}" href="${pageContext.request.contextPath}/catalogo?region=Costa">Costa</a>
