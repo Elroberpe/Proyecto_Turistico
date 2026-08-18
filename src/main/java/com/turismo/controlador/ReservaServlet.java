@@ -76,7 +76,8 @@ public class ReservaServlet extends HttpServlet {
             int idUsuario = Integer.parseInt(request.getParameter("id_usuario"));
             int idPaquete = Integer.parseInt(request.getParameter("id_paquete"));
             String tipoViajeRaw = request.getParameter("tipo_viaje");
-            String tipoViaje = ("oneway".equalsIgnoreCase(tipoViajeRaw) || "ida".equalsIgnoreCase(tipoViajeRaw) || "Solo Ida".equalsIgnoreCase(tipoViajeRaw)) ? "ida" : "idavuelta";
+            String tipoViaje = ("oneway".equalsIgnoreCase(tipoViajeRaw) || "ida".equalsIgnoreCase(tipoViajeRaw)
+                    || "Solo Ida".equalsIgnoreCase(tipoViajeRaw)) ? "ida" : "idavuelta";
             int numPasajeros = Integer.parseInt(request.getParameter("num_pasajeros"));
             BigDecimal precioTotal = new BigDecimal(request.getParameter("precio_total"));
 
@@ -87,20 +88,22 @@ public class ReservaServlet extends HttpServlet {
             LocalDate fechaSalida = LocalDate.parse(fechaSalidaStr);
 
             if (fechaSalida.isBefore(hoy)) {
-                request.getSession().setAttribute("error", "❌ La fecha de salida no puede ser anterior a hoy.");
+                request.getSession().setAttribute("error", "La fecha de salida no puede ser anterior a hoy.");
                 response.sendRedirect(request.getContextPath() + "/admin/reservas");
                 return;
             }
 
             if ("idavuelta".equalsIgnoreCase(tipoViaje)) {
                 if (fechaRetornoStr == null || fechaRetornoStr.trim().isEmpty()) {
-                    request.getSession().setAttribute("error", "❌ Para viaje de ida y vuelta, la fecha de retorno es obligatoria.");
+                    request.getSession().setAttribute("error",
+                            "Para viaje de ida y vuelta, la fecha de retorno es obligatoria.");
                     response.sendRedirect(request.getContextPath() + "/admin/reservas");
                     return;
                 }
                 LocalDate fechaRetorno = LocalDate.parse(fechaRetornoStr);
                 if (fechaRetorno.isBefore(fechaSalida)) {
-                    request.getSession().setAttribute("error", "❌ La fecha de retorno no puede ser anterior a la fecha de salida.");
+                    request.getSession().setAttribute("error",
+                            "La fecha de retorno no puede ser anterior a la fecha de salida.");
                     response.sendRedirect(request.getContextPath() + "/admin/reservas");
                     return;
                 }
@@ -116,17 +119,17 @@ public class ReservaServlet extends HttpServlet {
             }
             r.setNumPasajeros(numPasajeros);
             r.setPrecioTotal(precioTotal);
-            r.setEstado("pendiente"); 
-            
+            r.setEstado("pendiente");
+
             if (reservaDao.crear(r)) {
-                request.getSession().setAttribute("mensaje", "✅ Reserva creada (Pendiente de pago).");
+                request.getSession().setAttribute("mensaje", "Reserva creada (Pendiente de pago).");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al crear la reserva.");
+                request.getSession().setAttribute("error", "Error al crear la reserva.");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado al crear reserva.");
+            request.getSession().setAttribute("error", "Error inesperado al crear reserva.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/reservas");
     }
@@ -140,13 +143,14 @@ public class ReservaServlet extends HttpServlet {
 
             Reserva reservaAnterior = reservaDao.obtenerPorId(id);
             if (reservaAnterior == null) {
-                request.getSession().setAttribute("error", "❌ Reserva no encontrada.");
+                request.getSession().setAttribute("error", "Reserva no encontrada.");
                 response.sendRedirect(request.getContextPath() + "/admin/reservas");
                 return;
             }
 
             if ("pagada".equals(reservaAnterior.getEstado())) {
-                request.getSession().setAttribute("error", "❌ No se puede editar una reserva pagada. Use el módulo de Pagos.");
+                request.getSession().setAttribute("error",
+                        "No se puede editar una reserva pagada. Use el módulo de Pagos.");
                 response.sendRedirect(request.getContextPath() + "/admin/reservas");
                 return;
             }
@@ -154,7 +158,8 @@ public class ReservaServlet extends HttpServlet {
             int idUsuario = Integer.parseInt(request.getParameter("id_usuario"));
             int idPaquete = Integer.parseInt(request.getParameter("id_paquete"));
             String tipoViajeRaw = request.getParameter("tipo_viaje");
-            String tipoViaje = ("oneway".equalsIgnoreCase(tipoViajeRaw) || "ida".equalsIgnoreCase(tipoViajeRaw) || "Solo Ida".equalsIgnoreCase(tipoViajeRaw)) ? "ida" : "idavuelta";
+            String tipoViaje = ("oneway".equalsIgnoreCase(tipoViajeRaw) || "ida".equalsIgnoreCase(tipoViajeRaw)
+                    || "Solo Ida".equalsIgnoreCase(tipoViajeRaw)) ? "ida" : "idavuelta";
             int numPasajeros = Integer.parseInt(request.getParameter("num_pasajeros"));
             BigDecimal precioTotal = new BigDecimal(request.getParameter("precio_total"));
             String estado = request.getParameter("estado");
@@ -166,20 +171,22 @@ public class ReservaServlet extends HttpServlet {
             LocalDate fechaSalida = LocalDate.parse(fechaSalidaStr);
 
             if (fechaSalida.isBefore(hoy)) {
-                request.getSession().setAttribute("error", "❌ La fecha de salida no puede ser anterior a hoy.");
+                request.getSession().setAttribute("error", "La fecha de salida no puede ser anterior a hoy.");
                 response.sendRedirect(request.getContextPath() + "/admin/reservas");
                 return;
             }
 
             if ("idavuelta".equalsIgnoreCase(tipoViaje)) {
                 if (fechaRetornoStr == null || fechaRetornoStr.trim().isEmpty()) {
-                    request.getSession().setAttribute("error", "❌ Para viaje de ida y vuelta, la fecha de retorno es obligatoria.");
+                    request.getSession().setAttribute("error",
+                            "Para viaje de ida y vuelta, la fecha de retorno es obligatoria.");
                     response.sendRedirect(request.getContextPath() + "/admin/reservas");
                     return;
                 }
                 LocalDate fechaRetorno = LocalDate.parse(fechaRetornoStr);
                 if (fechaRetorno.isBefore(fechaSalida)) {
-                    request.getSession().setAttribute("error", "❌ La fecha de retorno no puede ser anterior a la fecha de salida.");
+                    request.getSession().setAttribute("error",
+                            "La fecha de retorno no puede ser anterior a la fecha de salida.");
                     response.sendRedirect(request.getContextPath() + "/admin/reservas");
                     return;
                 }
@@ -199,14 +206,14 @@ public class ReservaServlet extends HttpServlet {
             r.setEstado(estado);
 
             if (reservaDao.actualizar(r)) {
-                request.getSession().setAttribute("mensaje", "✅ Reserva actualizada.");
+                request.getSession().setAttribute("mensaje", "Reserva actualizada.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al actualizar la reserva.");
+                request.getSession().setAttribute("error", "Error al actualizar la reserva.");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado al editar reserva.");
+            request.getSession().setAttribute("error", "Error inesperado al editar reserva.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/reservas");
     }
@@ -220,21 +227,21 @@ public class ReservaServlet extends HttpServlet {
 
             Reserva reserva = reservaDao.obtenerPorId(id);
             if (reserva != null && "pagada".equals(reserva.getEstado())) {
-                request.getSession().setAttribute("error", "❌ No se puede eliminar una reserva pagada.");
+                request.getSession().setAttribute("error", "No se puede eliminar una reserva pagada.");
                 response.sendRedirect(request.getContextPath() + "/admin/reservas");
                 return;
             }
 
             if (reservaDao.eliminar(id)) {
-                request.getSession().setAttribute("mensaje", "✅ Reserva eliminada.");
+                request.getSession().setAttribute("mensaje", "Reserva eliminada.");
             } else {
-                request.getSession().setAttribute("error", "❌ Error al eliminar la reserva.");
+                request.getSession().setAttribute("error", "Error al eliminar la reserva.");
             }
         } catch (NumberFormatException e) {
-            request.getSession().setAttribute("error", "❌ ID inválido.");
+            request.getSession().setAttribute("error", "ID inválido.");
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "❌ Error inesperado al eliminar reserva.");
+            request.getSession().setAttribute("error", "Error inesperado al eliminar reserva.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/reservas");
     }
