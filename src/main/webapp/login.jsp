@@ -23,25 +23,20 @@
 		</div>
 
 		<!-- ALERTAS DE ESTADO -->
-		<c:if test="${param.error == '1'}">
-			<div class="alert alert-danger alert-dismissible fade show rounded-3 small py-2 text-center" role="alert">
-				<i class="bi bi-exclamation-circle-fill me-1"></i> Correo o contraseña incorrectos.
-				<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-			</div>
-		</c:if>
-
-		<c:if test="${param.registro == 'ok'}">
+		<c:if test="${not empty sessionScope.mensaje}">
 			<div class="alert alert-success alert-dismissible fade show rounded-3 small py-2 text-center" role="alert">
-				<i class="bi bi-check-circle-fill me-1"></i> ¡Cuenta creada con éxito! Ya puedes iniciar sesión.
-				<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+				<i class="bi bi-check-circle-fill me-1"></i> ${sessionScope.mensaje}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 			</div>
+			<c:remove var="mensaje" scope="session"/>
 		</c:if>
 
-		<c:if test="${param.registro == 'error'}">
+		<c:if test="${not empty sessionScope.error}">
 			<div class="alert alert-danger alert-dismissible fade show rounded-3 small py-2 text-center" role="alert">
-				<i class="bi bi-exclamation-triangle-fill me-1"></i> No se pudo registrar la cuenta. El correo ya podría estar en uso.
-				<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+				<i class="bi bi-exclamation-circle-fill me-1"></i> ${sessionScope.error}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 			</div>
+			<c:remove var="error" scope="session"/>
 		</c:if>
 
 		<!-- LOGIN -->
