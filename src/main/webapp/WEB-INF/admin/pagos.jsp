@@ -1,20 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List, com.turismo.modelo.Pago, com.turismo.modelo.Reserva" %>
-<%
-    List<Pago> pagos = (List<Pago>) request.getAttribute("pagos");
-    if (pagos == null) {
-        response.sendRedirect(request.getContextPath() + "/admin/pagos");
-        return;
-    }
-
-    // Obtener reservas pendientes
-    List<Reserva> reservasPendientes = (List<Reserva>) request.getAttribute("reservasPendientes");
-
-    String mensaje = (String) session.getAttribute("mensaje");
-    String error = (String) session.getAttribute("error");
-    session.removeAttribute("mensaje");
-    session.removeAttribute("error");
-%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<c:if test="${empty pagos}">
+    <c:redirect url="/admin/pagos"/>
+</c:if>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -24,7 +13,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/admin/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/admin/css/style.css">
 </head>
 <body>
     <div class="d-flex">
@@ -44,18 +33,20 @@
             </nav>
 
             <!-- Mensajes -->
-            <% if (mensaje != null) { %>
+            <c:if test="${not empty sessionScope.mensaje}">
                 <div class="alert alert-success alert-dismissible fade show">
-                    <i class="bi bi-check-circle me-2"></i> <%= mensaje %>
+                    <i class="bi bi-check-circle me-2"></i> ${sessionScope.mensaje}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-            <% } %>
-            <% if (error != null) { %>
+                <c:remove var="mensaje" scope="session"/>
+            </c:if>
+            <c:if test="${not empty sessionScope.error}">
                 <div class="alert alert-danger alert-dismissible fade show">
-                    <i class="bi bi-exclamation-triangle me-2"></i> <%= error %>
+                    <i class="bi bi-exclamation-triangle me-2"></i> ${sessionScope.error}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-            <% } %>
+                <c:remove var="error" scope="session"/>
+            </c:if>
 
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Gestión de Pagos</h2>
@@ -80,43 +71,53 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% if (pagos.isEmpty()) { %>
-                                <tr>
-                                    <td colspan="8" class="text-center text-muted">No hay pagos registrados.</td>
-                                </tr>
-                            <% } else { %>
-                                <% for (Pago p : pagos) { %>
-                                <tr>
-                                    <td><%= p.getIdPago() %></td>
-                                    <td><%= p.getNombreCliente() %></td>
-                                    <td><%= p.getNombrePaquete() %></td>
-                                    <td><span class="badge bg-secondary"><%= p.getNombreMetodo() %></span></td>
-                                    <td>S/ <%= p.getMonto() %></td>
-                                    <td>
-                                        <span class="badge <%= "pagado".equals(p.getEstado()) ? "bg-success" : 
-                                                         "rechazado".equals(p.getEstado()) ? "bg-danger" : "bg-warning text-dark" %>">
-                                            <%= p.getEstado() %>
-                                        </span>
-                                    </td>
-                                    <td><%= p.getFechaPago() != null ? p.getFechaPago() : "-" %></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-secondary-custom btn-editar" 
-                                                data-id="<%= p.getIdPago() %>"
-                                                data-reserva="<%= p.getIdReserva() %>"
-                                                data-metodo="<%= p.getIdMetodo() %>"
-                                                data-monto="<%= p.getMonto() %>"
-                                                data-estado="<%= p.getEstado() %>"
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#pagoModal">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-danger btn-eliminar" data-id="<%= p.getIdPago() %>">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <% } %>
-                            <% } %>
+                            <c:choose>
+                                <c:when test="${empty pagos}">
+                                    <tr>
+                                        <td colspan="8" class="text-center text-muted">No hay pagos registrados.</td>
+                                    </tr>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:forEach items="${pagos}" var="p">
+                                        <tr>
+                                            <td>${p.idPago}</td>
+                                            <td>${p.nombreCliente}</td>
+                                            <td>${p.nombrePaquete}</td>
+                                            <td><span class="badge bg-secondary">${p.nombreMetodo}</span></td>
+                                            <td>S/ ${p.monto}</td>
+                                            <td>
+                                                <span class="badge ${p.estado == 'pagado' ? 'bg-success' : 
+                                                                     p.estado == 'rechazado' ? 'bg-danger' : 'bg-warning text-dark'}">
+                                                    ${p.estado}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${not empty p.fechaPago}">
+                                                        <fmt:formatDate value="${p.fechaPago}" pattern="yyyy-MM-dd HH:mm"/>
+                                                    </c:when>
+                                                    <c:otherwise>-</c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-secondary-custom btn-editar" 
+                                                        data-id="${p.idPago}"
+                                                        data-reserva="${p.idReserva}"
+                                                        data-metodo="${p.idMetodo}"
+                                                        data-monto="${p.monto}"
+                                                        data-estado="${p.estado}"
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#pagoModal">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger btn-eliminar" data-id="${p.idPago}">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </c:otherwise>
+                            </c:choose>
                         </tbody>
                     </table>
                 </div>
@@ -135,7 +136,7 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="<%=request.getContextPath()%>/admin/pagos" method="post">
+                    <form action="${pageContext.request.contextPath}/admin/pagos" method="post">
                         <input type="hidden" id="actionPago" name="action" value="crear">
                         <input type="hidden" id="idPago" name="id">
                         <div class="row">
@@ -143,13 +144,11 @@
                                 <label class="form-label">Reserva</label>
                                 <select class="form-select" name="id_reserva" id="idReserva" required>
                                     <option value="">Seleccionar reserva</option>
-                                    <% if (reservasPendientes != null) {
-                                        for (Reserva r : reservasPendientes) { %>
-                                        <option value="<%= r.getIdReserva() %>" data-monto="<%= r.getPrecioTotal() %>">
-                                            #<%= r.getIdReserva() %> - <%= r.getNombreUsuario() %> - S/ <%= r.getPrecioTotal() %>
+                                    <c:forEach items="${reservasPendientes}" var="r">
+                                        <option value="${r.idReserva}" data-monto="${r.precioTotal}">
+                                            #${r.idReserva} - ${r.nombreUsuario} - S/ ${r.precioTotal}
                                         </option>
-                                    <%  }
-                                    } %>
+                                    </c:forEach>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -185,7 +184,7 @@
         </div>
     </div>
 
-    <form id="formEliminar" action="<%=request.getContextPath()%>/admin/pagos" method="post">
+    <form id="formEliminar" action="${pageContext.request.contextPath}/admin/pagos" method="post">
         <input type="hidden" name="action" value="eliminar">
         <input type="hidden" id="idEliminar" name="id">
     </form>
@@ -193,7 +192,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="<%=request.getContextPath()%>/assets/admin/js/script.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/admin/js/script.js"></script>
     <script>
         // Auto-completar monto al seleccionar reserva
         document.addEventListener('DOMContentLoaded', function() {
