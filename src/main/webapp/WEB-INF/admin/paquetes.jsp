@@ -1,19 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List, com.turismo.modelo.Paquete, com.turismo.modelo.CategoriaPaquete" %>
-<%
-    List<Paquete> paquetes = (List<Paquete>) request.getAttribute("paquetes");
-    List<CategoriaPaquete> categorias = (List<CategoriaPaquete>) request.getAttribute("categorias");
-    if (paquetes == null) {
-        response.sendRedirect(request.getContextPath() + "/admin/paquetes");
-        return;
-    }
-
-    String mensaje = (String) session.getAttribute("mensaje");
-    String error = (String) session.getAttribute("error");
-    session.removeAttribute("mensaje");
-    session.removeAttribute("error");
-%>
-
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<c:if test="${empty paquetes}">
+    <c:redirect url="/admin/paquetes"/>
+</c:if>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -23,7 +13,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/admin/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/admin/css/style.css">
 </head>
 <body>
 
@@ -44,18 +34,20 @@
                 </div>
             </nav>
 
-            <% if (mensaje != null) { %>
+            <c:if test="${not empty sessionScope.mensaje}">
                 <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-                    <%= mensaje %>
+                    ${sessionScope.mensaje}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-            <% } %>
-            <% if (error != null) { %>
+                <c:remove var="mensaje" scope="session"/>
+            </c:if>
+            <c:if test="${not empty sessionScope.error}">
                 <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
-                    <%= error %>
+                    ${sessionScope.error}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-            <% } %>
+                <c:remove var="error" scope="session"/>
+            </c:if>
 
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Gestión de Paquetes</h2>
@@ -79,39 +71,44 @@
                             </tr>
                         </thead>
                         <tbody>
-                        	<% if (paquetes.isEmpty()) { %>
-                                <tr>
-                                    <td colspan="7" class="text-center text-muted">No hay paquetes registrados.</td>
-                                </tr>
-                            <% } else { %>
-                        
-                        	<% for(Paquete paquete : paquetes){ %>
-                            <tr>
-                                <td><%=paquete.getIdPaquete() %></td>
-                                <td><%= paquete.getCategoriaNombre() != null ? paquete.getCategoriaNombre() : "Sin categoría" %></td>
-                                <td><%=paquete.getNombre() %></td>
-                                <td><%=paquete.getDestino() %></td>
-                                <td><%=paquete.getPrecioSoles() %></td>
-                                <td><span class="badge <%= "activo".equals(paquete.getEstado()) ? "bg-success" : "bg-danger" %>">
-                                            <%= paquete.getEstado() %>
-                                        </span></td>
-                                <td>
-                                    <button class="btn btn-sm btn-secondary-custom btn-editar" 
-                                            data-id="<%=paquete.getIdPaquete()%>"
-                                            data-nombre="<%=paquete.getNombre()%>"
-                                            data-categoria="<%=paquete.getIdCategoria()%>"
-                                            data-destino="<%=paquete.getDestino()%>"
-                                            data-precio="<%=paquete.getPrecioSoles()%>"
-                                            data-descripcion="<%=paquete.getDescripcion() != null ? paquete.getDescripcion() : ""%>"
-                                            data-imagen="<%=paquete.getImagenUrl() != null ? paquete.getImagenUrl() : ""%>"
-                                            data-estado="<%=paquete.getEstado()%>"
-                                            data-bs-toggle="modal" data-bs-target="#paqueteModal"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn btn-sm btn-danger btn-eliminar" data-id="<%=paquete.getIdPaquete()%>" data-nombre="<%=paquete.getNombre()%>">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                          <% } } %>
+                            <c:choose>
+                                <c:when test="${empty paquetes}">
+                                    <tr>
+                                        <td colspan="7" class="text-center text-muted">No hay paquetes registrados.</td>
+                                    </tr>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:forEach items="${paquetes}" var="paquete">
+                                        <tr>
+                                            <td>${paquete.idPaquete}</td>
+                                            <td>${not empty paquete.categoriaNombre ? paquete.categoriaNombre : 'Sin categoría'}</td>
+                                            <td>${paquete.nombre}</td>
+                                            <td>${paquete.destino}</td>
+                                            <td>${paquete.precioSoles}</td>
+                                            <td>
+                                                <span class="badge ${paquete.estado == 'activo' ? 'bg-success' : 'bg-danger'}">
+                                                    ${paquete.estado}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-secondary-custom btn-editar" 
+                                                        data-id="${paquete.idPaquete}"
+                                                        data-nombre="${paquete.nombre}"
+                                                        data-categoria="${paquete.idCategoria}"
+                                                        data-destino="${paquete.destino}"
+                                                        data-precio="${paquete.precioSoles}"
+                                                        data-descripcion="${not empty paquete.descripcion ? paquete.descripcion : ''}"
+                                                        data-imagen="${not empty paquete.imagenUrl ? paquete.imagenUrl : ''}"
+                                                        data-estado="${paquete.estado}"
+                                                        data-bs-toggle="modal" data-bs-target="#paqueteModal"><i class="bi bi-pencil"></i></button>
+                                                <button class="btn btn-sm btn-danger btn-eliminar" data-id="${paquete.idPaquete}" data-nombre="${paquete.nombre}">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </c:otherwise>
+                            </c:choose>
                         </tbody>
                     </table>
                 </div>
@@ -128,79 +125,77 @@
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form action="<%=request.getContextPath()%>/admin/paquetes" method="post">
-            	<input id="action" type="hidden" name="action" value="crear">
-			    <input type="hidden" id="id" name="id">
-			
-			    <div class="row">
-			        <div class="col-md-6 mb-3">
-			            <label for="nombre" class="form-label">Nombre del Paquete</label>
-			            <input id="nombre" type="text" class="form-control" name="nombre" required>
-			        </div>
-			
-			        <div class="col-md-6 mb-3">
-			            <label for="idCategoria" class="form-label">Categoría</label>
-			            <select id="idCategoria" class="form-select" name="id_categoria" required>
-			                <option value="">Seleccione Categoría</option>
-			                <% if (categorias != null) { 
-			                     for(CategoriaPaquete categoria : categorias){ %>
-			                     <option value="<%=categoria.getIdCategoria()%>">
-					               <%=categoria.getNombre()%>
-					             </option>
-			                  <% } 
-			                } %>
-			            </select>
-			        </div>
-			    </div>
-			
-			    <div class="row">
-			        <div class="col-md-6 mb-3">
-			            <label for="destino" class="form-label">Destino</label>
-			            <input id="destino" type="text" class="form-control" name="destino" required>
-			        </div>
-			
-			        <div class="col-md-6 mb-3">
-			            <label for="precioSoles" class="form-label">Precio (Soles)</label>
-			            <input id="precioSoles" type="number" step="0.01" class="form-control" name="precio_soles" required>
-			        </div>
-			    </div>
-			
-			    <div class="mb-3">
-			        <label for="descripcion" class="form-label">Descripción</label>
-			        <textarea id="descripcion" class="form-control" name="descripcion" rows="3" required></textarea>
-			    </div>
-			
-			    <div class="row">
-			        <div class="col-md-8 mb-3">
-			            <label for="imagenUrl" class="form-label">URL de Imagen</label>
-			            <input id="imagenUrl" type="text" class="form-control" name="imagenUrl" placeholder="https://ejemplo.com/imagen.jpg">
-			        </div>
-			
-			        <div class="col-md-4 mb-3">
-			            <label for="estado" class="form-label">Estado</label>
-			            <select id="estado" class="form-select" name="estado" required>
-			                <option value="activo">Activo</option>
-			                <option value="inactivo">Inactivo</option>
-			            </select>
-			        </div>
-			    </div>
-			
-			    <div class="text-end mt-3">
-			        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
-			            Cancelar
-			        </button>
-			
-			        <button type="submit" class="btn btn-primary-custom">
-			            Guardar Paquete
-			        </button>
-			    </div>
-			</form>
+            <form action="${pageContext.request.contextPath}/admin/paquetes" method="post">
+                <input id="action" type="hidden" name="action" value="crear">
+                <input type="hidden" id="id" name="id">
+            
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="nombre" class="form-label">Nombre del Paquete</label>
+                        <input id="nombre" type="text" class="form-control" name="nombre" required>
+                    </div>
+            
+                    <div class="col-md-6 mb-3">
+                        <label for="idCategoria" class="form-label">Categoría</label>
+                        <select id="idCategoria" class="form-select" name="id_categoria" required>
+                            <option value="">Seleccione Categoría</option>
+                            <c:forEach items="${categorias}" var="categoria">
+                                <option value="${categoria.idCategoria}">
+                                    ${categoria.nombre}
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                </div>
+            
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="destino" class="form-label">Destino</label>
+                        <input id="destino" type="text" class="form-control" name="destino" required>
+                    </div>
+            
+                    <div class="col-md-6 mb-3">
+                        <label for="precioSoles" class="form-label">Precio (Soles)</label>
+                        <input id="precioSoles" type="number" step="0.01" class="form-control" name="precio_soles" required>
+                    </div>
+                </div>
+            
+                <div class="mb-3">
+                    <label for="descripcion" class="form-label">Descripción</label>
+                    <textarea id="descripcion" class="form-control" name="descripcion" rows="3" required></textarea>
+                </div>
+            
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <label for="imagenUrl" class="form-label">URL de Imagen</label>
+                        <input id="imagenUrl" type="text" class="form-control" name="imagenUrl" placeholder="https://ejemplo.com/imagen.jpg">
+                    </div>
+            
+                    <div class="col-md-4 mb-3">
+                        <label for="estado" class="form-label">Estado</label>
+                        <select id="estado" class="form-select" name="estado" required>
+                            <option value="activo">Activo</option>
+                            <option value="inactivo">Inactivo</option>
+                        </select>
+                    </div>
+                </div>
+            
+                <div class="text-end mt-3">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+            
+                    <button type="submit" class="btn btn-primary-custom">
+                        Guardar Paquete
+                    </button>
+                </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
     
-    <form id="formEliminar" action="<%=request.getContextPath()%>/admin/paquetes" method="post">
+    <form id="formEliminar" action="${pageContext.request.contextPath}/admin/paquetes" method="post">
         <input type="hidden" name="action" value="eliminar">
         <input type="hidden" id="idEliminar" name="id">
     </form>
@@ -208,59 +203,59 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="<%=request.getContextPath()%>/assets/admin/js/script.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/admin/js/script.js"></script>
     
     <script>
-  		// Limpiar campos del modal para Nuevo Paquete
-    	document.getElementById("btnNuevo").addEventListener("click", function () {
-    		 document.getElementById("action").value = "crear";
-    		 document.getElementById("id").value = "";
-    		 document.getElementById("nombre").value = "";
-    		 document.getElementById("idCategoria").selectedIndex = 0;
-    		 document.getElementById("destino").value = "";
-    		 document.getElementById("precioSoles").value = "";
-    		 document.getElementById("descripcion").value = "";
-    		 document.getElementById("imagenUrl").value = "";
-    		 document.getElementById("estado").value = "activo";
-    		 document.getElementById("modalTitle").textContent = "Nuevo Paquete";
-    	});
+        // Limpiar campos del modal para Nuevo Paquete
+        document.getElementById("btnNuevo").addEventListener("click", function () {
+             document.getElementById("action").value = "crear";
+             document.getElementById("id").value = "";
+             document.getElementById("nombre").value = "";
+             document.getElementById("idCategoria").selectedIndex = 0;
+             document.getElementById("destino").value = "";
+             document.getElementById("precioSoles").value = "";
+             document.getElementById("descripcion").value = "";
+             document.getElementById("imagenUrl").value = "";
+             document.getElementById("estado").value = "activo";
+             document.getElementById("modalTitle").textContent = "Nuevo Paquete";
+        });
 
-    	// Cargar datos en el modal para Editar Paquete
-    	document.querySelectorAll(".btn-editar").forEach(function (btn) {
-    		btn.addEventListener("click", function () {
-    			document.getElementById("action").value = "editar";
-    			document.getElementById("id").value = this.dataset.id;
-    			document.getElementById("nombre").value = this.dataset.nombre;
-    			document.getElementById("idCategoria").value = this.dataset.categoria;
-    			document.getElementById("destino").value = this.dataset.destino;
-    			document.getElementById("precioSoles").value = this.dataset.precio;
-    			document.getElementById("descripcion").value = this.dataset.descripcion;
-    			document.getElementById("imagenUrl").value = this.dataset.imagen;
-    			document.getElementById("estado").value = this.dataset.estado;
-    			document.getElementById("modalTitle").textContent = "Editar Paquete";
-    		});
-    	});
+        // Cargar datos en el modal para Editar Paquete
+        document.querySelectorAll(".btn-editar").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                document.getElementById("action").value = "editar";
+                document.getElementById("id").value = this.dataset.id;
+                document.getElementById("nombre").value = this.dataset.nombre;
+                document.getElementById("idCategoria").value = this.dataset.categoria;
+                document.getElementById("destino").value = this.dataset.destino;
+                document.getElementById("precioSoles").value = this.dataset.precio;
+                document.getElementById("descripcion").value = this.dataset.descripcion;
+                document.getElementById("imagenUrl").value = this.dataset.imagen;
+                document.getElementById("estado").value = this.dataset.estado;
+                document.getElementById("modalTitle").textContent = "Editar Paquete";
+            });
+        });
 
-    	// Confirmar eliminación con SweetAlert2
-    	document.querySelectorAll(".btn-eliminar").forEach(function (btn) {
-    		btn.addEventListener("click", function () {
-    			let id = this.dataset.id;
-    			let nombre = this.dataset.nombre || "el paquete";
-    			Swal.fire({
-    				title: "¿Eliminar paquete?",
-    				text: "Esta acción eliminará " + nombre + ". ¿Deseas continuar?",
-    				icon: "warning",
-    				showCancelButton: true,
-    				confirmButtonText: "Sí, eliminar",
-    				cancelButtonText: "Cancelar"
-    			}).then((result) => {
-    				if (result.isConfirmed) {
-    					document.getElementById("idEliminar").value = id;
-    					document.getElementById("formEliminar").submit();
-    				}
-    			});
-    		});
-    	});
+        // Confirmar eliminación con SweetAlert2
+        document.querySelectorAll(".btn-eliminar").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                let id = this.dataset.id;
+                let nombre = this.dataset.nombre || "el paquete";
+                Swal.fire({
+                    title: "¿Eliminar paquete?",
+                    text: "Esta acción eliminará " + nombre + ". ¿Deseas continuar?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Sí, eliminar",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById("idEliminar").value = id;
+                        document.getElementById("formEliminar").submit();
+                    }
+                });
+            });
+        });
     </script>
     
 </body>
