@@ -1,7 +1,4 @@
 // ==================== PÁGINA DE CONTACTO ====================
-// Maneja la validación del formulario de contacto.
-// Se usa expresiones regulares para validar nombre, email,
-// teléfono y longitud mínima del mensaje.
 
 document.addEventListener('DOMContentLoaded', () => {
     initFormularioContacto();
