@@ -204,59 +204,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="${pageContext.request.contextPath}/assets/admin/js/script.js"></script>
-    
-    <script>
-        // Limpiar campos del modal para Nuevo Paquete
-        document.getElementById("btnNuevo").addEventListener("click", function () {
-             document.getElementById("action").value = "crear";
-             document.getElementById("id").value = "";
-             document.getElementById("nombre").value = "";
-             document.getElementById("idCategoria").selectedIndex = 0;
-             document.getElementById("destino").value = "";
-             document.getElementById("precioSoles").value = "";
-             document.getElementById("descripcion").value = "";
-             document.getElementById("imagenUrl").value = "";
-             document.getElementById("estado").value = "activo";
-             document.getElementById("modalTitle").textContent = "Nuevo Paquete";
-        });
-
-        // Cargar datos en el modal para Editar Paquete
-        document.querySelectorAll(".btn-editar").forEach(function (btn) {
-            btn.addEventListener("click", function () {
-                document.getElementById("action").value = "editar";
-                document.getElementById("id").value = this.dataset.id;
-                document.getElementById("nombre").value = this.dataset.nombre;
-                document.getElementById("idCategoria").value = this.dataset.categoria;
-                document.getElementById("destino").value = this.dataset.destino;
-                document.getElementById("precioSoles").value = this.dataset.precio;
-                document.getElementById("descripcion").value = this.dataset.descripcion;
-                document.getElementById("imagenUrl").value = this.dataset.imagen;
-                document.getElementById("estado").value = this.dataset.estado;
-                document.getElementById("modalTitle").textContent = "Editar Paquete";
-            });
-        });
-
-        // Confirmar eliminación con SweetAlert2
-        document.querySelectorAll(".btn-eliminar").forEach(function (btn) {
-            btn.addEventListener("click", function () {
-                let id = this.dataset.id;
-                let nombre = this.dataset.nombre || "el paquete";
-                Swal.fire({
-                    title: "¿Eliminar paquete?",
-                    text: "Esta acción eliminará " + nombre + ". ¿Deseas continuar?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Sí, eliminar",
-                    cancelButtonText: "Cancelar"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById("idEliminar").value = id;
-                        document.getElementById("formEliminar").submit();
-                    }
-                });
-            });
-        });
-    </script>
-    
+    <script src="${pageContext.request.contextPath}/assets/admin/js/paquetes.js"></script>
 </body>
 </html>
