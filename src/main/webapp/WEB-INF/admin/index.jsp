@@ -1,16 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.math.BigDecimal" %>
-<%
-    Integer totalPaquetes = (Integer) request.getAttribute("totalPaquetes");
-    Integer totalClientes = (Integer) request.getAttribute("totalClientes");
-    Integer reservasMes = (Integer) request.getAttribute("reservasMes");
-    BigDecimal ingresosMes = (BigDecimal) request.getAttribute("ingresosMes");
-
-    if (totalPaquetes == null) {
-        response.sendRedirect(request.getContextPath() + "/admin/dashboard");
-        return;
-    }
-%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<c:if test="${empty totalPaquetes}">
+    <c:redirect url="/admin/dashboard"/>
+</c:if>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -20,7 +13,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/admin/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/admin/css/style.css">
 </head>
 <body>
     <div class="d-flex">
@@ -46,28 +39,28 @@
                 <div class="col-md-3 mb-4">
                     <div class="card text-center p-4 border-0 shadow-sm">
                         <h1 class="text-primary-custom"><i class="bi bi-box-seam"></i></h1>
-                        <h3 class="mt-2"><%= totalPaquetes %></h3>
+                        <h3 class="mt-2">${totalPaquetes}</h3>
                         <p class="text-muted">Paquetes Activos</p>
                     </div>
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="card text-center p-4 border-0 shadow-sm">
                         <h1 class="text-secondary-custom"><i class="bi bi-person-badge"></i></h1>
-                        <h3 class="mt-2"><%= totalClientes %></h3>
+                        <h3 class="mt-2">${totalClientes}</h3>
                         <p class="text-muted">Clientes Registrados</p>
                     </div>
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="card text-center p-4 border-0 shadow-sm">
                         <h1 class="text-primary-custom"><i class="bi bi-calendar-check"></i></h1>
-                        <h3 class="mt-2"><%= reservasMes %></h3>
+                        <h3 class="mt-2">${reservasMes}</h3>
                         <p class="text-muted">Reservas del Mes</p>
                     </div>
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="card text-center p-4 border-0 shadow-sm">
                         <h1 class="text-success"><i class="bi bi-cash-coin"></i></h1>
-                        <h3 class="mt-2">S/ <%= ingresosMes %></h3>
+                        <h3 class="mt-2">S/ <fmt:formatNumber value="${ingresosMes != null ? ingresosMes : 0}" minFractionDigits="2" maxFractionDigits="2"/></h3>
                         <p class="text-muted">Ingresos del Mes</p>
                     </div>
                 </div>
@@ -77,6 +70,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
-    <script src="<%=request.getContextPath()%>/assets/admin/js/script.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/admin/js/script.js"></script>
 </body>
 </html>
