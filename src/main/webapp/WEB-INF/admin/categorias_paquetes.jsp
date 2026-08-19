@@ -144,46 +144,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="${pageContext.request.contextPath}/assets/admin/js/script.js"></script>
-
-    <script>
-        // Limpiar campos del modal para nueva categoría
-        document.getElementById("btnNuevo").addEventListener("click", function () {
-            document.getElementById("idCategoria").value = "";
-            document.getElementById("nombre").value = "";
-            document.getElementById("descripcion").value = "";
-            document.getElementById("accion").value = "guardar";
-        });
-
-        // Llenar campos del modal al editar
-        document.querySelectorAll(".btn-editar").forEach(boton => {
-            boton.addEventListener("click", function () {
-                document.getElementById("idCategoria").value = this.dataset.id;
-                document.getElementById("nombre").value = this.dataset.nombre;
-                document.getElementById("descripcion").value = this.dataset.descripcion;
-                document.getElementById("accion").value = "actualizar";
-            });
-        });
-
-        // Confirmar eliminación con SweetAlert2
-        document.querySelectorAll(".btn-eliminar").forEach(boton => {
-            boton.addEventListener("click", function () {
-                let id = this.dataset.id;
-                Swal.fire({
-                    title: "¿Eliminar categoría?",
-                    text: "Esta acción no se puede deshacer.",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Sí, eliminar",
-                    cancelButtonText: "Cancelar"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById("idEliminar").value = id;
-                        document.getElementById("formEliminar").submit();
-                    }
-                });
-            });
-        });
-    </script>
-
+    <script src="${pageContext.request.contextPath}/assets/admin/js/categorias.js"></script>
 </body>
 </html>
