@@ -182,59 +182,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="${pageContext.request.contextPath}/assets/admin/js/script.js"></script>
-    <script>
-        // Limpiar formulario para nuevo usuario
-        document.getElementById("btnNuevo").addEventListener("click", function () {
-            document.getElementById("actionUsuario").value = "crear";
-            document.getElementById("idUsuario").value = "";
-            document.getElementById("nombreUsuario").value = "";
-            document.getElementById("apellidosUsuario").value = "";
-            document.getElementById("emailUsuario").value = "";
-            document.getElementById("telefonoUsuario").value = "";
-            document.getElementById("passwordUsuario").value = "";
-            document.getElementById("passwordUsuario").required = true;
-            document.getElementById("passwordContainer").style.display = "block";
-            document.getElementById("rolUsuario").value = "2";
-            document.getElementById("usuarioModalTitle").textContent = "Nuevo Usuario";
-        });
-
-        // Llenar formulario para editar usuario
-        document.querySelectorAll(".btn-editar").forEach(boton => {
-            boton.addEventListener("click", function () {
-                document.getElementById("actionUsuario").value = "editar";
-                document.getElementById("idUsuario").value = this.dataset.id;
-                document.getElementById("nombreUsuario").value = this.dataset.nombre;
-                document.getElementById("apellidosUsuario").value = this.dataset.apellidos;
-                document.getElementById("emailUsuario").value = this.dataset.email;
-                document.getElementById("telefonoUsuario").value = this.dataset.telefono;
-                document.getElementById("passwordUsuario").required = false;
-                document.getElementById("passwordContainer").style.display = "none";
-                document.getElementById("rolUsuario").value = this.dataset.rol;
-                document.getElementById("usuarioModalTitle").textContent = "Editar Usuario: " + this.dataset.nombre;
-                document.getElementById("btnGuardarModal").className = "btn btn-primary-custom";
-            });
-        });
-
-        // Eliminar con SweetAlert2
-        document.querySelectorAll(".btn-eliminar").forEach(boton => {
-            boton.addEventListener("click", function () {
-                let id = this.dataset.id;
-                let nombre = this.dataset.nombre || "el usuario";
-                Swal.fire({
-                    title: "¿Eliminar usuario?",
-                    text: "Esta acción eliminará a " + nombre + ". ¿Deseas continuar?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Sí, eliminar",
-                    cancelButtonText: "Cancelar"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById("idEliminar").value = id;
-                        document.getElementById("formEliminar").submit();
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="${pageContext.request.contextPath}/assets/admin/js/usuarios.js"></script>
 </body>
 </html>
