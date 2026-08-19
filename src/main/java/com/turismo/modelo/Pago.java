@@ -1,6 +1,7 @@
 package com.turismo.modelo;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Pago {
@@ -13,6 +14,8 @@ public class Pago {
 	private BigDecimal monto;
 	private String estado;
 	private Timestamp fechaPago;
+	private Date fechaSalida;   // JOIN con reservas
+	private Date fechaRetorno;  // JOIN con reservas
 
 	// Constructor vacío
 	public Pago() {
@@ -89,5 +92,21 @@ public class Pago {
 
 	public void setFechaPago(Timestamp fechaPago) {
 		this.fechaPago = fechaPago;
+	}
+
+	public Date getFechaSalida() {
+		return fechaSalida;
+	}
+
+	public void setFechaSalida(Date fechaSalida) {
+		this.fechaSalida = fechaSalida;
+	}
+
+	public Date getFechaRetorno() {
+		return fechaRetorno;
+	}
+
+	public void setFechaRetorno(Date fechaRetorno) {
+		this.fechaRetorno = fechaRetorno;
 	}
 }

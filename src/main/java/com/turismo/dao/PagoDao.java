@@ -14,7 +14,8 @@ public class PagoDao {
     public List<Pago> listarTodos() {
         List<Pago> lista = new ArrayList<>();
         String sql = "SELECT p.id_pago, p.id_reserva, p.id_metodo, p.monto, p.estado, p.fecha_pago, " +
-                     "u.nombre AS nombre_cliente, pa.nombre AS nombre_paquete, mp.nombre AS nombre_metodo " +
+                     "u.nombre AS nombre_cliente, pa.nombre AS nombre_paquete, mp.nombre AS nombre_metodo, " +
+                     "r.fecha_salida, r.fecha_retorno " +
                      "FROM pagos p " +
                      "JOIN reservas r ON p.id_reserva = r.id_reserva " +
                      "JOIN usuario u ON r.id_usuario = u.id_usuario " +
@@ -37,6 +38,8 @@ public class PagoDao {
                 p.setMonto(rs.getBigDecimal("monto"));
                 p.setEstado(rs.getString("estado"));
                 p.setFechaPago(rs.getTimestamp("fecha_pago"));
+                p.setFechaSalida(rs.getDate("fecha_salida"));
+                p.setFechaRetorno(rs.getDate("fecha_retorno"));
                 lista.add(p);
             }
         } catch (SQLException e) {
@@ -50,7 +53,8 @@ public class PagoDao {
     // ============================================
     public Pago obtenerPorId(int id) {
         String sql = "SELECT p.id_pago, p.id_reserva, p.id_metodo, p.monto, p.estado, p.fecha_pago, " +
-                     "u.nombre AS nombre_cliente, pa.nombre AS nombre_paquete, mp.nombre AS nombre_metodo " +
+                     "u.nombre AS nombre_cliente, pa.nombre AS nombre_paquete, mp.nombre AS nombre_metodo, " +
+                     "r.fecha_salida, r.fecha_retorno " +
                      "FROM pagos p " +
                      "JOIN reservas r ON p.id_reserva = r.id_reserva " +
                      "JOIN usuario u ON r.id_usuario = u.id_usuario " +
@@ -75,6 +79,8 @@ public class PagoDao {
                 p.setMonto(rs.getBigDecimal("monto"));
                 p.setEstado(rs.getString("estado"));
                 p.setFechaPago(rs.getTimestamp("fecha_pago"));
+                p.setFechaSalida(rs.getDate("fecha_salida"));
+                p.setFechaRetorno(rs.getDate("fecha_retorno"));
                 return p;
             }
         } catch (SQLException e) {
