@@ -167,58 +167,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="${pageContext.request.contextPath}/assets/admin/js/script.js"></script>
-    <script>
-        // Limpiar campos para Nuevo Cliente
-        document.getElementById("btnNuevo").addEventListener("click", function () {
-            document.getElementById("actionCliente").value = "crear";
-            document.getElementById("idCliente").value = "";
-            document.getElementById("nombreCliente").value = "";
-            document.getElementById("apellidosCliente").value = "";
-            document.getElementById("emailCliente").value = "";
-            document.getElementById("telefonoCliente").value = "";
-            document.getElementById("passwordCliente").value = "";
-            document.getElementById("passwordCliente").required = true;
-            document.getElementById("passwordContainerCliente").style.display = "block";
-            document.getElementById("clienteModalTitle").textContent = "Nuevo Cliente";
-            document.getElementById("btnGuardarCliente").className = "btn btn-primary-custom";
-        });
-
-        // Llenar campos para Editar Cliente
-        document.querySelectorAll(".btn-editar").forEach(boton => {
-            boton.addEventListener("click", function () {
-                document.getElementById("actionCliente").value = "editar";
-                document.getElementById("idCliente").value = this.dataset.id;
-                document.getElementById("nombreCliente").value = this.dataset.nombre;
-                document.getElementById("apellidosCliente").value = this.dataset.apellidos;
-                document.getElementById("emailCliente").value = this.dataset.email;
-                document.getElementById("telefonoCliente").value = this.dataset.telefono;
-                document.getElementById("passwordCliente").required = false;
-                document.getElementById("passwordContainerCliente").style.display = "none";
-                document.getElementById("clienteModalTitle").textContent = "Editar Cliente: " + this.dataset.nombre;
-                document.getElementById("btnGuardarCliente").className = "btn btn-warning";
-            });
-        });
-
-        // Eliminar con SweetAlert2
-        document.querySelectorAll(".btn-eliminar").forEach(boton => {
-            boton.addEventListener("click", function () {
-                let id = this.dataset.id;
-                let nombre = this.dataset.nombre || "el cliente";
-                Swal.fire({
-                    title: "¿Eliminar cliente?",
-                    text: "Esta acción eliminará a " + nombre + ". ¿Deseas continuar?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Sí, eliminar",
-                    cancelButtonText: "Cancelar"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById("idEliminar").value = id;
-                        document.getElementById("formEliminar").submit();
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="${pageContext.request.contextPath}/assets/admin/js/clientes.js"></script>
 </body>
 </html>
