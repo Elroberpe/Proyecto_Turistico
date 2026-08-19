@@ -226,14 +226,21 @@ public class ReservaServlet extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
 
             Reserva reserva = reservaDao.obtenerPorId(id);
-            if (reserva != null && "pagada".equals(reserva.getEstado())) {
-                request.getSession().setAttribute("error", "No se puede eliminar una reserva pagada.");
+            if (reserva == null) {
+                request.getSession().setAttribute("error", "Reserva no encontrada.");
+                response.sendRedirect(request.getContextPath() + "/admin/reservas");
+                return;
+            }
+
+            if (!"pendiente".equalsIgnoreCase(reserva.getEstado())) {
+                request.getSession().setAttribute("error", 
+                    "Solo se pueden eliminar reservas en estado 'pendiente'. Las reservas pagadas o canceladas no pueden eliminarse.");
                 response.sendRedirect(request.getContextPath() + "/admin/reservas");
                 return;
             }
 
             if (reservaDao.eliminar(id)) {
-                request.getSession().setAttribute("mensaje", "Reserva eliminada.");
+                request.getSession().setAttribute("mensaje", "Reserva eliminada exitosamente.");
             } else {
                 request.getSession().setAttribute("error", "Error al eliminar la reserva.");
             }

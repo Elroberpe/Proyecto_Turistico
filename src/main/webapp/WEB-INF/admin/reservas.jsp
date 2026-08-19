@@ -115,10 +115,7 @@
                                             </td>
                                             <td>
                                                 <c:choose>
-                                                    <c:when test="${r.estado.equalsIgnoreCase('pagada')}">
-                                                        <button class="btn btn-sm btn-secondary" disabled><i class="bi bi-pencil"></i></button>
-                                                    </c:when>
-                                                    <c:otherwise>
+                                                    <c:when test="${r.estado.equalsIgnoreCase('pendiente')}">
                                                         <button class="btn btn-sm btn-secondary-custom btn-editar" 
                                                                 data-id="${r.idReserva}"
                                                                 data-usuario="${r.idUsuario}"
@@ -129,12 +126,21 @@
                                                                 data-retorno="${not empty r.fechaRetorno ? r.fechaRetorno : ''}"
                                                                 data-total="${r.precioTotal}"
                                                                 data-estado="${r.estado}"
-                                                                data-bs-toggle="modal" data-bs-target="#reservaModal">
+                                                                data-bs-toggle="modal" data-bs-target="#reservaModal"
+                                                                title="Editar Reserva">
                                                             <i class="bi bi-pencil"></i>
                                                         </button>
-                                                        <button class="btn btn-sm btn-danger btn-eliminar" data-id="${r.idReserva}">
+                                                        <button class="btn btn-sm btn-danger btn-eliminar" data-id="${r.idReserva}" title="Eliminar Reserva">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
+                                                    </c:when>
+                                                    <c:when test="${r.estado.equalsIgnoreCase('pagada')}">
+                                                        <button class="btn btn-sm btn-secondary" disabled title="Reserva pagada (gestionada desde Pagos)"><i class="bi bi-pencil"></i></button>
+                                                        <button class="btn btn-sm btn-secondary" disabled title="No se puede eliminar una reserva pagada"><i class="bi bi-trash"></i></button>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <button class="btn btn-sm btn-secondary" disabled title="Reserva cancelada"><i class="bi bi-pencil"></i></button>
+                                                        <button class="btn btn-sm btn-secondary" disabled title="No se puede eliminar una reserva cancelada"><i class="bi bi-trash"></i></button>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
