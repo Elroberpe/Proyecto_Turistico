@@ -100,19 +100,28 @@
                                                 </c:choose>
                                             </td>
                                             <td>
-                                                <button class="btn btn-sm btn-secondary-custom btn-editar" 
-                                                        data-id="${p.idPago}"
-                                                        data-reserva="${p.idReserva}"
-                                                        data-metodo="${p.idMetodo}"
-                                                        data-monto="${p.monto}"
-                                                        data-estado="${p.estado}"
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#pagoModal">
-                                                    <i class="bi bi-pencil"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-danger btn-eliminar" data-id="${p.idPago}">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
+                                                <c:choose>
+                                                    <c:when test="${p.estado == 'reembolsado' || p.estado == 'rechazado'}">
+                                                        <button class="btn btn-sm btn-secondary" disabled title="Este pago no se puede editar"><i class="bi bi-pencil"></i></button>
+                                                        <button class="btn btn-sm btn-secondary" disabled title="Pago ya finalizado/rechazado"><i class="bi bi-x-circle"></i></button>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <button class="btn btn-sm btn-secondary-custom btn-editar" 
+                                                                data-id="${p.idPago}"
+                                                                data-reserva="${p.idReserva}"
+                                                                data-metodo="${p.idMetodo}"
+                                                                data-monto="${p.monto}"
+                                                                data-estado="${p.estado}"
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#pagoModal"
+                                                                title="Editar Pago">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger btn-anular" data-id="${p.idPago}" title="Rechazar/Anular Pago">
+                                                            <i class="bi bi-x-circle"></i>
+                                                        </button>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -169,8 +178,8 @@
                                 <label class="form-label">Estado</label>
                                 <select class="form-select" id="estadoPago" name="estado" required>
                                     <option value="pagado">Pagado</option>
-                                    <option value="rechazado">Rechazado</option>
                                     <option value="reembolsado">Reembolsado</option>
+                                    <option value="rechazado">Rechazado</option>
                                 </select>
                             </div>
                         </div>
@@ -185,7 +194,7 @@
     </div>
 
     <form id="formEliminar" action="${pageContext.request.contextPath}/admin/pagos" method="post">
-        <input type="hidden" name="action" value="eliminar">
+        <input type="hidden" name="action" value="anular">
         <input type="hidden" id="idEliminar" name="id">
     </form>
 

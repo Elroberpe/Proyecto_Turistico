@@ -51,8 +51,9 @@ public class PagoServlet extends HttpServlet {
             case "editar":
                 editar(request, response);
                 break;
+            case "anular":
             case "eliminar":
-                eliminar(request, response);
+                anular(request, response);
                 break;
             default:
                 response.sendRedirect(request.getContextPath() + "/admin/pagos");
@@ -125,7 +126,7 @@ public class PagoServlet extends HttpServlet {
             String estadoAnterior = pagoActual.getEstado();
             int idReserva = pagoActual.getIdReserva();
 
-            // Actualizar pago
+            // Actualizar pago manteniendo el monto original
             Pago p = new Pago();
             p.setIdPago(id);
             p.setIdMetodo(idMetodo);
@@ -140,7 +141,7 @@ public class PagoServlet extends HttpServlet {
                            && !"rechazado".equals(estadoAnterior) && !"reembolsado".equals(estadoAnterior)) {
                     reservaDao.actualizarEstado(idReserva, "cancelada");
                 }
-                request.getSession().setAttribute("mensaje", "Pago actualizado.");
+                request.getSession().setAttribute("mensaje", "Pago actualizado exitosamente.");
             } else {
                 request.getSession().setAttribute("error", "Error al actualizar el pago.");
             }
@@ -152,34 +153,41 @@ public class PagoServlet extends HttpServlet {
     }
 
     // ============================================
-    // ELIMINAR PAGO
+    // ANULAR / RECHAZAR PAGO (LÓGICO)
     // ============================================
-    private void eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void anular(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
             
-            // Obtener el pago antes de eliminarlo
+            // Obtener el pago actual
             Pago pago = pagoDao.obtenerPorId(id);
             if (pago != null) {
+                if ("rechazado".equalsIgnoreCase(pago.getEstado())) {
+                    request.getSession().setAttribute("error", "Este pago ya se encuentra rechazado/anulado.");
+                    response.sendRedirect(request.getContextPath() + "/admin/pagos");
+                    return;
+                }
+
                 int idReserva = pago.getIdReserva();
                 
-                // Eliminar el pago
-                if (pagoDao.eliminar(id)) {
-                    // Actualizar reserva a "pendiente"
+                // Actualizar estado del pago a 'rechazado'
+                pago.setEstado("rechazado");
+                if (pagoDao.actualizar(pago)) {
+                    // Actualizar reserva a 'pendiente' para permitir nuevo intento
                     reservaDao.actualizarEstado(idReserva, "pendiente");
                     request.getSession().setAttribute("mensaje", 
-                        "Pago eliminado. Reserva #" + idReserva + " vuelta a estado Pendiente.");
+                        "Pago #" + id + " anulado/rechazado. La reserva #" + idReserva + " volvió a estado Pendiente.");
                 } else {
-                    request.getSession().setAttribute("error", "Error al eliminar el pago.");
+                    request.getSession().setAttribute("error", "Error al anular el pago.");
                 }
             } else {
                 request.getSession().setAttribute("error", "Pago no encontrado.");
             }
         } catch (NumberFormatException e) {
-            request.getSession().setAttribute("error", "ID inválido.");
+            request.getSession().setAttribute("error", "ID de pago inválido.");
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("error", "Error inesperado al eliminar pago.");
+            request.getSession().setAttribute("error", "Error inesperado al anular el pago.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/pagos");
     }

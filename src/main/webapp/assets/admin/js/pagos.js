@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (metodoPago) metodoPago.value = this.dataset.metodo || "1";
             if (montoInput) {
                 montoInput.value = this.dataset.monto || "";
-                montoInput.readOnly = false;
+                montoInput.readOnly = true;
             }
             if (estadoPago) estadoPago.value = this.dataset.estado || "pagado";
             if (pagoModalTitle) pagoModalTitle.textContent = "Editar Pago #" + (this.dataset.id || "");
@@ -68,17 +68,18 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Eliminar con SweetAlert2
-    document.querySelectorAll(".btn-eliminar").forEach(function (btn) {
+    // Anular / Rechazar Pago con SweetAlert2
+    document.querySelectorAll(".btn-anular, .btn-eliminar").forEach(function (btn) {
         btn.addEventListener("click", function () {
             const id = this.dataset.id;
             Swal.fire({
-                title: "¿Eliminar el pago #" + id + "?",
-                text: "Esta acción no se puede deshacer.",
+                title: "¿Rechazar / Anular pago #" + id + "?",
+                text: "El estado del pago cambiará a 'rechazado' y la reserva asociada volverá a estado Pendiente.",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: "Sí, eliminar",
-                cancelButtonText: "Cancelar"
+                confirmButtonText: "Sí, anular pago",
+                cancelButtonText: "Cancelar",
+                confirmButtonColor: "#d33"
             }).then((result) => {
                 if (result.isConfirmed) {
                     if (idEliminar && formEliminar) {
