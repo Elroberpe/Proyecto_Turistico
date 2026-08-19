@@ -44,7 +44,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 montoInput.readOnly = true;
             }
             if (metodoPago) metodoPago.value = "1";
-            if (estadoPago) estadoPago.value = "pagado";
+            if (estadoPago) {
+                estadoPago.innerHTML = '<option value="pagado">Pagado</option>';
+                estadoPago.value = "pagado";
+            }
             if (pagoModalTitle) pagoModalTitle.textContent = "Nuevo Pago";
             if (btnGuardarPago) btnGuardarPago.className = "btn btn-primary-custom";
         });
@@ -62,7 +65,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 montoInput.value = this.dataset.monto || "";
                 montoInput.readOnly = true;
             }
-            if (estadoPago) estadoPago.value = this.dataset.estado || "pagado";
+            if (estadoPago) {
+                estadoPago.innerHTML = '<option value="pagado">Pagado</option><option value="reembolsado">Reembolsado</option>';
+                estadoPago.value = this.dataset.estado || "pagado";
+            }
             if (pagoModalTitle) pagoModalTitle.textContent = "Editar Pago #" + (this.dataset.id || "");
             if (btnGuardarPago) btnGuardarPago.className = "btn btn-primary-custom";
         });

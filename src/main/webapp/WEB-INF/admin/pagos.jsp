@@ -188,7 +188,6 @@
                                 <select class="form-select" id="estadoPago" name="estado" required>
                                     <option value="pagado">Pagado</option>
                                     <option value="reembolsado">Reembolsado</option>
-                                    <option value="rechazado">Rechazado</option>
                                 </select>
                             </div>
                         </div>
