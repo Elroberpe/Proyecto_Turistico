@@ -1,17 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List, com.turismo.modelo.Usuario" %>
-<%
-    List<Usuario> clientes = (List<Usuario>) request.getAttribute("clientes");
-    if (clientes == null) {
-        response.sendRedirect(request.getContextPath() + "/admin/clientes");
-        return;
-    }
-
-    String mensaje = (String) session.getAttribute("mensaje");
-    String error = (String) session.getAttribute("error");
-    session.removeAttribute("mensaje");
-    session.removeAttribute("error");
-%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<c:if test="${empty clientes}">
+    <c:redirect url="/admin/clientes"/>
+</c:if>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -21,7 +12,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/admin/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/admin/css/style.css">
 </head>
 <body>
     <div class="d-flex">
@@ -41,18 +32,20 @@
             </nav>
 
             <!-- Mensajes -->
-            <% if (mensaje != null) { %>
+            <c:if test="${not empty sessionScope.mensaje}">
                 <div class="alert alert-success alert-dismissible fade show">
-                    <i class="bi bi-check-circle me-2"></i> <%= mensaje %>
+                    <i class="bi bi-check-circle me-2"></i> ${sessionScope.mensaje}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-            <% } %>
-            <% if (error != null) { %>
+                <c:remove var="mensaje" scope="session"/>
+            </c:if>
+            <c:if test="${not empty sessionScope.error}">
                 <div class="alert alert-danger alert-dismissible fade show">
-                    <i class="bi bi-exclamation-triangle me-2"></i> <%= error %>
+                    <i class="bi bi-exclamation-triangle me-2"></i> ${sessionScope.error}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-            <% } %>
+                <c:remove var="error" scope="session"/>
+            </c:if>
 
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Gestión de Clientes</h2>
@@ -75,36 +68,39 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% if (clientes.isEmpty()) { %>
-                                <tr>
-                                    <td colspan="6" class="text-center text-muted">No hay clientes registrados.</td>
-                                </tr>
-                            <% } else { %>
-                                <% for (Usuario u : clientes) { %>
-                                <tr>
-                                    <td><%= u.getIdUsuario() %></td>
-                                    <td><%= u.getNombre() %></td>
-                                    <td><%= u.getApellidos() %></td>
-                                    <td><%= u.getEmail() %></td>
-                                    <td><%= u.getTelefono() != null ? u.getTelefono() : "-" %></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-secondary-custom btn-editar" 
-                                                data-id="<%= u.getIdUsuario() %>"
-                                                data-nombre="<%= u.getNombre() %>"
-                                                data-apellidos="<%= u.getApellidos() %>"
-                                                data-email="<%= u.getEmail() %>"
-                                                data-telefono="<%= u.getTelefono() != null ? u.getTelefono() : "" %>"
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#clienteModal">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-danger btn-eliminar" data-id="<%= u.getIdUsuario() %>" data-nombre="<%= u.getNombre() %>">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <% } %>
-                            <% } %>
+                            <c:choose>
+                                <c:when test="${empty clientes}">
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted">No hay clientes registrados.</td>
+                                    </tr>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:forEach items="${clientes}" var="u">
+                                        <tr>
+                                            <td>${u.idUsuario}</td>
+                                            <td>${u.nombre}</td>
+                                            <td>${u.apellidos}</td>
+                                            <td>${u.email}</td>
+                                            <td>${not empty u.telefono ? u.telefono : '-'}</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-secondary-custom btn-editar" 
+                                                        data-id="${u.idUsuario}"
+                                                        data-nombre="${u.nombre}"
+                                                        data-apellidos="${u.apellidos}"
+                                                        data-email="${u.email}"
+                                                        data-telefono="${not empty u.telefono ? u.telefono : ''}"
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#clienteModal">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger btn-eliminar" data-id="${u.idUsuario}" data-nombre="${u.nombre}">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </c:otherwise>
+                            </c:choose>
                         </tbody>
                     </table>
                 </div>
@@ -123,7 +119,7 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="<%=request.getContextPath()%>/admin/clientes" method="post">
+                    <form action="${pageContext.request.contextPath}/admin/clientes" method="post">
                         <input type="hidden" id="actionCliente" name="action" value="crear">
                         <input type="hidden" id="idCliente" name="id">
                         <div class="row">
@@ -162,7 +158,7 @@
         </div>
     </div>
 
-    <form id="formEliminar" action="<%=request.getContextPath()%>/admin/clientes" method="post">
+    <form id="formEliminar" action="${pageContext.request.contextPath}/admin/clientes" method="post">
         <input type="hidden" name="action" value="eliminar">
         <input type="hidden" id="idEliminar" name="id">
     </form>
@@ -170,7 +166,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="<%=request.getContextPath()%>/assets/admin/js/script.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/admin/js/script.js"></script>
     <script>
         // Limpiar campos para Nuevo Cliente
         document.getElementById("btnNuevo").addEventListener("click", function () {
