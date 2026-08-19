@@ -1,21 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List, com.turismo.modelo.Reserva, com.turismo.modelo.Usuario, com.turismo.modelo.Paquete, com.turismo.modelo.CategoriaPaquete" %>
-<%
-    List<Reserva> reservas = (List<Reserva>) request.getAttribute("reservas");
-    if (reservas == null) {
-        response.sendRedirect(request.getContextPath() + "/admin/reservas");
-        return;
-    }
-
-    List<Usuario> usuarios = (List<Usuario>) request.getAttribute("usuarios");
-    List<Paquete> paquetes = (List<Paquete>) request.getAttribute("paquetes");
-    List<CategoriaPaquete> categorias = (List<CategoriaPaquete>) request.getAttribute("categorias");
-
-    String mensaje = (String) session.getAttribute("mensaje");
-    String error = (String) session.getAttribute("error");
-    session.removeAttribute("mensaje");
-    session.removeAttribute("error");
-%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+<c:if test="${empty reservas}">
+    <c:redirect url="/admin/reservas"/>
+</c:if>
+<jsp:useBean id="now" class="java.util.Date"/>
+<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="minDate"/>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -25,7 +16,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/admin/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/admin/css/style.css">
 </head>
 <body>
     <div class="d-flex">
@@ -42,18 +33,20 @@
                 </div>
             </nav>
 
-            <% if (mensaje != null) { %>
+            <c:if test="${not empty sessionScope.mensaje}">
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="bi bi-check-circle me-2"></i> <%= mensaje %>
+                    <i class="bi bi-check-circle me-2"></i> ${sessionScope.mensaje}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-            <% } %>
-            <% if (error != null) { %>
+                <c:remove var="mensaje" scope="session"/>
+            </c:if>
+            <c:if test="${not empty sessionScope.error}">
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="bi bi-exclamation-triangle me-2"></i> <%= error %>
+                    <i class="bi bi-exclamation-triangle me-2"></i> ${sessionScope.error}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-            <% } %>
+                <c:remove var="error" scope="session"/>
+            </c:if>
 
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Gestión de Reservas</h2>
@@ -81,56 +74,74 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% if (reservas.isEmpty()) { %>
-                                <tr><td colspan="11" class="text-center text-muted">No hay reservas registradas.</td></tr>
-                            <% } else {
-                                for (Reserva r : reservas) { %>
-                                <tr>
-                                    <td>#<%= r.getIdReserva() %></td>
-                                    <td><%= r.getNombreUsuario() != null ? r.getNombreUsuario() : "ID #" + r.getIdUsuario() %></td>
-                                    <td><%= r.getNombrePaquete() != null ? r.getNombrePaquete() : "ID #" + r.getIdPaquete() %></td>
-                                    <td><%= r.getFechaReserva() != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format(r.getFechaReserva()) : "-" %></td>
-                                    <td><%= ("idavuelta".equalsIgnoreCase(r.getTipoViaje()) || "roundtrip".equalsIgnoreCase(r.getTipoViaje())) ? "Ida y Vuelta" : "Solo Ida" %></td>
-                                    <td><%= r.getFechaSalida() %></td>
-                                    <td><%= r.getFechaRetorno() != null ? r.getFechaRetorno() : "-" %></td>
-                                    <td><%= r.getNumPasajeros() %></td>
-                                    <td class="fw-bold">S/ <%= r.getPrecioTotal() %></td>
-                                    <td>
-                                        <% if ("pagada".equalsIgnoreCase(r.getEstado())) { %>
-                                            <span class="badge bg-success">Pagada</span>
-                                        <% } else if ("pendiente".equalsIgnoreCase(r.getEstado())) { %>
-                                            <span class="badge bg-warning text-dark">Pendiente</span>
-                                        <% } else if ("cancelada".equalsIgnoreCase(r.getEstado())) { %>
-                                            <span class="badge bg-danger">Cancelada</span>
-                                        <% } else { %>
-                                            <span class="badge bg-secondary"><%= r.getEstado() %></span>
-                                        <% } %>
-                                    </td>
-                                    <td>
-                                        <% if ("pagada".equalsIgnoreCase(r.getEstado())) { %>
-                                            <button class="btn btn-sm btn-secondary" disabled><i class="bi bi-pencil"></i></button>
-                                        <% } else { %>
-                                            <button class="btn btn-sm btn-secondary-custom btn-editar" 
-                                                    data-id="<%= r.getIdReserva() %>"
-                                                    data-usuario="<%= r.getIdUsuario() %>"
-                                                    data-paquete="<%= r.getIdPaquete() %>"
-                                                    data-tipoviaje="<%= r.getTipoViaje() %>"
-                                                    data-pasajeros="<%= r.getNumPasajeros() %>"
-                                                    data-salida="<%= r.getFechaSalida() %>"
-                                                    data-retorno="<%= r.getFechaRetorno() != null ? r.getFechaRetorno() : "" %>"
-                                                    data-total="<%= r.getPrecioTotal() %>"
-                                                    data-estado="<%= r.getEstado() %>"
-                                                    data-bs-toggle="modal" data-bs-target="#reservaModal">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-danger btn-eliminar" data-id="<%= r.getIdReserva() %>">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        <% } %>
-                                    </td>
-                                </tr>
-                            <% }
-                            } %>
+                            <c:choose>
+                                <c:when test="${empty reservas}">
+                                    <tr><td colspan="11" class="text-center text-muted">No hay reservas registradas.</td></tr>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:forEach items="${reservas}" var="r">
+                                        <tr>
+                                            <td>#${r.idReserva}</td>
+                                            <td>${not empty r.nombreUsuario ? r.nombreUsuario : 'ID #'.concat(r.idUsuario)}</td>
+                                            <td>${not empty r.nombrePaquete ? r.nombrePaquete : 'ID #'.concat(r.idPaquete)}</td>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${not empty r.fechaReserva}">
+                                                        <fmt:formatDate value="${r.fechaReserva}" pattern="dd/MM/yyyy"/>
+                                                    </c:when>
+                                                    <c:otherwise>-</c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                            <td>${r.tipoViaje == 'idavuelta' || r.tipoViaje == 'roundtrip' ? 'Ida y Vuelta' : 'Solo Ida'}</td>
+                                            <td>${r.fechaSalida}</td>
+                                            <td>${not empty r.fechaRetorno ? r.fechaRetorno : '-'}</td>
+                                            <td>${r.numPasajeros}</td>
+                                            <td class="fw-bold">S/ ${r.precioTotal}</td>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${r.estado.equalsIgnoreCase('pagada')}">
+                                                        <span class="badge bg-success">Pagada</span>
+                                                    </c:when>
+                                                    <c:when test="${r.estado.equalsIgnoreCase('pendiente')}">
+                                                        <span class="badge bg-warning text-dark">Pendiente</span>
+                                                    </c:when>
+                                                    <c:when test="${r.estado.equalsIgnoreCase('cancelada')}">
+                                                        <span class="badge bg-danger">Cancelada</span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="badge bg-secondary">${r.estado}</span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${r.estado.equalsIgnoreCase('pagada')}">
+                                                        <button class="btn btn-sm btn-secondary" disabled><i class="bi bi-pencil"></i></button>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <button class="btn btn-sm btn-secondary-custom btn-editar" 
+                                                                data-id="${r.idReserva}"
+                                                                data-usuario="${r.idUsuario}"
+                                                                data-paquete="${r.idPaquete}"
+                                                                data-tipoviaje="${r.tipoViaje}"
+                                                                data-pasajeros="${r.numPasajeros}"
+                                                                data-salida="${r.fechaSalida}"
+                                                                data-retorno="${not empty r.fechaRetorno ? r.fechaRetorno : ''}"
+                                                                data-total="${r.precioTotal}"
+                                                                data-estado="${r.estado}"
+                                                                data-bs-toggle="modal" data-bs-target="#reservaModal">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger btn-eliminar" data-id="${r.idReserva}">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </c:otherwise>
+                            </c:choose>
                         </tbody>
                     </table>
                 </div>
@@ -149,7 +160,7 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="<%=request.getContextPath()%>/admin/reservas" method="post" id="formReserva">
+                    <form action="${pageContext.request.contextPath}/admin/reservas" method="post" id="formReserva">
                         <input type="hidden" id="actionReserva" name="action" value="crear">
                         <input type="hidden" id="idReserva" name="id">
 
@@ -158,24 +169,20 @@
                                 <label class="form-label">Cliente</label>
                                 <select class="form-select" id="usuarioReserva" name="id_usuario" required>
                                     <option value="">Seleccionar cliente</option>
-                                    <% if (usuarios != null) {
-                                        for (Usuario u : usuarios) { %>
-                                        <option value="<%= u.getIdUsuario() %>">
-                                            <%= u.getNombre() %> <%= u.getApellidos() %> (<%= u.getEmail() %>)
+                                    <c:forEach items="${usuarios}" var="u">
+                                        <option value="${u.idUsuario}">
+                                            ${u.nombre} ${u.apellidos} (${u.email})
                                         </option>
-                                    <%  }
-                                    } %>
+                                    </c:forEach>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Filtrar por Región</label>
                                 <select class="form-select" id="filtroCategoria">
                                     <option value="0">Todas las regiones</option>
-                                    <% if (categorias != null) {
-                                        for (CategoriaPaquete cat : categorias) { %>
-                                        <option value="<%= cat.getIdCategoria() %>"><%= cat.getNombre() %></option>
-                                    <%  }
-                                    } %>
+                                    <c:forEach items="${categorias}" var="cat">
+                                        <option value="${cat.idCategoria}">${cat.nombre}</option>
+                                    </c:forEach>
                                 </select>
                             </div>
                         </div>
@@ -185,15 +192,13 @@
                                 <label class="form-label">Paquete Turístico</label>
                                 <select class="form-select" id="paqueteReserva" name="id_paquete" required>
                                     <option value="">Seleccionar paquete</option>
-                                    <% if (paquetes != null) {
-                                        for (Paquete p : paquetes) { %>
-                                        <option value="<%= p.getIdPaquete() %>" 
-                                                data-precio="<%= p.getPrecioSoles() %>"
-                                                data-categoria="<%= p.getIdCategoria() %>">
-                                            <%= p.getNombre() %> - S/ <%= p.getPrecioSoles() %>
+                                    <c:forEach items="${paquetes}" var="p">
+                                        <option value="${p.idPaquete}" 
+                                                data-precio="${p.precioSoles}"
+                                                data-categoria="${p.idCategoria}">
+                                            ${p.nombre} - S/ ${p.precioSoles}
                                         </option>
-                                    <%  }
-                                    } %>
+                                    </c:forEach>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -220,7 +225,7 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Fecha Salida</label>
                                 <input type="date" class="form-control" id="fechaSalidaReserva" name="fecha_salida" required
-                                       min="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>">
+                                       min="${minDate}">
                             </div>
                             <div class="col-md-6 mb-3" id="divFechaRetorno">
                                 <label class="form-label">Fecha Retorno <span id="retornoObligatorio" style="color:red;">*</span></label>
@@ -248,7 +253,7 @@
         </div>
     </div>
 
-    <form id="formEliminar" action="<%=request.getContextPath()%>/admin/reservas" method="post">
+    <form id="formEliminar" action="${pageContext.request.contextPath}/admin/reservas" method="post">
         <input type="hidden" name="action" value="eliminar">
         <input type="hidden" id="idEliminar" name="id">
     </form>
