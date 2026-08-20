@@ -1,4 +1,4 @@
-﻿package com.turismo.mantenimientos;
+package com.turismo.mantenimientos;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -237,6 +237,108 @@ public class PaqueteModel implements PaqueteInterface {
                 p.setEstado(rs.getString("estado"));
                 p.setCategoriaNombre(rs.getString("categoria_nombre"));
                 lista.add(p);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+    // ============================================
+    // LISTAR POR CATEGORÍA - ADMIN (activos + inactivos)
+    // ============================================
+    @Override
+    public List<Paquete> listarPorCategoriaAdmin(String nombreCategoria) {
+        List<Paquete> lista = new ArrayList<>();
+        String sql = "SELECT p.*, c.nombre as categoria_nombre FROM paquetes p " +
+                     "JOIN categorias_paquetes c ON p.id_categoria = c.id_categoria " +
+                     "WHERE c.nombre = ? " +
+                     "ORDER BY p.id_paquete DESC";
+
+        try (Connection con = ConexionDB.obtenerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, nombreCategoria);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Paquete p = new Paquete();
+                p.setIdPaquete(rs.getInt("id_paquete"));
+                p.setIdCategoria(rs.getInt("id_categoria"));
+                p.setNombre(rs.getString("nombre"));
+                p.setDestino(rs.getString("destino"));
+                p.setDescripcion(rs.getString("descripcion"));
+                p.setImagenUrl(rs.getString("imagenUrl"));
+                p.setPrecioSoles(rs.getBigDecimal("precio_soles"));
+                p.setEstado(rs.getString("estado"));
+                p.setCategoriaNombre(rs.getString("categoria_nombre"));
+                lista.add(p);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+    // ============================================
+    // LISTAR POR CATEGORÍA Y DESTINO - ADMIN
+    // ============================================
+    @Override
+    public List<Paquete> listarPorCategoriaYDestinoAdmin(String nombreCategoria, String destino) {
+        List<Paquete> lista = new ArrayList<>();
+        String sql = "SELECT p.*, c.nombre as categoria_nombre FROM paquetes p " +
+                     "JOIN categorias_paquetes c ON p.id_categoria = c.id_categoria " +
+                     "WHERE c.nombre = ? AND p.destino = ? " +
+                     "ORDER BY p.id_paquete DESC";
+
+        try (Connection con = ConexionDB.obtenerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, nombreCategoria);
+            ps.setString(2, destino);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Paquete p = new Paquete();
+                p.setIdPaquete(rs.getInt("id_paquete"));
+                p.setIdCategoria(rs.getInt("id_categoria"));
+                p.setNombre(rs.getString("nombre"));
+                p.setDestino(rs.getString("destino"));
+                p.setDescripcion(rs.getString("descripcion"));
+                p.setImagenUrl(rs.getString("imagenUrl"));
+                p.setPrecioSoles(rs.getBigDecimal("precio_soles"));
+                p.setEstado(rs.getString("estado"));
+                p.setCategoriaNombre(rs.getString("categoria_nombre"));
+                lista.add(p);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+    // ============================================
+    // LISTAR DESTINOS ÚNICOS POR CATEGORÍA - ADMIN
+    // ============================================
+    @Override
+    public List<String> listarDestinosPorCategoria(String nombreCategoria) {
+        List<String> lista = new ArrayList<>();
+        String sql = "SELECT DISTINCT p.destino FROM paquetes p " +
+                     "JOIN categorias_paquetes c ON p.id_categoria = c.id_categoria " +
+                     "WHERE c.nombre = ? " +
+                     "ORDER BY p.destino";
+
+        try (Connection con = ConexionDB.obtenerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, nombreCategoria);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String dest = rs.getString("destino");
+                if (dest != null && !dest.trim().isEmpty()) {
+                    lista.add(dest);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

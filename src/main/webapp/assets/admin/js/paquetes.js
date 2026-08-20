@@ -71,4 +71,53 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     });
+
+    // ==========================================
+    // FILTROS DE REGIÓN Y DESTINO
+    // ==========================================
+    const filtroRegion = document.getElementById('filtroRegion');
+    const filtroDestino = document.getElementById('filtroDestino');
+
+    // Al cambiar región: recargar la página con la nueva región (sin destino)
+    if (filtroRegion) {
+        filtroRegion.addEventListener('change', function () {
+            const region = this.value;
+            if (region === '0' || region === '') {
+                window.location.href = getContextPath() + '/admin/paquetes';
+            } else {
+                window.location.href = getContextPath() + '/admin/paquetes?region=' + encodeURIComponent(region);
+            }
+        });
+    }
+
+    // Al cambiar destino: aplicar ambos filtros
+    if (filtroDestino) {
+        filtroDestino.addEventListener('change', function () {
+            aplicarFiltro();
+        });
+    }
 });
+
+function aplicarFiltro() {
+    var region = document.getElementById('filtroRegion').value;
+    var destino = document.getElementById('filtroDestino').value;
+    var url = getContextPath() + '/admin/paquetes';
+
+    if (region !== '0' && region !== '') {
+        url += '?region=' + encodeURIComponent(region);
+        if (destino !== '') {
+            url += '&destino=' + encodeURIComponent(destino);
+        }
+    }
+    window.location.href = url;
+}
+
+function limpiarFiltros() {
+    window.location.href = getContextPath() + '/admin/paquetes';
+}
+
+function getContextPath() {
+    var base = document.querySelector('base');
+    if (base) return base.href.replace(/\/$/, '');
+    return window.location.pathname.split('/').slice(0, 2).join('/');
+}

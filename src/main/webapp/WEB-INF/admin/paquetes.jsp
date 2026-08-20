@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
-<c:if test="${empty paquetes}">
-    <c:redirect url="/admin/paquetes"/>
-</c:if>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -55,7 +52,39 @@
                     <i class="bi bi-plus-circle"></i> Nuevo Paquete
                 </button>
             </div>
-            
+
+            <!-- FILTROS DE REGIÓN Y DESTINO -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold text-muted small text-uppercase">Filtrar por Región</label>
+                    <select id="filtroRegion" class="form-select">
+                        <option value="0">Todas las regiones</option>
+                        <c:forEach items="${categorias}" var="cat">
+                            <option value="${cat.nombre}" ${param.region == cat.nombre ? 'selected' : ''}>
+                                ${cat.nombre}
+                            </option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold text-muted small text-uppercase">Filtrar por Destino</label>
+                    <select id="filtroDestino" class="form-select"
+                            ${empty param.region or param.region == '0' ? 'disabled' : ''}>
+                        <option value="">Todos los destinos</option>
+                        <c:forEach items="${destinosUnicos}" var="dest">
+                            <option value="${dest}" ${param.destino == dest ? 'selected' : ''}>
+                                ${dest}
+                            </option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button class="btn btn-secondary w-100" onclick="limpiarFiltros()">
+                        <i class="bi bi-x-circle"></i> Limpiar filtros
+                    </button>
+                </div>
+            </div>
+
             <div class="card p-4">
                 <div class="table-responsive">
                     <table class="table table-hover table-custom align-middle">

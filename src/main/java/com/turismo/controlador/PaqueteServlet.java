@@ -25,10 +25,34 @@ public class PaqueteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Paquete> paquetes = dao.listarTodos();
+
+        String region = request.getParameter("region");
+        String destino = request.getParameter("destino");
+
+        // 1. Poblar el desplegable de regiones
         List<CategoriaPaquete> categorias = categoriaDao.listar();
-        request.setAttribute("paquetes", paquetes);
+
+        // 2. Filtrar paquetes y obtener destinos únicos según región seleccionada
+        List<Paquete> paquetes;
+        List<String> destinosUnicos = null;
+
+        boolean tieneRegion = region != null && !region.trim().isEmpty() && !"0".equals(region);
+        boolean tieneDestino = destino != null && !destino.trim().isEmpty();
+
+        if (tieneRegion) {
+            destinosUnicos = dao.listarDestinosPorCategoria(region);
+            if (tieneDestino) {
+                paquetes = dao.listarPorCategoriaYDestinoAdmin(region, destino);
+            } else {
+                paquetes = dao.listarPorCategoriaAdmin(region);
+            }
+        } else {
+            paquetes = dao.listarTodos();
+        }
+
         request.setAttribute("categorias", categorias);
+        request.setAttribute("destinosUnicos", destinosUnicos);
+        request.setAttribute("paquetes", paquetes);
         request.getRequestDispatcher("/WEB-INF/admin/paquetes.jsp").forward(request, response);
     }
 
