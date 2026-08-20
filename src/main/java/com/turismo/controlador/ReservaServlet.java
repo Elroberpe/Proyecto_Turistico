@@ -4,14 +4,13 @@ import com.turismo.dao.DAOFactory;
 import com.turismo.interfaces.ReservaInterface;
 import com.turismo.interfaces.UsuarioInterface;
 import com.turismo.interfaces.PaqueteInterface;
+import com.turismo.interfaces.CategoriaPaqueteInterface;
 import com.turismo.interfaces.PagoInterface;
 import com.turismo.modelo.Reserva;
 import com.turismo.modelo.Usuario;
 import com.turismo.modelo.Paquete;
 import com.turismo.modelo.CategoriaPaquete;
 import com.turismo.modelo.Pago;
-import com.turismo.service.CategoriaService;
-import com.turismo.service.PaqueteService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -28,8 +27,8 @@ public class ReservaServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ReservaInterface reservaDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getReserva();
     private UsuarioInterface usuarioDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getUsuario();
-    private PaqueteService paqueteService = new PaqueteService();
-    private CategoriaService categoriaService = new CategoriaService();
+    private PaqueteInterface paqueteDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getPaquete();
+    private CategoriaPaqueteInterface categoriaDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getCategoriaPaquete();
     private PagoInterface pagoDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getPago();
 
     @Override
@@ -38,8 +37,8 @@ public class ReservaServlet extends HttpServlet {
 
         List<Reserva> reservas = reservaDao.listarTodos();
         List<Usuario> usuarios = usuarioDao.listarClientes();
-        List<Paquete> paquetes = paqueteService.listarActivos();
-        List<CategoriaPaquete> categorias = categoriaService.listar();
+        List<Paquete> paquetes = paqueteDao.listarActivos();
+        List<CategoriaPaquete> categorias = categoriaDao.listar();
 
         request.setAttribute("reservas", reservas);
         request.setAttribute("usuarios", usuarios);

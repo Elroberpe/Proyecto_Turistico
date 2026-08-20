@@ -1,7 +1,8 @@
 package com.turismo.controlador;
 
+import com.turismo.dao.DAOFactory;
+import com.turismo.interfaces.CategoriaPaqueteInterface;
 import com.turismo.modelo.CategoriaPaquete;
-import com.turismo.service.CategoriaService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,12 +14,12 @@ import java.io.IOException;
 public class CategoriaServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private CategoriaService categoriaService = new CategoriaService();
+    private CategoriaPaqueteInterface dao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getCategoriaPaquete();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("categorias", categoriaService.listar());
+        request.setAttribute("categorias", dao.listar());
         request.getRequestDispatcher("/WEB-INF/admin/categorias_paquetes.jsp").forward(request, response);
     }
 
@@ -56,7 +57,7 @@ public class CategoriaServlet extends HttpServlet {
             c.setNombre(request.getParameter("nombre").trim());
             c.setDescripcion(request.getParameter("descripcion").trim());
 
-            if (categoriaService.crear(c)) {
+            if (dao.crear(c)) {
                 request.getSession().setAttribute("mensaje", "Categoría creada correctamente.");
             } else {
                 request.getSession().setAttribute("error", "Error al crear la categoría.");
@@ -78,7 +79,7 @@ public class CategoriaServlet extends HttpServlet {
             c.setNombre(request.getParameter("nombre").trim());
             c.setDescripcion(request.getParameter("descripcion").trim());
 
-            if (categoriaService.actualizar(c)) {
+            if (dao.actualizar(c)) {
                 request.getSession().setAttribute("mensaje", "Categoría actualizada correctamente.");
             } else {
                 request.getSession().setAttribute("error", "Error al actualizar la categoría.");
@@ -96,11 +97,11 @@ public class CategoriaServlet extends HttpServlet {
     private void eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
-            int count = categoriaService.contarPaquetesPorCategoria(id);
+            int count = dao.contarPaquetesPorCategoria(id);
 
             if (count > 0) {
                 request.getSession().setAttribute("error", "No se puede eliminar. La categoría tiene " + count + " paquetes asociados.");
-            } else if (categoriaService.eliminar(id)) {
+            } else if (dao.eliminar(id)) {
                 request.getSession().setAttribute("mensaje", "Categoría eliminada correctamente.");
             } else {
                 request.getSession().setAttribute("error", "Error al eliminar la categoría.");
