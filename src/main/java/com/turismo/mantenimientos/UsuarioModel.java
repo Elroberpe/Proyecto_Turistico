@@ -1,4 +1,4 @@
-package com.turismo.dao;
+﻿package com.turismo.mantenimientos;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,15 +12,15 @@ import com.turismo.conexion.ConexionDB;
 import com.turismo.interfaces.UsuarioInterface;
 import com.turismo.modelo.Usuario;
 
-public class UsuarioDao implements UsuarioInterface {
+public class UsuarioModel implements UsuarioInterface {
 
-    public UsuarioDao() {
-        // Constructor vacío
+    public UsuarioModel() {
     }
 
     // ============================================
     // LOGIN
     // ============================================
+    @Override
     public Usuario login(String email, String password) {
         Usuario usuario = null;
         String sql = "SELECT * FROM usuario WHERE email = ? AND password = ?";
@@ -54,6 +54,7 @@ public class UsuarioDao implements UsuarioInterface {
     // ============================================
     // REGISTRAR (CREAR)
     // ============================================
+    @Override
     public boolean registrar(Usuario usuario) {
         String sql = "INSERT INTO usuario (id_rol, nombre, apellidos, email, password, telefono) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -78,13 +79,14 @@ public class UsuarioDao implements UsuarioInterface {
     // ============================================
     // LISTAR TODOS LOS USUARIOS
     // ============================================
+    @Override
     public List<Usuario> listar() {
         List<Usuario> lista = new ArrayList<>();
-        String sql = "SELECT * FROM usuario ORDER BY id_usuario";
+        String sql = "SELECT * FROM usuario";
 
         try (Connection con = ConexionDB.obtenerConexion();
-             Statement st = con.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 Usuario u = new Usuario();
@@ -105,6 +107,7 @@ public class UsuarioDao implements UsuarioInterface {
     // ============================================
     // OBTENER USUARIO POR ID
     // ============================================
+    @Override
     public Usuario obtenerPorId(int id) {
         String sql = "SELECT * FROM usuario WHERE id_usuario = ?";
 
@@ -133,6 +136,7 @@ public class UsuarioDao implements UsuarioInterface {
     // ============================================
     // OBTENER USUARIO POR EMAIL
     // ============================================
+    @Override
     public Usuario obtenerPorEmail(String email) {
         String sql = "SELECT * FROM usuario WHERE email = ?";
 
@@ -162,6 +166,7 @@ public class UsuarioDao implements UsuarioInterface {
     // ============================================
     // ACTUALIZAR USUARIO
     // ============================================
+    @Override
     public boolean actualizar(Usuario usuario) {
         String sql = "UPDATE usuario SET nombre = ?, apellidos = ?, email = ?, telefono = ? WHERE id_usuario = ?";
 
@@ -185,8 +190,9 @@ public class UsuarioDao implements UsuarioInterface {
     // ============================================
     // ACTUALIZAR USUARIO CON CONTRASEÑA
     // ============================================
+    @Override
     public boolean actualizarConPassword(Usuario usuario) {
-        String sql = "UPDATE usuario SET nombre = ?, apellidos = ?, email = ?, telefono = ?, password = ? WHERE id_usuario = ?";
+        String sql = "UPDATE usuario SET nombre = ?, apellidos = ?, email = ?, password = ?, telefono = ? WHERE id_usuario = ?";
 
         try (Connection con = ConexionDB.obtenerConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -194,8 +200,8 @@ public class UsuarioDao implements UsuarioInterface {
             ps.setString(1, usuario.getNombre());
             ps.setString(2, usuario.getApellidos());
             ps.setString(3, usuario.getEmail());
-            ps.setString(4, usuario.getTelefono());
-            ps.setString(5, usuario.getPassword());
+            ps.setString(4, usuario.getPassword());
+            ps.setString(5, usuario.getTelefono());
             ps.setInt(6, usuario.getIdUsuario());
 
             return ps.executeUpdate() > 0;
@@ -209,6 +215,7 @@ public class UsuarioDao implements UsuarioInterface {
     // ============================================
     // ELIMINAR USUARIO
     // ============================================
+    @Override
     public boolean eliminar(int id) {
         String sql = "DELETE FROM usuario WHERE id_usuario = ?";
 
@@ -223,10 +230,11 @@ public class UsuarioDao implements UsuarioInterface {
             return false;
         }
     }
-    
-	// ============================================
-	// CONTAR CLIENTES (id_rol = 1)
-	// ============================================
+
+    // ============================================
+    // CONTAR CLIENTES
+    // ============================================
+    @Override
     public int contarClientes() {
         String sql = "SELECT COUNT(*) FROM usuario WHERE id_rol = 1";
         try (Connection con = ConexionDB.obtenerConexion();
@@ -240,32 +248,32 @@ public class UsuarioDao implements UsuarioInterface {
         }
         return 0;
     }
-   
-    
-	// ============================================
-	// LISTAR SOLO CLIENTES (id_rol = 1)
-	// ============================================
-	public List<Usuario> listarClientes() {
-	    List<Usuario> lista = new ArrayList<>();
-	    String sql = "SELECT * FROM usuario WHERE id_rol = 1 ORDER BY nombre";
-	
-	    try (Connection con = ConexionDB.obtenerConexion();
-	         Statement st = con.createStatement();
-	         ResultSet rs = st.executeQuery(sql)) {
-	
-	        while (rs.next()) {
-	            Usuario u = new Usuario();
-	            u.setIdUsuario(rs.getInt("id_usuario"));
-	            u.setIdRol(rs.getInt("id_rol"));
-	            u.setNombre(rs.getString("nombre"));
-	            u.setApellidos(rs.getString("apellidos"));
-	            u.setEmail(rs.getString("email"));
-	            u.setTelefono(rs.getString("telefono"));
-	            lista.add(u);
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	    return lista;
-	}
+
+    // ============================================
+    // LISTAR CLIENTES
+    // ============================================
+    @Override
+    public List<Usuario> listarClientes() {
+        List<Usuario> lista = new ArrayList<>();
+        String sql = "SELECT * FROM usuario WHERE id_rol = 1 ORDER BY nombre";
+
+        try (Connection con = ConexionDB.obtenerConexion();
+             Statement st = con.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            while (rs.next()) {
+                Usuario u = new Usuario();
+                u.setIdUsuario(rs.getInt("id_usuario"));
+                u.setIdRol(rs.getInt("id_rol"));
+                u.setNombre(rs.getString("nombre"));
+                u.setApellidos(rs.getString("apellidos"));
+                u.setEmail(rs.getString("email"));
+                u.setTelefono(rs.getString("telefono"));
+                lista.add(u);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
 }

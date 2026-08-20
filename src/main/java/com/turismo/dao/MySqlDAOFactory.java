@@ -5,31 +5,36 @@ import com.turismo.interfaces.PagoInterface;
 import com.turismo.interfaces.PaqueteInterface;
 import com.turismo.interfaces.ReservaInterface;
 import com.turismo.interfaces.UsuarioInterface;
+import com.turismo.mantenimientos.CategoriaPaqueteModel;
+import com.turismo.mantenimientos.PagoModel;
+import com.turismo.mantenimientos.PaqueteModel;
+import com.turismo.mantenimientos.ReservaModel;
+import com.turismo.mantenimientos.UsuarioModel;
 
 public class MySqlDAOFactory extends DAOFactory {
 
     @Override
     public UsuarioInterface getUsuario() {
-        return new UsuarioDao();
+        return new UsuarioModel();
     }
 
     @Override
     public PaqueteInterface getPaquete() {
-        return new PaqueteDao();
+        return new PaqueteModel();
     }
 
     @Override
     public ReservaInterface getReserva() {
-        return new ReservaDao();
+        return new ReservaModel();
     }
 
     @Override
     public PagoInterface getPago() {
-        return new PagoDao();
+        return new PagoModel();
     }
 
     @Override
     public CategoriaPaqueteInterface getCategoriaPaquete() {
-        return new CategoriaPaqueteDao();
+        return new CategoriaPaqueteModel();
     }
 }

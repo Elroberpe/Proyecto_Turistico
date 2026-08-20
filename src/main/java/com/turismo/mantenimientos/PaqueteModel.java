@@ -1,4 +1,4 @@
-package com.turismo.dao;
+﻿package com.turismo.mantenimientos;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,15 +12,15 @@ import com.turismo.conexion.ConexionDB;
 import com.turismo.interfaces.PaqueteInterface;
 import com.turismo.modelo.Paquete;
 
-public class PaqueteDao implements PaqueteInterface {
+public class PaqueteModel implements PaqueteInterface {
 
-    public PaqueteDao() {
-        // Constructor vacío
+    public PaqueteModel() {
     }
 
     // ============================================
     // LISTAR POR CATEGORÍA (para web pública)
     // ============================================
+    @Override
     public List<Paquete> listarPorCategoria(String nombreCategoria) {
         List<Paquete> lista = new ArrayList<>();
         String sql = "SELECT p.* FROM paquetes p " +
@@ -52,8 +52,9 @@ public class PaqueteDao implements PaqueteInterface {
     }
 
     // ============================================
-    // ✅ NUEVO: LISTAR TODOS (para admin)
+    // LISTAR TODOS (para admin)
     // ============================================
+    @Override
     public List<Paquete> listarTodos() {
         List<Paquete> lista = new ArrayList<>();
         String sql = "SELECT p.*, c.nombre as categoria_nombre FROM paquetes p " +
@@ -68,13 +69,13 @@ public class PaqueteDao implements PaqueteInterface {
                 Paquete p = new Paquete();
                 p.setIdPaquete(rs.getInt("id_paquete"));
                 p.setIdCategoria(rs.getInt("id_categoria"));
-                p.setCategoriaNombre(rs.getString("categoria_nombre"));
                 p.setNombre(rs.getString("nombre"));
                 p.setDestino(rs.getString("destino"));
                 p.setDescripcion(rs.getString("descripcion"));
                 p.setImagenUrl(rs.getString("imagenUrl"));
                 p.setPrecioSoles(rs.getBigDecimal("precio_soles"));
                 p.setEstado(rs.getString("estado"));
+                p.setCategoriaNombre(rs.getString("categoria_nombre"));
                 lista.add(p);
             }
         } catch (Exception e) {
@@ -84,8 +85,9 @@ public class PaqueteDao implements PaqueteInterface {
     }
 
     // ============================================
-    // ✅ NUEVO: OBTENER POR ID
+    // OBTENER POR ID
     // ============================================
+    @Override
     public Paquete obtenerPorId(int id) {
         String sql = "SELECT p.*, c.nombre as categoria_nombre FROM paquetes p " +
                      "JOIN categorias_paquetes c ON p.id_categoria = c.id_categoria " +
@@ -101,13 +103,13 @@ public class PaqueteDao implements PaqueteInterface {
                 Paquete p = new Paquete();
                 p.setIdPaquete(rs.getInt("id_paquete"));
                 p.setIdCategoria(rs.getInt("id_categoria"));
-                p.setCategoriaNombre(rs.getString("categoria_nombre"));
                 p.setNombre(rs.getString("nombre"));
                 p.setDestino(rs.getString("destino"));
                 p.setDescripcion(rs.getString("descripcion"));
                 p.setImagenUrl(rs.getString("imagenUrl"));
                 p.setPrecioSoles(rs.getBigDecimal("precio_soles"));
                 p.setEstado(rs.getString("estado"));
+                p.setCategoriaNombre(rs.getString("categoria_nombre"));
                 return p;
             }
         } catch (Exception e) {
@@ -117,14 +119,15 @@ public class PaqueteDao implements PaqueteInterface {
     }
 
     // ============================================
-    // ✅ NUEVO: CREAR PAQUETE
+    // CREAR PAQUETE
     // ============================================
+    @Override
     public boolean crear(Paquete paquete) {
         String sql = "INSERT INTO paquetes (id_categoria, nombre, destino, descripcion, imagenUrl, precio_soles, estado) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection con = ConexionDB.obtenerConexion();
-             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, paquete.getIdCategoria());
             ps.setString(2, paquete.getNombre());
@@ -134,23 +137,18 @@ public class PaqueteDao implements PaqueteInterface {
             ps.setBigDecimal(6, paquete.getPrecioSoles());
             ps.setString(7, paquete.getEstado());
 
-            int filas = ps.executeUpdate();
-            if (filas > 0) {
-                ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                    paquete.setIdPaquete(rs.getInt(1));
-                }
-                return true;
-            }
+            return ps.executeUpdate() > 0;
+
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     // ============================================
-    // ✅ NUEVO: ACTUALIZAR PAQUETE
+    // ACTUALIZAR PAQUETE
     // ============================================
+    @Override
     public boolean actualizar(Paquete paquete) {
         String sql = "UPDATE paquetes SET id_categoria = ?, nombre = ?, destino = ?, " +
                      "descripcion = ?, imagenUrl = ?, precio_soles = ?, estado = ? " +
@@ -169,6 +167,7 @@ public class PaqueteDao implements PaqueteInterface {
             ps.setInt(8, paquete.getIdPaquete());
 
             return ps.executeUpdate() > 0;
+
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -176,26 +175,28 @@ public class PaqueteDao implements PaqueteInterface {
     }
 
     // ============================================
-    // ✅ NUEVO: ELIMINAR (cambia estado a inactivo)
+    // ELIMINAR PAQUETE
     // ============================================
+    @Override
     public boolean eliminar(int id) {
-        String sql = "UPDATE paquetes SET estado = 'inactivo' WHERE id_paquete = ?";
+        String sql = "DELETE FROM paquetes WHERE id_paquete = ?";
 
         try (Connection con = ConexionDB.obtenerConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
+
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    
-	// ============================================
-	// CONTAR PAQUETES ACTIVOS
-	// ============================================
+    // ============================================
+    // CONTAR PAQUETES ACTIVOS
+    // ============================================
+    @Override
     public int contarActivos() {
         String sql = "SELECT COUNT(*) FROM paquetes WHERE estado = 'activo'";
         try (Connection con = ConexionDB.obtenerConexion();
@@ -210,15 +211,15 @@ public class PaqueteDao implements PaqueteInterface {
         return 0;
     }
 
-	// ============================================
-	// LISTAR PAQUETES ACTIVOS
-	// ============================================
+    // ============================================
+    // LISTAR ACTIVOS
+    // ============================================
+    @Override
     public List<Paquete> listarActivos() {
         List<Paquete> lista = new ArrayList<>();
         String sql = "SELECT p.*, c.nombre as categoria_nombre FROM paquetes p " +
                      "JOIN categorias_paquetes c ON p.id_categoria = c.id_categoria " +
-                     "WHERE p.estado = 'activo' " +
-                     "ORDER BY p.nombre ASC";
+                     "WHERE p.estado = 'activo' ORDER BY p.nombre";
 
         try (Connection con = ConexionDB.obtenerConexion();
              Statement st = con.createStatement();
@@ -228,13 +229,13 @@ public class PaqueteDao implements PaqueteInterface {
                 Paquete p = new Paquete();
                 p.setIdPaquete(rs.getInt("id_paquete"));
                 p.setIdCategoria(rs.getInt("id_categoria"));
-                p.setCategoriaNombre(rs.getString("categoria_nombre"));
                 p.setNombre(rs.getString("nombre"));
                 p.setDestino(rs.getString("destino"));
                 p.setDescripcion(rs.getString("descripcion"));
                 p.setImagenUrl(rs.getString("imagenUrl"));
                 p.setPrecioSoles(rs.getBigDecimal("precio_soles"));
                 p.setEstado(rs.getString("estado"));
+                p.setCategoriaNombre(rs.getString("categoria_nombre"));
                 lista.add(p);
             }
         } catch (Exception e) {
