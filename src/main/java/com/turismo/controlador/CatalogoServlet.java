@@ -8,12 +8,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import com.turismo.dao.PaqueteDao;
+import com.turismo.dao.DAOFactory;
+import com.turismo.interfaces.PaqueteInterface;
 import com.turismo.modelo.Paquete;
 
 @WebServlet("/catalogo")
 public class CatalogoServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private PaqueteInterface dao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getPaquete();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -24,7 +26,6 @@ public class CatalogoServlet extends HttpServlet {
             region = "Costa"; // Por defecto
         }
 
-        PaqueteDao dao = new PaqueteDao();
         List<Paquete> paquetes = dao.listarPorCategoria(region);
         request.setAttribute("paquetes", paquetes);
 

@@ -1,7 +1,8 @@
 package com.turismo.controlador;
 
-import com.turismo.dao.PagoDao;
-import com.turismo.dao.ReservaDao;
+import com.turismo.dao.DAOFactory;
+import com.turismo.interfaces.PagoInterface;
+import com.turismo.interfaces.ReservaInterface;
 import com.turismo.modelo.Pago;
 import com.turismo.modelo.Reserva;
 import com.turismo.modelo.Usuario;
@@ -21,8 +22,8 @@ import java.sql.Timestamp;
 public class ProcesarPagoServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     
-    private ReservaDao reservaDao = new ReservaDao();
-    private PagoDao pagoDao = new PagoDao();
+    private ReservaInterface reservaDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getReserva();
+    private PagoInterface pagoDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getPago();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

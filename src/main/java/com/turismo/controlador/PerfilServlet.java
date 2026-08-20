@@ -1,6 +1,7 @@
 package com.turismo.controlador;
 
-import com.turismo.dao.UsuarioDao;
+import com.turismo.dao.DAOFactory;
+import com.turismo.interfaces.UsuarioInterface;
 import com.turismo.modelo.Usuario;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,7 +15,7 @@ import java.io.IOException;
 @WebServlet("/perfil")
 public class PerfilServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private UsuarioDao usuarioDao = new UsuarioDao();
+    private UsuarioInterface usuarioDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getUsuario();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

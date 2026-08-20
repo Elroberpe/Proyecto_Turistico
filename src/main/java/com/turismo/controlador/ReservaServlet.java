@@ -1,10 +1,11 @@
 package com.turismo.controlador;
 
-import com.turismo.dao.ReservaDao;
-import com.turismo.dao.UsuarioDao;
-import com.turismo.dao.PaqueteDao;
-import com.turismo.dao.CategoriaPaqueteDao;
-import com.turismo.dao.PagoDao;
+import com.turismo.dao.DAOFactory;
+import com.turismo.interfaces.ReservaInterface;
+import com.turismo.interfaces.UsuarioInterface;
+import com.turismo.interfaces.PaqueteInterface;
+import com.turismo.interfaces.CategoriaPaqueteInterface;
+import com.turismo.interfaces.PagoInterface;
 import com.turismo.modelo.Reserva;
 import com.turismo.modelo.Usuario;
 import com.turismo.modelo.Paquete;
@@ -24,11 +25,11 @@ import java.util.List;
 @WebServlet("/admin/reservas")
 public class ReservaServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private ReservaDao reservaDao = new ReservaDao();
-    private UsuarioDao usuarioDao = new UsuarioDao();
-    private PaqueteDao paqueteDao = new PaqueteDao();
-    private CategoriaPaqueteDao categoriaDao = new CategoriaPaqueteDao();
-    private PagoDao pagoDao = new PagoDao();
+    private ReservaInterface reservaDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getReserva();
+    private UsuarioInterface usuarioDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getUsuario();
+    private PaqueteInterface paqueteDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getPaquete();
+    private CategoriaPaqueteInterface categoriaDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getCategoriaPaquete();
+    private PagoInterface pagoDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getPago();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

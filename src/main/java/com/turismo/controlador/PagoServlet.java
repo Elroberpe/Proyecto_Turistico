@@ -1,7 +1,8 @@
 package com.turismo.controlador;
 
-import com.turismo.dao.PagoDao;
-import com.turismo.dao.ReservaDao;
+import com.turismo.dao.DAOFactory;
+import com.turismo.interfaces.PagoInterface;
+import com.turismo.interfaces.ReservaInterface;
 import com.turismo.modelo.Pago;
 import com.turismo.modelo.Reserva;
 import jakarta.servlet.ServletException;
@@ -18,8 +19,8 @@ import java.util.List;
 public class PagoServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private PagoDao pagoDao = new PagoDao();
-    private ReservaDao reservaDao = new ReservaDao();
+    private PagoInterface pagoDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getPago();
+    private ReservaInterface reservaDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getReserva();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

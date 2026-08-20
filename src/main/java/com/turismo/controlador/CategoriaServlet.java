@@ -1,6 +1,7 @@
 package com.turismo.controlador;
 
-import com.turismo.dao.CategoriaPaqueteDao;
+import com.turismo.dao.DAOFactory;
+import com.turismo.interfaces.CategoriaPaqueteInterface;
 import com.turismo.modelo.CategoriaPaquete;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,7 +14,7 @@ import java.io.IOException;
 public class CategoriaServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private CategoriaPaqueteDao dao = new CategoriaPaqueteDao();
+    private CategoriaPaqueteInterface dao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getCategoriaPaquete();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

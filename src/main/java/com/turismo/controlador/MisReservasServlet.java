@@ -1,6 +1,7 @@
 package com.turismo.controlador;
 
-import com.turismo.dao.ReservaDao;
+import com.turismo.dao.DAOFactory;
+import com.turismo.interfaces.ReservaInterface;
 import com.turismo.modelo.Reserva;
 import com.turismo.modelo.Usuario;
 import jakarta.servlet.ServletException;
@@ -18,7 +19,7 @@ import java.util.List;
 @WebServlet("/mis-reservas")
 public class MisReservasServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private ReservaDao reservaDao = new ReservaDao();
+    private ReservaInterface reservaDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getReserva();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
