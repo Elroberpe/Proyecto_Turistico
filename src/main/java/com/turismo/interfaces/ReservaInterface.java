@@ -1,4 +1,4 @@
-﻿package com.turismo.interfaces;
+package com.turismo.interfaces;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,5 +15,6 @@ public interface ReservaInterface {
     int contarReservasDelMes();
     BigDecimal sumarIngresosDelMes();
     List<Reserva> listarPorUsuario(int idUsuario);
+    int contarPorPaquete(int idPaquete);
     void actualizarReservasCompletadas();
 }

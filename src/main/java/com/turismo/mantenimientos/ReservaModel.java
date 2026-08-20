@@ -1,4 +1,4 @@
-﻿package com.turismo.mantenimientos;
+package com.turismo.mantenimientos;
 
 import com.turismo.conexion.ConexionDB;
 import com.turismo.interfaces.ReservaInterface;
@@ -330,5 +330,25 @@ public class ReservaModel implements ReservaInterface {
             e.printStackTrace();
         }
         return lista;
+    }
+
+    // ============================================
+    // CONTAR RESERVAS POR PAQUETE
+    // ============================================
+    @Override
+    public int contarPorPaquete(int idPaquete) {
+        String sql = "SELECT COUNT(*) FROM reservas WHERE id_paquete = ?";
+        try (Connection con = ConexionDB.obtenerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idPaquete);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

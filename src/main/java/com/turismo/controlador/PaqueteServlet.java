@@ -3,6 +3,7 @@ package com.turismo.controlador;
 import com.turismo.dao.DAOFactory;
 import com.turismo.interfaces.CategoriaPaqueteInterface;
 import com.turismo.interfaces.PaqueteInterface;
+import com.turismo.interfaces.ReservaInterface;
 import com.turismo.modelo.CategoriaPaquete;
 import com.turismo.modelo.Paquete;
 import jakarta.servlet.ServletException;
@@ -19,6 +20,7 @@ public class PaqueteServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private PaqueteInterface dao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getPaquete();
     private CategoriaPaqueteInterface categoriaDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getCategoriaPaquete();
+    private ReservaInterface reservaDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getReserva();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -106,6 +108,14 @@ public class PaqueteServlet extends HttpServlet {
     private void eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
+
+            int count = reservaDao.contarPorPaquete(id);
+            if (count > 0) {
+                request.getSession().setAttribute("error", "No se puede eliminar este paquete, tiene reservas asociadas.");
+                response.sendRedirect(request.getContextPath() + "/admin/paquetes");
+                return;
+            }
+
             if (dao.eliminar(id)) {
                 request.getSession().setAttribute("mensaje", "Paquete eliminado correctamente.");
             } else {
