@@ -4,10 +4,12 @@ import com.turismo.dao.ReservaDao;
 import com.turismo.dao.UsuarioDao;
 import com.turismo.dao.PaqueteDao;
 import com.turismo.dao.CategoriaPaqueteDao;
+import com.turismo.dao.PagoDao;
 import com.turismo.modelo.Reserva;
 import com.turismo.modelo.Usuario;
 import com.turismo.modelo.Paquete;
 import com.turismo.modelo.CategoriaPaquete;
+import com.turismo.modelo.Pago;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -26,6 +28,7 @@ public class ReservaServlet extends HttpServlet {
     private UsuarioDao usuarioDao = new UsuarioDao();
     private PaqueteDao paqueteDao = new PaqueteDao();
     private CategoriaPaqueteDao categoriaDao = new CategoriaPaqueteDao();
+    private PagoDao pagoDao = new PagoDao();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -235,6 +238,14 @@ public class ReservaServlet extends HttpServlet {
             if (!"pendiente".equalsIgnoreCase(reserva.getEstado())) {
                 request.getSession().setAttribute("error", 
                     "Solo se pueden eliminar reservas en estado 'pendiente'. Las reservas pagadas o canceladas no pueden eliminarse.");
+                response.sendRedirect(request.getContextPath() + "/admin/reservas");
+                return;
+            }
+
+            // Validar si tiene algún pago o transacción asociada en el historial
+            Pago pago = pagoDao.obtenerPorReserva(id);
+            if (pago != null) {
+                request.getSession().setAttribute("error", "No se puede eliminar la reserva, tiene un pago asociado.");
                 response.sendRedirect(request.getContextPath() + "/admin/reservas");
                 return;
             }
