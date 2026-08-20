@@ -138,13 +138,12 @@
                                                         data-bs-toggle="modal" data-bs-target="#modalDetalle${r.idReserva}">
                                                     <i class="bi bi-receipt me-1"></i> Ver
                                                 </button>
-                                                <c:if test="${esCancelable}">
-                                                    <button type="button" class="btn btn-sm btn-danger btn-cancelar"
-                                                            data-id="${r.idReserva}"
-                                                            data-paquete="${not empty r.nombrePaquete ? r.nombrePaquete : 'Paquete #'.concat(r.idPaquete)}">
-                                                        <i class="bi bi-x-lg me-1"></i> Cancelar
-                                                    </button>
-                                                </c:if>
+                                                <button type="button" class="btn btn-sm ${esCancelable ? 'btn-danger btn-cancelar' : 'btn-secondary'}"
+                                                        data-id="${r.idReserva}"
+                                                        data-paquete="${not empty r.nombrePaquete ? r.nombrePaquete : 'Paquete #'.concat(r.idPaquete)}"
+                                                        ${esCancelable ? '' : 'disabled title="No se puede cancelar"'}>
+                                                    <i class="bi bi-x-lg me-1"></i> Cancelar
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
