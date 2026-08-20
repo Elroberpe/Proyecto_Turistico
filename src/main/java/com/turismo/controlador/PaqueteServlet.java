@@ -1,10 +1,10 @@
 package com.turismo.controlador;
 
 import com.turismo.dao.DAOFactory;
-import com.turismo.interfaces.CategoriaPaqueteInterface;
 import com.turismo.interfaces.PaqueteInterface;
 import com.turismo.modelo.CategoriaPaquete;
 import com.turismo.modelo.Paquete;
+import com.turismo.service.CategoriaService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,13 +18,13 @@ import java.util.List;
 public class PaqueteServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private PaqueteInterface dao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getPaquete();
-    private CategoriaPaqueteInterface categoriaDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getCategoriaPaquete();
+    private CategoriaService categoriaService = new CategoriaService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<Paquete> paquetes = dao.listarTodos();
-        List<CategoriaPaquete> categorias = categoriaDao.listar();
+        List<CategoriaPaquete> categorias = categoriaService.listar();
         request.setAttribute("paquetes", paquetes);
         request.setAttribute("categorias", categorias);
         request.getRequestDispatcher("/WEB-INF/admin/paquetes.jsp").forward(request, response);
