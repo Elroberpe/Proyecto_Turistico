@@ -20,16 +20,7 @@
 
         <!-- Page Content -->
         <div id="content">
-            <nav class="navbar navbar-expand-lg navbar-light bg-white rounded shadow-sm mb-4 p-3">
-                <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="btn btn-primary-custom">
-                        <i class="bi bi-list"></i>
-                    </button>
-                    <div class="ms-auto">
-                        <span class="me-3 fw-bold">Bienvenido, Admin</span>
-                    </div>
-                </div>
-            </nav>
+            <jsp:include page="componentes/topbar.jsp" />
 
             <c:if test="${not empty sessionScope.mensaje}">
                 <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
