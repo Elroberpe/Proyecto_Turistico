@@ -1,8 +1,7 @@
 package com.turismo.controlador;
 
-import com.turismo.dao.DAOFactory;
-import com.turismo.interfaces.UsuarioInterface;
 import com.turismo.modelo.Usuario;
+import com.turismo.service.UsuarioService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,6 +15,7 @@ import java.io.IOException;
 public class PerfilServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UsuarioInterface usuarioDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getUsuario();
+    private UsuarioService usuarioService = new UsuarioService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -66,9 +66,9 @@ public class PerfilServlet extends HttpServlet {
                 boolean exito;
                 if (password != null && !password.trim().isEmpty()) {
                     u.setPassword(password);
-                    exito = usuarioDao.actualizarConPassword(u);
+                    exito = usuarioService.actualizarConPassword(u);
                 } else {
-                    exito = usuarioDao.actualizar(u);
+                    exito = usuarioService.actualizar(u);
                 }
 
                 if (exito) {

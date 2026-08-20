@@ -6,13 +6,12 @@ import com.turismo.modelo.Usuario;
 public interface UsuarioInterface {
     Usuario login(String email, String password);
     boolean registrar(Usuario usuario);
+    List<Usuario> listar();
+    Usuario obtenerPorId(int id);
+    Usuario obtenerPorEmail(String email);
     boolean actualizar(Usuario usuario);
     boolean actualizarConPassword(Usuario usuario);
     boolean eliminar(int id);
-    Usuario obtenerPorId(int id);
-    Usuario obtenerPorEmail(String email);
-    List<Usuario> listarTodos();
-    List<Usuario> listarClientes();
-    List<Usuario> listarAdministradores();
     int contarClientes();
+    List<Usuario> listarClientes();
 }

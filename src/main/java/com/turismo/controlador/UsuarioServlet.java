@@ -6,6 +6,7 @@ import java.util.List;
 import com.turismo.dao.DAOFactory;
 import com.turismo.interfaces.UsuarioInterface;
 import com.turismo.modelo.Usuario;
+import com.turismo.service.UsuarioService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,6 +19,7 @@ public class UsuarioServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     
     private UsuarioInterface dao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getUsuario();
+    private UsuarioService usuarioService = new UsuarioService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -69,7 +71,7 @@ public class UsuarioServlet extends HttpServlet {
             int rol = (rolParam != null && !rolParam.trim().isEmpty()) ? Integer.parseInt(rolParam) : 2;
             u.setIdRol(rol);
 
-            if (dao.registrar(u)) {
+            if (usuarioService.registrar(u)) {
                 request.getSession().setAttribute("mensaje", "Usuario registrado correctamente.");
             } else {
                 request.getSession().setAttribute("error", "Error al registrar el usuario.");

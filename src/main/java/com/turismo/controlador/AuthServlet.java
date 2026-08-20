@@ -2,9 +2,8 @@ package com.turismo.controlador;
 
 import java.io.IOException;
 
-import com.turismo.dao.DAOFactory;
-import com.turismo.interfaces.UsuarioInterface;
 import com.turismo.modelo.Usuario;
+import com.turismo.service.UsuarioService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,7 +16,7 @@ import jakarta.servlet.http.HttpSession;
 public class AuthServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-    private UsuarioInterface dao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getUsuario();
+    private UsuarioService usuarioService = new UsuarioService();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -59,7 +58,7 @@ public class AuthServlet extends HttpServlet {
     	String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        Usuario usuario = dao.login(email, password);
+        Usuario usuario = usuarioService.login(email, password);
 
         if (usuario != null) {
 
@@ -101,7 +100,7 @@ public class AuthServlet extends HttpServlet {
         String redirect = request.getParameter("redirect");
         String redirectParam = (redirect != null && !redirect.trim().isEmpty()) ? "?redirect=" + redirect : "";
 
-        if (dao.registrar(usuario)) {
+        if (usuarioService.registrar(usuario)) {
             request.getSession().setAttribute("mensaje", "Cuenta creada con éxito. Ya puedes iniciar sesión.");
             response.sendRedirect(request.getContextPath() + "/login" + redirectParam);
         } else {

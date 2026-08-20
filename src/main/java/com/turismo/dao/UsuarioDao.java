@@ -131,6 +131,35 @@ public class UsuarioDao implements UsuarioInterface {
     }
 
     // ============================================
+    // OBTENER USUARIO POR EMAIL
+    // ============================================
+    public Usuario obtenerPorEmail(String email) {
+        String sql = "SELECT * FROM usuario WHERE email = ?";
+
+        try (Connection con = ConexionDB.obtenerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Usuario u = new Usuario();
+                u.setIdUsuario(rs.getInt("id_usuario"));
+                u.setIdRol(rs.getInt("id_rol"));
+                u.setNombre(rs.getString("nombre"));
+                u.setApellidos(rs.getString("apellidos"));
+                u.setEmail(rs.getString("email"));
+                u.setPassword(rs.getString("password"));
+                u.setTelefono(rs.getString("telefono"));
+                return u;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // ============================================
     // ACTUALIZAR USUARIO
     // ============================================
     public boolean actualizar(Usuario usuario) {
