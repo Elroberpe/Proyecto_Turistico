@@ -1,4 +1,4 @@
-﻿package com.turismo.service;
+package com.turismo.service;
 
 import com.turismo.dao.DAOFactory;
 import com.turismo.interfaces.UsuarioInterface;
@@ -77,5 +77,9 @@ public class UsuarioService {
             usuario.setPassword(hash);
         }
         return usuarioDao.actualizarConPassword(usuario);
+    }
+
+    public Usuario obtenerPorId(int id) {
+        return usuarioDao.obtenerPorId(id);
     }
 }

@@ -1,5 +1,7 @@
 package com.turismo.controlador;
 
+import com.turismo.dao.DAOFactory;
+import com.turismo.interfaces.UsuarioInterface;
 import com.turismo.modelo.Usuario;
 import com.turismo.service.UsuarioService;
 import jakarta.servlet.ServletException;
