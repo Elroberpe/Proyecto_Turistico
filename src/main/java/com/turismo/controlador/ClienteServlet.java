@@ -7,7 +7,9 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import com.turismo.dao.DAOFactory;
 import com.turismo.interfaces.UsuarioInterface;
+import com.turismo.interfaces.ReservaInterface;
 import com.turismo.modelo.Usuario;
+import com.turismo.modelo.Reserva;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,6 +22,7 @@ public class ClienteServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     
     private UsuarioInterface dao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getUsuario();
+    private ReservaInterface reservaDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getReserva();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -110,6 +113,14 @@ public class ClienteServlet extends HttpServlet {
     private void eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
+
+            List<Reserva> reservas = reservaDao.listarPorUsuario(id);
+            if (reservas != null && !reservas.isEmpty()) {
+                request.getSession().setAttribute("error", "No se puede eliminar, tiene reservas asociadas.");
+                response.sendRedirect(request.getContextPath() + "/admin/clientes");
+                return;
+            }
+
             if (dao.eliminar(id)) {
                 request.getSession().setAttribute("mensaje", "Cliente eliminado correctamente.");
             } else {

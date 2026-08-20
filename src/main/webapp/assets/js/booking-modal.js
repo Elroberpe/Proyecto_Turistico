@@ -190,35 +190,14 @@ function calcularPrecio() {
         return 0;
     }
 
-    // Validación de fecha retorno en viajes de ida y vuelta
-    const esSoloIda = el.tipoViaje?.value === 'oneway';
-    if (!esSoloIda && el.fechaRetorno?.value) {
-        const salidaDate = new Date(el.fechaSalida.value + 'T00:00:00');
-        const retornoDate = new Date(el.fechaRetorno.value + 'T00:00:00');
-        if (retornoDate <= salidaDate) {
-            mostrarError('⚠️ La fecha de retorno debe ser posterior a la fecha de salida.');
-            if (el.precioDisplay) el.precioDisplay.textContent = 'S/ 0.00';
-            window.precioActual = null;
-            return 0;
-        }
-    }
-
     // Cálculo financiero unificado mediante la función compartida
-    const cotizacion = (typeof window.calcularCotizacionReserva === 'function') 
-        ? window.calcularCotizacionReserva({
-            precioBase: destino.precioSoles || destino.precioBase || 0,
-            tipoViaje: el.tipoViaje?.value,
-            fechaSalida: el.fechaSalida?.value,
-            fechaRetorno: el.fechaRetorno?.value,
-            pasajeros: el.pasajeros?.value
-        })
-        : {
-            noches: 1,
-            numPasajeros: parseInt(el.pasajeros?.value || 1, 10),
-            subtotal: (destino.precioSoles || destino.precioBase || 0) * parseInt(el.pasajeros?.value || 1, 10),
-            igv: ((destino.precioSoles || destino.precioBase || 0) * parseInt(el.pasajeros?.value || 1, 10)) * 0.18,
-            total: ((destino.precioSoles || destino.precioBase || 0) * parseInt(el.pasajeros?.value || 1, 10)) * 1.18
-        };
+    const cotizacion = calcularCotizacionReserva({
+        precioBase: destino.precioSoles || destino.precioBase || 0,
+        tipoViaje: el.tipoViaje?.value,
+        fechaSalida: el.fechaSalida?.value,
+        fechaRetorno: el.fechaRetorno?.value,
+        pasajeros: el.pasajeros?.value
+    });
 
     if (el.precioDisplay) {
         el.precioDisplay.textContent = `S/ ${cotizacion.total.toFixed(2)}`;

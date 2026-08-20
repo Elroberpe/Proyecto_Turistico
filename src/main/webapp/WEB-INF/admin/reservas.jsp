@@ -230,7 +230,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Precio Total (S/)</label>
-                                <input type="number" step="0.01" class="form-control" id="precioTotalReserva" name="precio_total" required placeholder="0.00">
+                                <input type="number" step="0.01" class="form-control bg-light" id="precioTotalReserva" name="precio_total" required placeholder="0.00" readonly>
                             </div>
                         </div>
 
