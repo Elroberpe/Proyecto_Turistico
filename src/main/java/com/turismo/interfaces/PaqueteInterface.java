@@ -7,8 +7,6 @@ public interface PaqueteInterface {
     List<Paquete> listarTodos();
     List<Paquete> listarActivos();
     List<Paquete> listarPorCategoria(String nombreCategoria);
-    List<Paquete> listarPorIdCategoria(int idCategoria);
-    List<Paquete> listarDestacados(int limite);
     Paquete obtenerPorId(int id);
     boolean crear(Paquete paquete);
     boolean actualizar(Paquete paquete);

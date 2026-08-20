@@ -3,7 +3,7 @@ package com.turismo.service;
 import com.turismo.dao.DAOFactory;
 import com.turismo.interfaces.UsuarioInterface;
 import com.turismo.modelo.Usuario;
-import com.turismo.utils.BCrypt;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class UsuarioService {
 
