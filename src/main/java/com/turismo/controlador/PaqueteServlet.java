@@ -1,10 +1,9 @@
 package com.turismo.controlador;
 
-import com.turismo.dao.DAOFactory;
-import com.turismo.interfaces.PaqueteInterface;
 import com.turismo.modelo.CategoriaPaquete;
 import com.turismo.modelo.Paquete;
 import com.turismo.service.CategoriaService;
+import com.turismo.service.PaqueteService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,13 +16,13 @@ import java.util.List;
 @WebServlet("/admin/paquetes")
 public class PaqueteServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private PaqueteInterface dao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getPaquete();
+    private PaqueteService paqueteService = new PaqueteService();
     private CategoriaService categoriaService = new CategoriaService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Paquete> paquetes = dao.listarTodos();
+        List<Paquete> paquetes = paqueteService.listarTodos();
         List<CategoriaPaquete> categorias = categoriaService.listar();
         request.setAttribute("paquetes", paquetes);
         request.setAttribute("categorias", categorias);
@@ -66,7 +65,7 @@ public class PaqueteServlet extends HttpServlet {
             p.setPrecioSoles(new BigDecimal(request.getParameter("precio_soles")));
             p.setEstado(request.getParameter("estado"));
 
-            if (dao.crear(p)) {
+            if (paqueteService.crear(p)) {
                 request.getSession().setAttribute("mensaje", "Paquete creado correctamente.");
             } else {
                 request.getSession().setAttribute("error", "Error al crear el paquete.");
@@ -91,7 +90,7 @@ public class PaqueteServlet extends HttpServlet {
             p.setPrecioSoles(new BigDecimal(request.getParameter("precio_soles")));
             p.setEstado(request.getParameter("estado"));
 
-            if (dao.actualizar(p)) {
+            if (paqueteService.actualizar(p)) {
                 request.getSession().setAttribute("mensaje", "Paquete actualizado correctamente.");
             } else {
                 request.getSession().setAttribute("error", "Error al actualizar el paquete.");
@@ -106,7 +105,7 @@ public class PaqueteServlet extends HttpServlet {
     private void eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
-            if (dao.eliminar(id)) {
+            if (paqueteService.eliminar(id)) {
                 request.getSession().setAttribute("mensaje", "Paquete eliminado correctamente.");
             } else {
                 request.getSession().setAttribute("error", "Error al eliminar el paquete.");

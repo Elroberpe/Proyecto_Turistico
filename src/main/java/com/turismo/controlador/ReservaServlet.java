@@ -11,6 +11,7 @@ import com.turismo.modelo.Paquete;
 import com.turismo.modelo.CategoriaPaquete;
 import com.turismo.modelo.Pago;
 import com.turismo.service.CategoriaService;
+import com.turismo.service.PaqueteService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -27,7 +28,7 @@ public class ReservaServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ReservaInterface reservaDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getReserva();
     private UsuarioInterface usuarioDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getUsuario();
-    private PaqueteInterface paqueteDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getPaquete();
+    private PaqueteService paqueteService = new PaqueteService();
     private CategoriaService categoriaService = new CategoriaService();
     private PagoInterface pagoDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getPago();
 
@@ -37,7 +38,7 @@ public class ReservaServlet extends HttpServlet {
 
         List<Reserva> reservas = reservaDao.listarTodos();
         List<Usuario> usuarios = usuarioDao.listarClientes();
-        List<Paquete> paquetes = paqueteDao.listarActivos();
+        List<Paquete> paquetes = paqueteService.listarActivos();
         List<CategoriaPaquete> categorias = categoriaService.listar();
 
         request.setAttribute("reservas", reservas);
