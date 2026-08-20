@@ -172,19 +172,11 @@ public class PagoServlet extends HttpServlet {
                 int idReserva = pago.getIdReserva();
                 Reserva reserva = reservaDao.obtenerPorId(idReserva);
 
-                // Validar si el viaje ya concluyó
-                if (reserva != null && reserva.getFechaSalida() != null) {
-                    LocalDate hoy = LocalDate.now();
-                    LocalDate fechaFinViaje = (reserva.getFechaRetorno() != null) 
-                                                ? reserva.getFechaRetorno().toLocalDate() 
-                                                : reserva.getFechaSalida().toLocalDate();
-
-                    if (fechaFinViaje.isBefore(hoy)) {
-                        request.getSession().setAttribute("error", 
-                            "No se puede anular o rechazar el pago de una reserva cuyo viaje ya ha concluido (" + fechaFinViaje + ").");
-                        response.sendRedirect(request.getContextPath() + "/admin/pagos");
-                        return;
-                    }
+                // Validar si la reserva ya se completó
+                if (reserva != null && "completada".equalsIgnoreCase(reserva.getEstado())) {
+                    request.getSession().setAttribute("error", "No se puede anular, la reserva ya se completó.");
+                    response.sendRedirect(request.getContextPath() + "/admin/pagos");
+                    return;
                 }
                 
                 // Actualizar estado del pago a 'rechazado'

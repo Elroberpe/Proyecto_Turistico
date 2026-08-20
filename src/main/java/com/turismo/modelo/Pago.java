@@ -14,6 +14,7 @@ public class Pago {
 	private BigDecimal monto;
 	private String estado;
 	private Timestamp fechaPago;
+	private String estadoReserva; // JOIN con reservas (r.estado)
 	private Date fechaSalida;   // JOIN con reservas
 	private Date fechaRetorno;  // JOIN con reservas
 
@@ -22,6 +23,13 @@ public class Pago {
 	}
 
 	// Getters y Setters
+	public String getEstadoReserva() {
+		return estadoReserva;
+	}
+
+	public void setEstadoReserva(String estadoReserva) {
+		this.estadoReserva = estadoReserva;
+	}
 	public int getIdPago() {
 		return idPago;
 	}

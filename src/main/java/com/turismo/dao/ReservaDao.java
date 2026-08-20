@@ -13,7 +13,25 @@ import java.sql.Statement;
 
 public class ReservaDao {
 
+    // ============================================
+    // ACTUALIZAR AUTOMÁTICAMENTE RESERVAS A COMPLETADAS
+    // ============================================
+    public void actualizarReservasCompletadas() {
+        String sql = "UPDATE reservas SET estado = 'completada' " +
+                     "WHERE estado = 'pagada' AND (" +
+                     "  (fecha_retorno IS NOT NULL AND fecha_retorno < CURDATE()) OR " +
+                     "  (fecha_retorno IS NULL AND fecha_salida < CURDATE())" +
+                     ")";
+        try (Connection con = ConexionDB.obtenerConexion();
+             Statement st = con.createStatement()) {
+            st.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<Reserva> listarTodos() {
+        actualizarReservasCompletadas();
         List<Reserva> lista = new ArrayList<>();
         String sql = "SELECT r.*, u.nombre as nombre_usuario, p.nombre as nombre_paquete " +
                      "FROM reservas r " +
@@ -48,6 +66,7 @@ public class ReservaDao {
     }
 
     public Reserva obtenerPorId(int id) {
+        actualizarReservasCompletadas();
         String sql = "SELECT r.*, u.nombre as nombre_usuario, p.nombre as nombre_paquete " +
                      "FROM reservas r " +
                      "JOIN usuario u ON r.id_usuario = u.id_usuario " +
@@ -170,6 +189,7 @@ public class ReservaDao {
 	// LISTAR SOLO RESERVAS PENDIENTES
 	// ============================================
 	public List<Reserva> listarPendientes() {
+	    actualizarReservasCompletadas();
 	    List<Reserva> lista = new ArrayList<>();
 	    String sql = "SELECT r.*, u.nombre as nombre_usuario, p.nombre as nombre_paquete " +
 	                 "FROM reservas r " +
@@ -226,7 +246,7 @@ public class ReservaDao {
 	// SUMAR INGRESOS DEL MES ACTUAL
 	// ============================================
 	public BigDecimal sumarIngresosDelMes() {
-	    String sql = "SELECT SUM(precio_total) FROM reservas WHERE MONTH(fecha_reserva) = MONTH(CURRENT_DATE()) AND YEAR(fecha_reserva) = YEAR(CURRENT_DATE()) AND estado = 'pagada'";
+	    String sql = "SELECT SUM(precio_total) FROM reservas WHERE MONTH(fecha_reserva) = MONTH(CURRENT_DATE()) AND YEAR(fecha_reserva) = YEAR(CURRENT_DATE()) AND (estado = 'pagada' OR estado = 'completada')";
 	    try (Connection con = ConexionDB.obtenerConexion();
 	         Statement st = con.createStatement();
 	         ResultSet rs = st.executeQuery(sql)) {
@@ -243,6 +263,7 @@ public class ReservaDao {
 	// LISTAR RESERVAS POR USUARIO
 	// ============================================
 	public List<Reserva> listarPorUsuario(int idUsuario) {
+	    actualizarReservasCompletadas();
 	    List<Reserva> lista = new ArrayList<>();
 	    String sql = "SELECT r.*, u.nombre as nombre_usuario, p.nombre as nombre_paquete " +
 	                 "FROM reservas r " +

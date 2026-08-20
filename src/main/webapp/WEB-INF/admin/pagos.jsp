@@ -4,8 +4,6 @@
 <c:if test="${empty pagos}">
     <c:redirect url="/admin/pagos"/>
 </c:if>
-<jsp:useBean id="now" class="java.util.Date"/>
-<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="hoyStr"/>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -81,9 +79,6 @@
                                 </c:when>
                                 <c:otherwise>
                                     <c:forEach items="${pagos}" var="p">
-                                        <c:set var="fechaFin" value="${not empty p.fechaRetorno ? p.fechaRetorno : p.fechaSalida}"/>
-                                        <fmt:formatDate value="${fechaFin}" pattern="yyyy-MM-dd" var="fechaFinStr"/>
-                                        <c:set var="viajeConcluido" value="${not empty fechaFinStr && fechaFinStr < hoyStr}"/>
                                         <tr>
                                             <td>${p.idPago}</td>
                                             <td>${p.nombreCliente}</td>
@@ -110,9 +105,9 @@
                                                         <button class="btn btn-sm btn-secondary" disabled title="Pago ya finalizado/rechazado"><i class="bi bi-pencil"></i></button>
                                                         <button class="btn btn-sm btn-secondary" disabled title="Pago ya finalizado/rechazado"><i class="bi bi-x-circle"></i></button>
                                                     </c:when>
-                                                    <c:when test="${viajeConcluido}">
-                                                        <button class="btn btn-sm btn-secondary" disabled title="El viaje ya concluyó; este pago es inmutable"><i class="bi bi-pencil"></i></button>
-                                                        <button class="btn btn-sm btn-secondary" disabled title="El viaje ya concluyó; este pago es inmutable"><i class="bi bi-x-circle"></i></button>
+                                                    <c:when test="${p.estadoReserva == 'completada'}">
+                                                        <button class="btn btn-sm btn-secondary" disabled title="La reserva ya se completó; este pago es inmutable"><i class="bi bi-pencil"></i></button>
+                                                        <button class="btn btn-sm btn-secondary" disabled title="La reserva ya se completó; este pago es inmutable"><i class="bi bi-x-circle"></i></button>
                                                     </c:when>
                                                     <c:otherwise>
                                                         <button class="btn btn-sm btn-secondary-custom btn-editar" 
