@@ -57,14 +57,14 @@ public class ReservaModel implements ReservaInterface {
                 r.setIdUsuario(rs.getInt("id_usuario"));
                 r.setIdPaquete(rs.getInt("id_paquete"));
                 r.setFechaReserva(rs.getTimestamp("fecha_reserva"));
-                r.setNumeroPasajeros(rs.getInt("numero_pasajeros"));
+                r.setNumPasajeros(rs.getInt("numero_pasajeros"));
                 r.setPrecioTotal(rs.getBigDecimal("precio_total"));
                 r.setEstado(rs.getString("estado"));
                 r.setTipoViaje(rs.getString("tipo_viaje"));
                 r.setFechaSalida(rs.getDate("fecha_salida"));
                 r.setFechaRetorno(rs.getDate("fecha_retorno"));
-                r.setUsuarioNombre(rs.getString("usuario_nombre") + " " + rs.getString("usuario_apellidos"));
-                r.setPaqueteNombre(rs.getString("paquete_nombre") + " (" + rs.getString("paquete_destino") + ")");
+                r.setNombreUsuario(rs.getString("usuario_nombre") + " " + rs.getString("usuario_apellidos"));
+                r.setNombrePaquete(rs.getString("paquete_nombre") + " (" + rs.getString("paquete_destino") + ")");
                 lista.add(r);
             }
         } catch (SQLException e) {
@@ -81,8 +81,7 @@ public class ReservaModel implements ReservaInterface {
         actualizarReservasCompletadas();
         String sql = "SELECT r.*, " +
                      "u.nombre as usuario_nombre, u.apellidos as usuario_apellidos, u.email as usuario_email, " +
-                     "p.nombre as paquete_nombre, p.destino as paquete_destino, p.precio_soles as paquete_precio, " +
-                     "p.id_categoria as paquete_id_categoria " +
+                     "p.nombre as paquete_nombre, p.destino as paquete_destino " +
                      "FROM reservas r " +
                      "JOIN usuario u ON r.id_usuario = u.id_usuario " +
                      "JOIN paquetes p ON r.id_paquete = p.id_paquete " +
@@ -100,16 +99,14 @@ public class ReservaModel implements ReservaInterface {
                 r.setIdUsuario(rs.getInt("id_usuario"));
                 r.setIdPaquete(rs.getInt("id_paquete"));
                 r.setFechaReserva(rs.getTimestamp("fecha_reserva"));
-                r.setNumeroPasajeros(rs.getInt("numero_pasajeros"));
+                r.setNumPasajeros(rs.getInt("numero_pasajeros"));
                 r.setPrecioTotal(rs.getBigDecimal("precio_total"));
                 r.setEstado(rs.getString("estado"));
                 r.setTipoViaje(rs.getString("tipo_viaje"));
                 r.setFechaSalida(rs.getDate("fecha_salida"));
                 r.setFechaRetorno(rs.getDate("fecha_retorno"));
-                r.setUsuarioNombre(rs.getString("usuario_nombre") + " " + rs.getString("usuario_apellidos"));
-                r.setPaqueteNombre(rs.getString("paquete_nombre"));
-                r.setPaquetePrecio(rs.getBigDecimal("paquete_precio"));
-                r.setIdCategoria(rs.getInt("paquete_id_categoria"));
+                r.setNombreUsuario(rs.getString("usuario_nombre") + " " + rs.getString("usuario_apellidos"));
+                r.setNombrePaquete(rs.getString("paquete_nombre"));
                 return r;
             }
         } catch (SQLException e) {
@@ -131,7 +128,7 @@ public class ReservaModel implements ReservaInterface {
 
             ps.setInt(1, reserva.getIdUsuario());
             ps.setInt(2, reserva.getIdPaquete());
-            ps.setInt(3, reserva.getNumeroPasajeros());
+            ps.setInt(3, reserva.getNumPasajeros());
             ps.setBigDecimal(4, reserva.getPrecioTotal());
             ps.setString(5, reserva.getEstado());
             ps.setString(6, reserva.getTipoViaje());
@@ -166,7 +163,7 @@ public class ReservaModel implements ReservaInterface {
 
             ps.setInt(1, reserva.getIdUsuario());
             ps.setInt(2, reserva.getIdPaquete());
-            ps.setInt(3, reserva.getNumeroPasajeros());
+            ps.setInt(3, reserva.getNumPasajeros());
             ps.setBigDecimal(4, reserva.getPrecioTotal());
             ps.setString(5, reserva.getEstado());
             ps.setString(6, reserva.getTipoViaje());
@@ -245,11 +242,11 @@ public class ReservaModel implements ReservaInterface {
                 r.setIdUsuario(rs.getInt("id_usuario"));
                 r.setIdPaquete(rs.getInt("id_paquete"));
                 r.setFechaReserva(rs.getTimestamp("fecha_reserva"));
-                r.setNumeroPasajeros(rs.getInt("numero_pasajeros"));
+                r.setNumPasajeros(rs.getInt("numero_pasajeros"));
                 r.setPrecioTotal(rs.getBigDecimal("precio_total"));
                 r.setEstado(rs.getString("estado"));
-                r.setUsuarioNombre(rs.getString("usuario_nombre") + " " + rs.getString("usuario_apellidos"));
-                r.setPaqueteNombre(rs.getString("paquete_nombre"));
+                r.setNombreUsuario(rs.getString("usuario_nombre") + " " + rs.getString("usuario_apellidos"));
+                r.setNombrePaquete(rs.getString("paquete_nombre"));
                 lista.add(r);
             }
         } catch (SQLException e) {
@@ -302,7 +299,7 @@ public class ReservaModel implements ReservaInterface {
     public List<Reserva> listarPorUsuario(int idUsuario) {
         actualizarReservasCompletadas();
         List<Reserva> lista = new ArrayList<>();
-        String sql = "SELECT r.*, p.nombre as paquete_nombre, p.destino as paquete_destino, p.imagenUrl as paquete_imagen " +
+        String sql = "SELECT r.*, p.nombre as paquete_nombre, p.destino as paquete_destino " +
                      "FROM reservas r " +
                      "JOIN paquetes p ON r.id_paquete = p.id_paquete " +
                      "WHERE r.id_usuario = ? " +
@@ -320,15 +317,13 @@ public class ReservaModel implements ReservaInterface {
                 r.setIdUsuario(rs.getInt("id_usuario"));
                 r.setIdPaquete(rs.getInt("id_paquete"));
                 r.setFechaReserva(rs.getTimestamp("fecha_reserva"));
-                r.setNumeroPasajeros(rs.getInt("numero_pasajeros"));
+                r.setNumPasajeros(rs.getInt("numero_pasajeros"));
                 r.setPrecioTotal(rs.getBigDecimal("precio_total"));
                 r.setEstado(rs.getString("estado"));
                 r.setTipoViaje(rs.getString("tipo_viaje"));
                 r.setFechaSalida(rs.getDate("fecha_salida"));
                 r.setFechaRetorno(rs.getDate("fecha_retorno"));
-                r.setPaqueteNombre(rs.getString("paquete_nombre"));
-                r.setPaqueteDestino(rs.getString("paquete_destino"));
-                r.setPaqueteImagen(rs.getString("paquete_imagen"));
+                r.setNombrePaquete(rs.getString("paquete_nombre") + " (" + rs.getString("paquete_destino") + ")");
                 lista.add(r);
             }
         } catch (SQLException e) {

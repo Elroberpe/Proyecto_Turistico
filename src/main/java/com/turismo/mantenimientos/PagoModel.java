@@ -38,9 +38,9 @@ public class PagoModel implements PagoInterface {
                 p.setMonto(rs.getBigDecimal("monto"));
                 p.setEstado(rs.getString("estado"));
                 p.setFechaPago(rs.getTimestamp("fecha_pago"));
-                p.setClienteNombre(rs.getString("nombre") + " " + rs.getString("apellidos"));
-                p.setPaqueteNombre(rs.getString("paquete_nombre"));
-                p.setMetodoNombre(rs.getString("metodo_nombre"));
+                p.setNombreCliente(rs.getString("nombre") + " " + rs.getString("apellidos"));
+                p.setNombrePaquete(rs.getString("paquete_nombre"));
+                p.setNombreMetodo(rs.getString("metodo_nombre"));
                 p.setFechaSalida(rs.getDate("fecha_salida"));
                 p.setFechaRetorno(rs.getDate("fecha_retorno"));
                 p.setEstadoReserva(rs.getString("estado_reserva"));
@@ -81,9 +81,9 @@ public class PagoModel implements PagoInterface {
                 p.setMonto(rs.getBigDecimal("monto"));
                 p.setEstado(rs.getString("estado"));
                 p.setFechaPago(rs.getTimestamp("fecha_pago"));
-                p.setClienteNombre(rs.getString("nombre") + " " + rs.getString("apellidos"));
-                p.setPaqueteNombre(rs.getString("paquete_nombre"));
-                p.setMetodoNombre(rs.getString("metodo_nombre"));
+                p.setNombreCliente(rs.getString("nombre") + " " + rs.getString("apellidos"));
+                p.setNombrePaquete(rs.getString("paquete_nombre"));
+                p.setNombreMetodo(rs.getString("metodo_nombre"));
                 p.setFechaSalida(rs.getDate("fecha_salida"));
                 p.setFechaRetorno(rs.getDate("fecha_retorno"));
                 p.setEstadoReserva(rs.getString("estado_reserva"));
