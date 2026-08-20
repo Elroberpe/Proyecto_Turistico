@@ -87,7 +87,7 @@
                             <tbody>
                                 <c:forEach items="${reservas}" var="r">
                                     <c:set var="viajeIniciado" value="${not empty r.fechaSalida and not empty fechaHoy and not r.fechaSalida.after(fechaHoy)}"/>
-                                    <c:set var="esCancelable" value="${r.estado != 'cancelada' and r.estado != 'completada' and r.estado != 'completado' and not viajeIniciado}"/>
+                                    <c:set var="esCancelable" value="${(r.estado == 'pagada' or r.estado == 'pendiente') and not viajeIniciado}"/>
                                     <c:set var="total" value="${r.precioTotal != null ? r.precioTotal : 0}"/>
                                     <c:set var="subtotal" value="${total / 1.18}"/>
                                     <c:set var="igv" value="${total - subtotal}"/>
