@@ -99,7 +99,7 @@
                                         <td>
                                             <c:choose>
                                                 <c:when test="${not empty r.fechaReserva}">
-                                                    <fmt:formatDate value="${r.fechaReserva}" pattern="dd/MM/yyyy HH:mm"/>
+                                                    <fmt:formatDate value="${r.fechaReserva}" pattern="dd/MM/yyyy"/>
                                                 </c:when>
                                                 <c:otherwise>-</c:otherwise>
                                             </c:choose>
