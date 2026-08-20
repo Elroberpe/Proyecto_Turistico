@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import com.turismo.dao.PaqueteDao;
 import com.turismo.dao.ReservaDao;
 import com.turismo.dao.UsuarioDao;
+import com.turismo.dao.PagoDao;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,11 +25,12 @@ public class AdminDashboardServlet extends HttpServlet {
         PaqueteDao paqueteDao = new PaqueteDao();
         UsuarioDao usuarioDao = new UsuarioDao();
         ReservaDao reservaDao = new ReservaDao();
+        PagoDao pagoDao = new PagoDao();
 
         int totalPaquetes = paqueteDao.contarActivos();
         int totalClientes = usuarioDao.contarClientes();
         int reservasMes = reservaDao.contarReservasDelMes();
-        BigDecimal ingresosMes = reservaDao.sumarIngresosDelMes();
+        BigDecimal ingresosMes = pagoDao.sumarIngresosDelMes();
 
         request.setAttribute("totalPaquetes", totalPaquetes);
         request.setAttribute("totalClientes", totalClientes);

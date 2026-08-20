@@ -186,4 +186,26 @@ public class PagoDao {
         }
         return null;
     }
+
+    // ============================================
+    // SUMAR INGRESOS REALES DEL MES ACTUAL
+    // ============================================
+    public BigDecimal sumarIngresosDelMes() {
+        String sql = "SELECT SUM(monto) FROM pagos " +
+                     "WHERE MONTH(fecha_pago) = MONTH(CURRENT_DATE()) " +
+                     "  AND YEAR(fecha_pago) = YEAR(CURRENT_DATE()) " +
+                     "  AND estado = 'pagado'";
+
+        try (Connection con = ConexionDB.obtenerConexion();
+             Statement st = con.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            if (rs.next()) {
+                return rs.getBigDecimal(1) != null ? rs.getBigDecimal(1) : BigDecimal.ZERO;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return BigDecimal.ZERO;
+    }
 }
