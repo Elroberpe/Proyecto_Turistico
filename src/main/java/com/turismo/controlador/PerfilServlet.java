@@ -3,7 +3,7 @@ package com.turismo.controlador;
 import com.turismo.dao.DAOFactory;
 import com.turismo.interfaces.UsuarioInterface;
 import com.turismo.modelo.Usuario;
-import com.turismo.service.UsuarioService;
+import org.mindrot.jbcrypt.BCrypt;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,7 +17,6 @@ import java.io.IOException;
 public class PerfilServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UsuarioInterface usuarioDao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getUsuario();
-    private UsuarioService usuarioService = new UsuarioService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -67,10 +66,11 @@ public class PerfilServlet extends HttpServlet {
 
                 boolean exito;
                 if (password != null && !password.trim().isEmpty()) {
-                    u.setPassword(password);
-                    exito = usuarioService.actualizarConPassword(u);
+                    String hash = BCrypt.hashpw(password, BCrypt.gensalt(12));
+                    u.setPassword(hash);
+                    exito = usuarioDao.actualizarConPassword(u);
                 } else {
-                    exito = usuarioService.actualizar(u);
+                    exito = usuarioDao.actualizar(u);
                 }
 
                 if (exito) {

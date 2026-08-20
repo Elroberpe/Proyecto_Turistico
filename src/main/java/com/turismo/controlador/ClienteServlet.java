@@ -3,10 +3,11 @@ package com.turismo.controlador;
 import java.io.IOException;
 import java.util.List;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import com.turismo.dao.DAOFactory;
 import com.turismo.interfaces.UsuarioInterface;
 import com.turismo.modelo.Usuario;
-import com.turismo.service.UsuarioService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -19,7 +20,6 @@ public class ClienteServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     
     private UsuarioInterface dao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getUsuario();
-    private UsuarioService usuarioService = new UsuarioService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -63,11 +63,16 @@ public class ClienteServlet extends HttpServlet {
             u.setNombre(request.getParameter("nombre"));
             u.setApellidos(request.getParameter("apellidos"));
             u.setEmail(request.getParameter("email"));
-            u.setPassword(request.getParameter("password"));
             u.setTelefono(request.getParameter("telefono"));
             u.setIdRol(1); // Rol Cliente
 
-            if (usuarioService.registrar(u)) {
+            String pass = request.getParameter("password");
+            if (pass != null && !pass.trim().isEmpty()) {
+                String hash = BCrypt.hashpw(pass, BCrypt.gensalt(12));
+                u.setPassword(hash);
+            }
+
+            if (dao.registrar(u)) {
                 request.getSession().setAttribute("mensaje", "Cliente registrado correctamente.");
             } else {
                 request.getSession().setAttribute("error", "Error al registrar el cliente.");

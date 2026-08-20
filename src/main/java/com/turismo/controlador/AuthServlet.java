@@ -2,8 +2,11 @@ package com.turismo.controlador;
 
 import java.io.IOException;
 
+import org.mindrot.jbcrypt.BCrypt;
+
+import com.turismo.dao.DAOFactory;
+import com.turismo.interfaces.UsuarioInterface;
 import com.turismo.modelo.Usuario;
-import com.turismo.service.UsuarioService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,7 +19,7 @@ import jakarta.servlet.http.HttpSession;
 public class AuthServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-    private UsuarioService usuarioService = new UsuarioService();
+    private UsuarioInterface dao = DAOFactory.getDaoFactory(DAOFactory.MYSQL).getUsuario();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -58,7 +61,29 @@ public class AuthServlet extends HttpServlet {
     	String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        Usuario usuario = usuarioService.login(email, password);
+        Usuario usuario = null;
+        if (email != null && password != null) {
+            Usuario uBD = dao.obtenerPorEmail(email.trim());
+            if (uBD != null && uBD.getPassword() != null) {
+                String dbPass = uBD.getPassword();
+                boolean match = false;
+
+                if (dbPass.startsWith("$2a$") || dbPass.startsWith("$2b$") || dbPass.startsWith("$2y$")) {
+                    match = BCrypt.checkpw(password, dbPass);
+                } else if (dbPass.equals(password)) {
+                    match = true;
+                    // Auto-actualizar contrasena antigua a BCrypt
+                    String hash = BCrypt.hashpw(password, BCrypt.gensalt(12));
+                    uBD.setPassword(hash);
+                    dao.actualizarConPassword(uBD);
+                }
+
+                if (match) {
+                    uBD.setPassword(null);
+                    usuario = uBD;
+                }
+            }
+        }
 
         if (usuario != null) {
 
@@ -94,13 +119,18 @@ public class AuthServlet extends HttpServlet {
         usuario.setNombre(request.getParameter("nombre"));
         usuario.setApellidos(request.getParameter("apellidos"));
         usuario.setEmail(request.getParameter("email"));
-        usuario.setPassword(request.getParameter("password"));
         usuario.setTelefono(request.getParameter("telefono"));
+
+        String rawPassword = request.getParameter("password");
+        if (rawPassword != null && !rawPassword.trim().isEmpty()) {
+            String hash = BCrypt.hashpw(rawPassword, BCrypt.gensalt(12));
+            usuario.setPassword(hash);
+        }
 
         String redirect = request.getParameter("redirect");
         String redirectParam = (redirect != null && !redirect.trim().isEmpty()) ? "?redirect=" + redirect : "";
 
-        if (usuarioService.registrar(usuario)) {
+        if (dao.registrar(usuario)) {
             request.getSession().setAttribute("mensaje", "Cuenta creada con éxito. Ya puedes iniciar sesión.");
             response.sendRedirect(request.getContextPath() + "/login" + redirectParam);
         } else {
