@@ -85,6 +85,10 @@ public class CategoriaPaqueteDao implements CategoriaPaqueteInterface {
         }
     }
 
+    public boolean actualizar(CategoriaPaquete categoria) {
+        return editar(categoria);
+    }
+
     public boolean eliminar(int id) {
         String sql = "DELETE FROM categorias_paquetes WHERE id_categoria = ?";
 

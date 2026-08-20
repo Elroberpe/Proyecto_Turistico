@@ -7,6 +7,8 @@ public interface CategoriaPaqueteInterface {
     List<CategoriaPaquete> listar();
     CategoriaPaquete obtenerPorId(int id);
     boolean crear(CategoriaPaquete categoria);
+    boolean editar(CategoriaPaquete categoria);
     boolean actualizar(CategoriaPaquete categoria);
     boolean eliminar(int id);
+    int contarPaquetesPorCategoria(int idCategoria);
 }
