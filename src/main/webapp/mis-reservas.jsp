@@ -297,7 +297,7 @@
                     text: "Esta acción cancelará tu reserva para " + paquete + ". ¿Deseas continuar?",
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: "#dc3545",
+                    confirmButtonColor: "#d33",
                     cancelButtonColor: "#6c757d",
                     confirmButtonText: "Sí, cancelar",
                     cancelButtonText: "No, mantener"

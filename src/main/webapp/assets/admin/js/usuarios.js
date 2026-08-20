@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 title: "¿Eliminar usuario?",
                 text: "Esta acción eliminará a " + nombre + ". ¿Deseas continuar?",
                 icon: "warning",
+                confirmButtonColor: "#d33",
                 showCancelButton: true,
                 confirmButtonText: "Sí, eliminar",
                 cancelButtonText: "Cancelar"

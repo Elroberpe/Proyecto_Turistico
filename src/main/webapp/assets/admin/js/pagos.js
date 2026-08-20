@@ -82,6 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 title: "¿Rechazar / Anular pago #" + id + "?",
                 text: "El estado del pago cambiará a 'rechazado' y la reserva asociada volverá a estado Pendiente.",
                 icon: "warning",
+                confirmButtonColor: "#d33",
                 showCancelButton: true,
                 confirmButtonText: "Sí, anular pago",
                 cancelButtonText: "Cancelar",

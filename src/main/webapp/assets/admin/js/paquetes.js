@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 title: "¿Eliminar paquete?",
                 text: "Esta acción eliminará " + nombrePaquete + ". ¿Deseas continuar?",
                 icon: "warning",
+                confirmButtonColor: "#d33",
                 showCancelButton: true,
                 confirmButtonText: "Sí, eliminar",
                 cancelButtonText: "Cancelar"

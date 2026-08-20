@@ -206,6 +206,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 title: "¿Eliminar reserva #" + id + "?",
                 text: "Esta acción no se puede deshacer.",
                 icon: "warning",
+                confirmButtonColor: "#d33",
                 showCancelButton: true,
                 confirmButtonText: "Sí, eliminar",
                 cancelButtonText: "Cancelar"
