@@ -51,6 +51,11 @@ public class AuthServlet extends HttpServlet {
             request.getSession().invalidate();
             response.sendRedirect(request.getContextPath() + "/index.jsp");
         } else {
+            HttpSession session = request.getSession(false);
+            if (session != null && session.getAttribute("usuario") != null) {
+                response.sendRedirect(request.getContextPath() + "/index.jsp");
+                return;
+            }
             request.getRequestDispatcher("/login.jsp").forward(request, response);
         }
     }

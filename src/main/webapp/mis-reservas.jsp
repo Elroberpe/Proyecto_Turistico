@@ -87,7 +87,7 @@
                             <tbody>
                                 <c:forEach items="${reservas}" var="r">
                                     <c:set var="esPasada" value="${not empty r.fechaSalida and not empty fechaHoy and not r.fechaSalida.after(fechaHoy)}"/>
-                                    <c:set var="esCancelable" value="${r.estado.toLowerCase() != 'cancelada' and r.estado.toLowerCase() != 'completada' and not esPasada}"/>
+                                    <c:set var="esCancelable" value="${r.estado.toLowerCase() != 'cancelada' and r.estado.toLowerCase() != 'completada' and r.estado.toLowerCase() != 'completado' and not esPasada}"/>
                                     <c:set var="total" value="${r.precioTotal != null ? r.precioTotal : 0}"/>
                                     <c:set var="subtotal" value="${total / 1.18}"/>
                                     <c:set var="igv" value="${total - subtotal}"/>
@@ -118,8 +118,8 @@
                                                 <c:when test="${r.estado.equalsIgnoreCase('cancelada')}">
                                                     <span class="badge bg-danger px-3">Cancelada</span>
                                                 </c:when>
-                                                <c:when test="${r.estado.equalsIgnoreCase('completada') or (r.estado.equalsIgnoreCase('pagada') and esPasada)}">
-                                                    <span class="badge bg-info text-dark px-3">Completada</span>
+                                                <c:when test="${r.estado.equalsIgnoreCase('completado') or r.estado.equalsIgnoreCase('completada') or (r.estado.equalsIgnoreCase('pagada') and esPasada)}">
+                                                    <span class="badge bg-info text-dark px-3">Completado</span>
                                                 </c:when>
                                                 <c:when test="${r.estado.equalsIgnoreCase('pagada')}">
                                                     <span class="badge bg-success px-3">Pagada</span>
@@ -194,8 +194,8 @@
                                                                     <c:when test="${r.estado.equalsIgnoreCase('cancelada')}">
                                                                         <span class="badge bg-danger rounded-pill px-3">Cancelada</span>
                                                                     </c:when>
-                                                                    <c:when test="${r.estado.equalsIgnoreCase('completada') or (r.estado.equalsIgnoreCase('pagada') and esPasada)}">
-                                                                        <span class="badge bg-info text-dark rounded-pill px-3">Completada</span>
+                                                                    <c:when test="${r.estado.equalsIgnoreCase('completado') or r.estado.equalsIgnoreCase('completada') or (r.estado.equalsIgnoreCase('pagada') and esPasada)}">
+                                                                        <span class="badge bg-info text-dark rounded-pill px-3">Completado</span>
                                                                     </c:when>
                                                                     <c:when test="${r.estado.equalsIgnoreCase('pagada')}">
                                                                         <span class="badge bg-success rounded-pill px-3">Pagada</span>
@@ -233,7 +233,7 @@
                                                                 <div>Esta reserva ha sido cancelada.</div>
                                                             </div>
                                                         </c:when>
-                                                        <c:when test="${r.estado.equalsIgnoreCase('completada') or (r.estado.equalsIgnoreCase('pagada') and esPasada)}">
+                                                        <c:when test="${r.estado.equalsIgnoreCase('completado') or r.estado.equalsIgnoreCase('completada') or (r.estado.equalsIgnoreCase('pagada') and esPasada)}">
                                                             <div class="alert alert-info d-flex align-items-center border-0 small shadow-sm mb-3" role="alert">
                                                                 <i class="bi bi-check2-all fs-4 me-2"></i>
                                                                 <div>Viaje concluido exitosamente.</div>

@@ -105,7 +105,7 @@
                                                         <button class="btn btn-sm btn-secondary" disabled title="Pago ya finalizado/rechazado"><i class="bi bi-pencil"></i></button>
                                                         <button class="btn btn-sm btn-secondary" disabled title="Pago ya finalizado/rechazado"><i class="bi bi-x-circle"></i></button>
                                                     </c:when>
-                                                    <c:when test="${p.estadoReserva == 'completada'}">
+                                                    <c:when test="${p.estadoReserva == 'completada' || p.estadoReserva == 'completado'}">
                                                         <button class="btn btn-sm btn-secondary" disabled title="La reserva ya se completó; este pago es inmutable"><i class="bi bi-pencil"></i></button>
                                                         <button class="btn btn-sm btn-secondary" disabled title="La reserva ya se completó; este pago es inmutable"><i class="bi bi-x-circle"></i></button>
                                                     </c:when>

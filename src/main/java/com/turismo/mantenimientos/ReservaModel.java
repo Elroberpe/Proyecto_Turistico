@@ -15,11 +15,11 @@ import java.sql.Statement;
 public class ReservaModel implements ReservaInterface {
 
     // ============================================
-    // ACTUALIZAR AUTOMÁTICAMENTE RESERVAS A COMPLETADAS
+    // ACTUALIZAR AUTOMÁTICAMENTE RESERVAS A COMPLETADO
     // ============================================
     @Override
     public void actualizarReservasCompletadas() {
-        String sql = "UPDATE reservas SET estado = 'completada' " +
+        String sql = "UPDATE reservas SET estado = 'completado' " +
                      "WHERE estado = 'pagada' AND ( " +
                      "  (fecha_retorno IS NOT NULL AND fecha_retorno < CURDATE()) OR " +
                      "  (fecha_retorno IS NULL AND fecha_salida < CURDATE()) " +
@@ -57,7 +57,7 @@ public class ReservaModel implements ReservaInterface {
                 r.setIdUsuario(rs.getInt("id_usuario"));
                 r.setIdPaquete(rs.getInt("id_paquete"));
                 r.setFechaReserva(rs.getTimestamp("fecha_reserva"));
-                r.setNumPasajeros(rs.getInt("numero_pasajeros"));
+                r.setNumPasajeros(rs.getInt("num_pasajeros"));
                 r.setPrecioTotal(rs.getBigDecimal("precio_total"));
                 r.setEstado(rs.getString("estado"));
                 r.setTipoViaje(rs.getString("tipo_viaje"));
@@ -99,7 +99,7 @@ public class ReservaModel implements ReservaInterface {
                 r.setIdUsuario(rs.getInt("id_usuario"));
                 r.setIdPaquete(rs.getInt("id_paquete"));
                 r.setFechaReserva(rs.getTimestamp("fecha_reserva"));
-                r.setNumPasajeros(rs.getInt("numero_pasajeros"));
+                r.setNumPasajeros(rs.getInt("num_pasajeros"));
                 r.setPrecioTotal(rs.getBigDecimal("precio_total"));
                 r.setEstado(rs.getString("estado"));
                 r.setTipoViaje(rs.getString("tipo_viaje"));
@@ -120,7 +120,7 @@ public class ReservaModel implements ReservaInterface {
     // ============================================
     @Override
     public boolean crear(Reserva reserva) {
-        String sql = "INSERT INTO reservas (id_usuario, id_paquete, numero_pasajeros, precio_total, estado, tipo_viaje, fecha_salida, fecha_retorno) " +
+        String sql = "INSERT INTO reservas (id_usuario, id_paquete, num_pasajeros, precio_total, estado, tipo_viaje, fecha_salida, fecha_retorno) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection con = ConexionDB.obtenerConexion();
@@ -154,7 +154,7 @@ public class ReservaModel implements ReservaInterface {
     // ============================================
     @Override
     public boolean actualizar(Reserva reserva) {
-        String sql = "UPDATE reservas SET id_usuario = ?, id_paquete = ?, numero_pasajeros = ?, " +
+        String sql = "UPDATE reservas SET id_usuario = ?, id_paquete = ?, num_pasajeros = ?, " +
                      "precio_total = ?, estado = ?, tipo_viaje = ?, fecha_salida = ?, fecha_retorno = ? " +
                      "WHERE id_reserva = ?";
 
@@ -242,7 +242,7 @@ public class ReservaModel implements ReservaInterface {
                 r.setIdUsuario(rs.getInt("id_usuario"));
                 r.setIdPaquete(rs.getInt("id_paquete"));
                 r.setFechaReserva(rs.getTimestamp("fecha_reserva"));
-                r.setNumPasajeros(rs.getInt("numero_pasajeros"));
+                r.setNumPasajeros(rs.getInt("num_pasajeros"));
                 r.setPrecioTotal(rs.getBigDecimal("precio_total"));
                 r.setEstado(rs.getString("estado"));
                 r.setNombreUsuario(rs.getString("usuario_nombre") + " " + rs.getString("usuario_apellidos"));
@@ -279,7 +279,7 @@ public class ReservaModel implements ReservaInterface {
     @Override
     public BigDecimal sumarIngresosDelMes() {
         actualizarReservasCompletadas();
-        String sql = "SELECT SUM(precio_total) FROM reservas WHERE MONTH(fecha_reserva) = MONTH(CURRENT_DATE()) AND YEAR(fecha_reserva) = YEAR(CURRENT_DATE()) AND (estado = 'pagada' OR estado = 'completada')";
+        String sql = "SELECT SUM(precio_total) FROM reservas WHERE MONTH(fecha_reserva) = MONTH(CURRENT_DATE()) AND YEAR(fecha_reserva) = YEAR(CURRENT_DATE()) AND (estado = 'pagada' OR estado = 'completado')";
         try (Connection con = ConexionDB.obtenerConexion();
              Statement st = con.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -317,7 +317,7 @@ public class ReservaModel implements ReservaInterface {
                 r.setIdUsuario(rs.getInt("id_usuario"));
                 r.setIdPaquete(rs.getInt("id_paquete"));
                 r.setFechaReserva(rs.getTimestamp("fecha_reserva"));
-                r.setNumPasajeros(rs.getInt("numero_pasajeros"));
+                r.setNumPasajeros(rs.getInt("num_pasajeros"));
                 r.setPrecioTotal(rs.getBigDecimal("precio_total"));
                 r.setEstado(rs.getString("estado"));
                 r.setTipoViaje(rs.getString("tipo_viaje"));

@@ -99,8 +99,8 @@
                                             <td class="fw-bold">S/ ${r.precioTotal}</td>
                                             <td>
                                                 <c:choose>
-                                                    <c:when test="${r.estado.equalsIgnoreCase('completada')}">
-                                                        <span class="badge bg-info text-dark">Completada</span>
+                                                    <c:when test="${r.estado.equalsIgnoreCase('completado') or r.estado.equalsIgnoreCase('completada')}">
+                                                        <span class="badge bg-info text-dark">Completado</span>
                                                     </c:when>
                                                     <c:when test="${r.estado.equalsIgnoreCase('pagada')}">
                                                         <span class="badge bg-success">Pagada</span>
@@ -137,7 +137,7 @@
                                                             <i class="bi bi-trash"></i>
                                                         </button>
                                                     </c:when>
-                                                    <c:when test="${r.estado.equalsIgnoreCase('completada')}">
+                                                    <c:when test="${r.estado.equalsIgnoreCase('completado') or r.estado.equalsIgnoreCase('completada')}">
                                                         <button class="btn btn-sm btn-secondary" disabled title="Reserva completada"><i class="bi bi-pencil"></i></button>
                                                         <button class="btn btn-sm btn-secondary" disabled title="No se puede eliminar una reserva completada"><i class="bi bi-trash"></i></button>
                                                     </c:when>
