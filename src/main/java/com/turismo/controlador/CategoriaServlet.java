@@ -79,7 +79,7 @@ public class CategoriaServlet extends HttpServlet {
             c.setNombre(request.getParameter("nombre").trim());
             c.setDescripcion(request.getParameter("descripcion").trim());
 
-            if (dao.editar(c)) {
+            if (dao.actualizar(c)) {
                 request.getSession().setAttribute("mensaje", "Categoría actualizada correctamente.");
             } else {
                 request.getSession().setAttribute("error", "Error al actualizar la categoría.");
