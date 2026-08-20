@@ -62,3 +62,4 @@
     </div>
   </div>
 </div>
+<script src="${pageContext.request.contextPath}/assets/js/calculo-reserva.js?v=1.0"></script>

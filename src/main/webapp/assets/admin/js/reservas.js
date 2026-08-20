@@ -44,20 +44,35 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (tipoViajeSelect) {
-        tipoViajeSelect.addEventListener('change', toggleRetorno);
+        tipoViajeSelect.addEventListener('change', function () {
+            toggleRetorno();
+            calcularTotal();
+        });
     }
 
-    // CALCULAR PRECIO TOTAL
+    // CALCULAR PRECIO TOTAL REUTILIZANDO LA LÓGICA COMPARTIDA (NOCHES + IGV 18%)
     function calcularTotal() {
         if (!paqueteSelect || !pasajerosInput || !precioTotalInput) return;
-        const pasajeros = parseInt(pasajerosInput.value) || 1;
+        const pasajeros = parseInt(pasajerosInput.value, 10) || 1;
         const selectedOpt = paqueteSelect.options[paqueteSelect.selectedIndex];
         let precioUnitario = 0;
         if (selectedOpt && selectedOpt.value !== "") {
             precioUnitario = parseFloat(selectedOpt.getAttribute("data-precio")) || 0;
         }
-        const total = precioUnitario * pasajeros;
-        precioTotalInput.value = total.toFixed(2);
+
+        if (typeof window.calcularCotizacionReserva === 'function') {
+            const cotizacion = window.calcularCotizacionReserva({
+                precioBase: precioUnitario,
+                tipoViaje: tipoViajeSelect ? tipoViajeSelect.value : 'idavuelta',
+                fechaSalida: salidaInput ? salidaInput.value : '',
+                fechaRetorno: retornoInput ? retornoInput.value : '',
+                pasajeros: pasajeros
+            });
+            precioTotalInput.value = cotizacion.total.toFixed(2);
+        } else {
+            const total = precioUnitario * pasajeros * 1.18;
+            precioTotalInput.value = total.toFixed(2);
+        }
     }
 
     if (paqueteSelect) {
@@ -88,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // VALIDACIONES DE FECHAS EN CLIENTE
+    // VALIDACIONES DE FECHAS EN CLIENTE Y RECÁLCULO
     if (salidaInput && retornoInput) {
         salidaInput.addEventListener("change", function () {
             const salida = this.value;
@@ -103,6 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 }
             }
+            calcularTotal();
         });
 
         retornoInput.addEventListener("change", function () {
@@ -115,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     icon: "warning"
                 });
             }
+            calcularTotal();
         });
     }
 
