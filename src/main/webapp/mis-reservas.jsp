@@ -86,8 +86,8 @@
                             </thead>
                             <tbody>
                                 <c:forEach items="${reservas}" var="r">
-                                    <c:set var="esPasada" value="${not empty r.fechaSalida and not empty fechaHoy and not r.fechaSalida.after(fechaHoy)}"/>
-                                    <c:set var="esCancelable" value="${r.estado.toLowerCase() != 'cancelada' and r.estado.toLowerCase() != 'completada' and r.estado.toLowerCase() != 'completado' and not esPasada}"/>
+                                    <c:set var="viajeIniciado" value="${not empty r.fechaSalida and not empty fechaHoy and not r.fechaSalida.after(fechaHoy)}"/>
+                                    <c:set var="esCancelable" value="${(r.estado.equalsIgnoreCase('pagada') or r.estado.equalsIgnoreCase('pendiente')) and not viajeIniciado}"/>
                                     <c:set var="total" value="${r.precioTotal != null ? r.precioTotal : 0}"/>
                                     <c:set var="subtotal" value="${total / 1.18}"/>
                                     <c:set var="igv" value="${total - subtotal}"/>
@@ -118,7 +118,7 @@
                                                 <c:when test="${r.estado.equalsIgnoreCase('cancelada')}">
                                                     <span class="badge bg-danger px-3">Cancelada</span>
                                                 </c:when>
-                                                <c:when test="${r.estado.equalsIgnoreCase('completado') or r.estado.equalsIgnoreCase('completada') or (r.estado.equalsIgnoreCase('pagada') and esPasada)}">
+                                                <c:when test="${r.estado.equalsIgnoreCase('completado') or r.estado.equalsIgnoreCase('completada')}">
                                                     <span class="badge bg-info text-dark px-3">Completado</span>
                                                 </c:when>
                                                 <c:when test="${r.estado.equalsIgnoreCase('pagada')}">
@@ -194,7 +194,7 @@
                                                                     <c:when test="${r.estado.equalsIgnoreCase('cancelada')}">
                                                                         <span class="badge bg-danger rounded-pill px-3">Cancelada</span>
                                                                     </c:when>
-                                                                    <c:when test="${r.estado.equalsIgnoreCase('completado') or r.estado.equalsIgnoreCase('completada') or (r.estado.equalsIgnoreCase('pagada') and esPasada)}">
+                                                                    <c:when test="${r.estado.equalsIgnoreCase('completado') or r.estado.equalsIgnoreCase('completada')}">
                                                                         <span class="badge bg-info text-dark rounded-pill px-3">Completado</span>
                                                                     </c:when>
                                                                     <c:when test="${r.estado.equalsIgnoreCase('pagada')}">
@@ -228,35 +228,35 @@
 
                                                     <c:choose>
                                                         <c:when test="${r.estado.equalsIgnoreCase('cancelada')}">
-                                                            <div class="alert alert-danger d-flex align-items-center border-0 small shadow-sm mb-3" role="alert">
-                                                                <i class="bi bi-x-octagon fs-4 me-2"></i>
-                                                                <div>Esta reserva ha sido cancelada.</div>
-                                                            </div>
-                                                        </c:when>
-                                                        <c:when test="${r.estado.equalsIgnoreCase('completado') or r.estado.equalsIgnoreCase('completada') or (r.estado.equalsIgnoreCase('pagada') and esPasada)}">
-                                                            <div class="alert alert-info d-flex align-items-center border-0 small shadow-sm mb-3" role="alert">
-                                                                <i class="bi bi-check2-all fs-4 me-2"></i>
-                                                                <div>Viaje concluido exitosamente.</div>
-                                                            </div>
-                                                        </c:when>
-                                                        <c:when test="${r.estado.equalsIgnoreCase('pagada')}">
-                                                            <div class="alert alert-success d-flex align-items-center border-0 small shadow-sm mb-3" role="alert">
-                                                                <i class="bi bi-shield-check fs-4 me-2"></i>
-                                                                <div>Reserva confirmada y pagada con éxito.</div>
-                                                            </div>
-                                                        </c:when>
-                                                        <c:when test="${r.estado.equalsIgnoreCase('pendiente')}">
-                                                            <div class="alert alert-warning d-flex align-items-center border-0 small shadow-sm mb-3" role="alert">
-                                                                <i class="bi bi-hourglass-split fs-4 me-2"></i>
-                                                                <div>Reserva pendiente de pago.</div>
-                                                            </div>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <div class="alert alert-secondary d-flex align-items-center border-0 small shadow-sm mb-3" role="alert">
-                                                                <div>Estado de reserva: ${r.estado}.</div>
-                                                            </div>
-                                                        </c:otherwise>
-                                                    </c:choose>
+                                                             <div class="alert alert-danger d-flex align-items-center border-0 small shadow-sm mb-3" role="alert">
+                                                                 <i class="bi bi-x-octagon fs-4 me-2"></i>
+                                                                 <div>Esta reserva ha sido cancelada.</div>
+                                                             </div>
+                                                         </c:when>
+                                                         <c:when test="${r.estado.equalsIgnoreCase('completado') or r.estado.equalsIgnoreCase('completada')}">
+                                                             <div class="alert alert-info d-flex align-items-center border-0 small shadow-sm mb-3" role="alert">
+                                                                 <i class="bi bi-check2-all fs-4 me-2"></i>
+                                                                 <div>Viaje concluido exitosamente.</div>
+                                                             </div>
+                                                         </c:when>
+                                                         <c:when test="${r.estado.equalsIgnoreCase('pagada')}">
+                                                             <div class="alert alert-success d-flex align-items-center border-0 small shadow-sm mb-3" role="alert">
+                                                                 <i class="bi bi-shield-check fs-4 me-2"></i>
+                                                                 <div>Reserva confirmada y pagada con éxito.</div>
+                                                             </div>
+                                                         </c:when>
+                                                         <c:when test="${r.estado.equalsIgnoreCase('pendiente')}">
+                                                             <div class="alert alert-warning d-flex align-items-center border-0 small shadow-sm mb-3" role="alert">
+                                                                 <i class="bi bi-hourglass-split fs-4 me-2"></i>
+                                                                 <div>Reserva pendiente de pago.</div>
+                                                             </div>
+                                                         </c:when>
+                                                         <c:otherwise>
+                                                             <div class="alert alert-secondary d-flex align-items-center border-0 small shadow-sm mb-3" role="alert">
+                                                                 <div>Estado de reserva: ${r.estado}.</div>
+                                                             </div>
+                                                         </c:otherwise>
+                                                     </c:choose>
 
                                                     <div class="d-flex justify-content-end gap-2 mt-3">
                                                         <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">

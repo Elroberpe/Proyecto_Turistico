@@ -23,7 +23,7 @@ public class PagoModel implements PagoInterface {
                      "JOIN reservas r ON p.id_reserva = r.id_reserva " +
                      "JOIN usuario u ON r.id_usuario = u.id_usuario " +
                      "JOIN paquetes pq ON r.id_paquete = pq.id_paquete " +
-                     "JOIN metodos_pago mp ON p.id_metodo = mp.id_metodo " +
+                     "JOIN metodo_pago mp ON p.id_metodo = mp.id_metodo " +
                      "ORDER BY p.id_pago DESC";
 
         try (Connection con = ConexionDB.obtenerConexion();
@@ -64,7 +64,7 @@ public class PagoModel implements PagoInterface {
                      "JOIN reservas r ON p.id_reserva = r.id_reserva " +
                      "JOIN usuario u ON r.id_usuario = u.id_usuario " +
                      "JOIN paquetes pq ON r.id_paquete = pq.id_paquete " +
-                     "JOIN metodos_pago mp ON p.id_metodo = mp.id_metodo " +
+                     "JOIN metodo_pago mp ON p.id_metodo = mp.id_metodo " +
                      "WHERE p.id_pago = ?";
 
         try (Connection con = ConexionDB.obtenerConexion();
