@@ -9,9 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.turismo.conexion.ConexionDB;
+import com.turismo.interfaces.PaqueteInterface;
 import com.turismo.modelo.Paquete;
 
-public class PaqueteDao {
+public class PaqueteDao implements PaqueteInterface {
 
     public PaqueteDao() {
         // Constructor vacío

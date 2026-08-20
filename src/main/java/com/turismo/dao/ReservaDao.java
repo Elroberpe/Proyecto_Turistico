@@ -1,6 +1,7 @@
 package com.turismo.dao;
 
 import com.turismo.conexion.ConexionDB;
+import com.turismo.interfaces.ReservaInterface;
 import com.turismo.modelo.Reserva;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class ReservaDao {
+public class ReservaDao implements ReservaInterface {
 
     // ============================================
     // ACTUALIZAR AUTOMÁTICAMENTE RESERVAS A COMPLETADAS

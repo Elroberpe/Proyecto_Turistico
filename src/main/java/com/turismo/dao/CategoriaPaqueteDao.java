@@ -1,12 +1,13 @@
 package com.turismo.dao;
 
 import com.turismo.conexion.ConexionDB;
+import com.turismo.interfaces.CategoriaPaqueteInterface;
 import com.turismo.modelo.CategoriaPaquete;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoriaPaqueteDao {
+public class CategoriaPaqueteDao implements CategoriaPaqueteInterface {
 
     public List<CategoriaPaquete> listar() {
         List<CategoriaPaquete> lista = new ArrayList<>();

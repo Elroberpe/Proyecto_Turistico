@@ -1,12 +1,14 @@
 package com.turismo.dao;
 
 import com.turismo.conexion.ConexionDB;
+import com.turismo.interfaces.PagoInterface;
 import com.turismo.modelo.Pago;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PagoDao {
+public class PagoDao implements PagoInterface {
 
     // ============================================
     // LISTAR TODOS LOS PAGOS

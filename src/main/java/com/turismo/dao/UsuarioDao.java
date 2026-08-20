@@ -9,9 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.turismo.conexion.ConexionDB;
+import com.turismo.interfaces.UsuarioInterface;
 import com.turismo.modelo.Usuario;
 
-public class UsuarioDao {
+public class UsuarioDao implements UsuarioInterface {
 
     public UsuarioDao() {
         // Constructor vacío
