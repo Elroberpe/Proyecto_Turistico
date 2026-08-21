@@ -24,6 +24,7 @@ public class InicioServlet extends HttpServlet {
 
         List<Paquete> paquetesDestacados = paqueteDao.listarDestacados(3);
         request.setAttribute("paquetesDestacados", paquetesDestacados);
+        request.setAttribute("inicioCargado", true);
 
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }

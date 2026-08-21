@@ -352,12 +352,11 @@ public class PaqueteModel implements PaqueteInterface {
     @Override
     public List<Paquete> listarDestacados(int limite) {
         List<Paquete> lista = new ArrayList<>();
-        String sql = "SELECT p.*, c.nombre AS categoria_nombre, COUNT(r.id_reserva) AS total_reservas " +
+        String sql = "SELECT p.*, c.nombre AS categoria_nombre, " +
+                     "       (SELECT COUNT(*) FROM reservas r WHERE r.id_paquete = p.id_paquete AND r.estado != 'cancelada') AS total_reservas " +
                      "FROM paquetes p " +
                      "JOIN categorias_paquetes c ON p.id_categoria = c.id_categoria " +
-                     "LEFT JOIN reservas r ON p.id_paquete = r.id_paquete AND r.estado != 'cancelada' " +
                      "WHERE p.estado = 'activo' " +
-                     "GROUP BY p.id_paquete, c.nombre " +
                      "ORDER BY total_reservas DESC, p.id_paquete DESC " +
                      "LIMIT ?";
 
