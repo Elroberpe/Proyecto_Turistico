@@ -15,4 +15,5 @@ public interface PaqueteInterface {
     boolean actualizar(Paquete paquete);
     boolean eliminar(int id);
     int contarActivos();
+    List<Paquete> listarDestacados(int limite);
 }

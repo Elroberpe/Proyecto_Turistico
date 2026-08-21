@@ -1,4 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<c:if test="${empty paquetesDestacados}">
+    <c:redirect url="/inicio"/>
+</c:if>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -110,9 +115,40 @@
                 <h2>Destinos Exclusivos</h2>
                 <p>Nuestra selección curada de las mejores experiencias a lo largo del Perú. Encuentra el viaje perfecto que estabas esperando.</p>
             </div>
-            <!-- Contenedor dinámico rellenado por main.js -->
+            <!-- Contenedor dinámico de paquetes destacados -->
             <div id="paquetesContainer" class="row g-4 justify-content-center">
-                <!-- El Javascript inyectará las tarjetas de paquetes destacados aquí -->
+                <c:choose>
+                    <c:when test="${not empty paquetesDestacados}">
+                        <c:forEach items="${paquetesDestacados}" var="p">
+                            <div class="col-md-4">
+                                <div class="card-tour">
+                                    <div class="img-wrap">
+                                        <img src="${p.imagenUrl}" alt="${p.nombre}">
+                                        <span class="badge-region"><i class="bi bi-geo-alt"></i> ${p.destino}</span>
+                                    </div>
+                                    <div class="body">
+                                        <h3>${p.nombre}</h3>
+                                        <div class="meta mb-2">"${p.descripcion}"</div>
+                                        <div class="d-flex justify-content-between align-items-end mt-3">
+                                            <div class="precio">
+                                                S/ <fmt:formatNumber value="${p.precioSoles}" minFractionDigits="2" maxFractionDigits="2"/><small> / persona</small>
+                                            </div>
+                                            <button class="btn-card-action" data-bs-toggle="modal" data-bs-target="#modalReserva" 
+                                                    data-id="${p.idPaquete}" data-nombre="${p.nombre}" data-precio="${p.precioSoles}">
+                                                Seleccionar <i class="bi bi-arrow-right"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="col-12 text-center text-muted">
+                            No hay paquetes disponibles por el momento.
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
             
             <div class="text-center mt-5">

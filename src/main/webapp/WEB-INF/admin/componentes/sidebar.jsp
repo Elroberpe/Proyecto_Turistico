@@ -6,7 +6,7 @@
 <nav id="sidebar" class="d-flex flex-column justify-content-between">
     <div>
         <div class="sidebar-header">
-            <h3 class="text-white m-0"><i class="bi bi-airplane-engines"></i> AdminTours</h3>
+            <h3 class="text-white m-0"><i class="bi bi-airplane-engines"></i> Chasqui</h3>
         </div>
         <ul class="list-unstyled components">
             <li class="${fn:contains(uri, '/admin/dashboard') or fn:endsWith(uri, 'index.jsp') ? 'active' : ''}">

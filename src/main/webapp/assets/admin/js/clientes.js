@@ -51,7 +51,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             if (passwordContainerCliente) passwordContainerCliente.style.display = "none";
             if (clienteModalTitle) clienteModalTitle.textContent = "Editar Cliente: " + (this.dataset.nombre || "");
-            if (btnGuardarCliente) btnGuardarCliente.className = "btn btn-warning";
         });
     });
 

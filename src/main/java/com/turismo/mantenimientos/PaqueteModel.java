@@ -345,4 +345,44 @@ public class PaqueteModel implements PaqueteInterface {
         }
         return lista;
     }
+
+    // ============================================
+    // LISTAR PAQUETES DESTACADOS (TOP MÁS RESERVADOS)
+    // ============================================
+    @Override
+    public List<Paquete> listarDestacados(int limite) {
+        List<Paquete> lista = new ArrayList<>();
+        String sql = "SELECT p.*, c.nombre AS categoria_nombre, COUNT(r.id_reserva) AS total_reservas " +
+                     "FROM paquetes p " +
+                     "JOIN categorias_paquetes c ON p.id_categoria = c.id_categoria " +
+                     "LEFT JOIN reservas r ON p.id_paquete = r.id_paquete AND r.estado != 'cancelada' " +
+                     "WHERE p.estado = 'activo' " +
+                     "GROUP BY p.id_paquete, c.nombre " +
+                     "ORDER BY total_reservas DESC, p.id_paquete DESC " +
+                     "LIMIT ?";
+
+        try (Connection con = ConexionDB.obtenerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, limite);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Paquete p = new Paquete();
+                p.setIdPaquete(rs.getInt("id_paquete"));
+                p.setIdCategoria(rs.getInt("id_categoria"));
+                p.setNombre(rs.getString("nombre"));
+                p.setDestino(rs.getString("destino"));
+                p.setDescripcion(rs.getString("descripcion"));
+                p.setImagenUrl(rs.getString("imagenUrl"));
+                p.setPrecioSoles(rs.getBigDecimal("precio_soles"));
+                p.setEstado(rs.getString("estado"));
+                p.setCategoriaNombre(rs.getString("categoria_nombre"));
+                lista.add(p);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
 }

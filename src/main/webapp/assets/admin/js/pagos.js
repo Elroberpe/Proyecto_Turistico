@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const id = this.dataset.id;
             Swal.fire({
                 title: "¿Rechazar / Anular pago #" + id + "?",
-                text: "El estado del pago cambiará a 'rechazado' y la reserva asociada volverá a estado Pendiente.",
+                text: "Esta acciòn no se podrà deshacer.",
                 icon: "warning",
                 confirmButtonColor: "#d33",
                 showCancelButton: true,
