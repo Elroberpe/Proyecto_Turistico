@@ -131,8 +131,10 @@ public class PagoServlet extends HttpServlet {
             // Actualizar pago manteniendo el monto original
             Pago p = new Pago();
             p.setIdPago(id);
+            p.setIdReserva(pagoActual.getIdReserva());
             p.setIdMetodo(idMetodo);
             p.setMonto(pagoActual.getMonto());
+            p.setFechaPago(pagoActual.getFechaPago());
             p.setEstado(estado);
 
             if (pagoDao.actualizar(p)) {
